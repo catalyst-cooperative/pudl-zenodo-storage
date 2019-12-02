@@ -121,7 +121,7 @@ class ZenStorage:
 
         return jsr
 
-    def update_deposition(self, deposition, metadata):
+    def update_deposition(self, deposition_url, metadata):
         raise NotImplementedError("Not ready yet.")
 
     def new_deposition_version(self, conceptdoi, version_info=None):

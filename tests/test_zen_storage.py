@@ -45,6 +45,30 @@ class TestZenStorage:
         lookup = self.zs.get_deposition('title:"%s"' % td["title"])
         assert(lookup["metadata"]["title"] == td["title"])
 
+    def test_update(self):
+        """Ensure updating a deposition's metadata works."""
+        td = copy.deepcopy(self.test_depostion)
+        td["title"] += ": %d" % random.randint(1000, 9999)
+        deposition = self.zs.create_deposition(td)
+
+        response = requests.post(disposition["links"]["publish"],
+                                 data={"access_token": self.zs.key})
+        published = response.json()
+
+        if response.status_code > 299:
+            raise AssertionError(
+                "Failed to save test deposition: code %d, %s" %
+                (response.status_code, published))
+
+        newtd = copy.copy(td)
+        newtd["title"] += " - updated"
+        newtd["description"] += " ... also updated."
+
+        update = self.zs.update_disposition(disposition["links"]["self"], newtd)
+        assert update["metadata"]["title"] == newtd["title"]
+        assert update["metadata"]["description"] == newtd["description"]
+        assert update["metadata"]["keywords"] == newtd["keywords"]
+
     def test_new_version_and_file_api_upload(self):
         """Ensure we can create new versions of a deposition"""
         # It would be better if we could test a single function at a time,
