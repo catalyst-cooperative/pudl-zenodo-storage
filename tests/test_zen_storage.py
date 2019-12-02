@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
+import json
 import copy
 import io
 import os
 import random
 import requests
+import semantic_version
 
 from zs import ZenStorage
 
@@ -29,7 +31,7 @@ class TestZenStorage:
         td = copy.deepcopy(self.test_deposition)
         td["title"] += ": %d" % random.randint(1000, 9999)
 
-        lookup = self.zs.get_deposition(td["title"])
+        lookup = self.zs.get_deposition('title:"%s"' % td["title"])
         assert(lookup is None)
 
         create = self.zs.create_deposition(td)
@@ -40,7 +42,7 @@ class TestZenStorage:
         requests.post(
             create["links"]["publish"], data={"access_token": self.zs.key})
 
-        lookup = self.zs.get_deposition(td["title"])
+        lookup = self.zs.get_deposition('title:"%s"' % td["title"])
         assert(lookup["metadata"]["title"] == td["title"])
 
     def test_new_version_and_file_api_upload(self):
@@ -66,11 +68,17 @@ class TestZenStorage:
         assert published["state"] == "done"
         assert published["submitted"]
 
-        new_version = self.zs.new_deposition_version(td)
+        new_version = self.zs.new_deposition_version(published["conceptdoi"])
+
+        msg = json.dumps([published, new_version], indent=4, sort_keys=True)
+        print(msg)
 
         assert new_version["title"] == first["title"]
         assert new_version["state"] == "unsubmitted"
         assert not new_version["submitted"]
+
+        assert semantic_version.Version(published["metadata"]["version"]) < \
+               semantic_version.Version(new_version["metadata"]["version"])
 
     def test_bucket_api_upload(self):
         """Verify the bucket api upload"""
@@ -89,5 +97,5 @@ class TestZenStorage:
                 "Failed to save test deposition: code %d, %s" %
                 (response.status_code, published))
 
-        lookup = self.zs.get_deposition(td["title"])
+        lookup = self.zs.get_deposition('title:"%s"' % td["title"])
         assert lookup["files"][0]["filename"] == "testing.txt"
