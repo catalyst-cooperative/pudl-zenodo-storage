@@ -50,8 +50,8 @@ Contributor:
 
 
 Resource:
-    profile
     name
+    profile
     path
     title
     parts: dict

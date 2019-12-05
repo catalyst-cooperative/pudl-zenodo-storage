@@ -3,6 +3,7 @@
 import json
 import logging
 import requests
+import semantic_version
 
 
 eia860_metadata = {
@@ -45,20 +46,24 @@ class ZenStorage:
         else:
             self.api_root = "https://zenodo.org/api"
 
-    def get_deposition(self, title):
+    def get_deposition(self, query):
         """
-        Get the Deposition (see developers.zenodo.org) id for a given form
-            title
+        Get data for a single Deposition (see developers.zenodo.org) based on
+        the provided query.
+
         Args:
-            title (str): the name of the PUDL deposition resource, such as
-                Eia860
+            query (str): A Zenodo (elasticsearch) compatible query string.
+                         eg. 'title:"Eia860"' or 'doi:"10.5072/zenodo.415988"'
 
         Returns:
-            deposition data as dict, per
-            https://developers.zenodo.org/?python#depositions
+            - If no such deposition exists, returns None.
+            - If a single deposition matches, returns the deposition data as
+              dict, per https://developers.zenodo.org/?python#depositions
+            - If more than one deposition matches, throws an exception
+
         """
         url = self.api_root + "/deposit/depositions"
-        params = {"q": 'title:"%s"' % title, "access_token": self.key}
+        params = {"q": query, "access_token": self.key}
 
         lookup = requests.get(url, params)
 
@@ -69,9 +74,13 @@ class ZenStorage:
             self.logger.error(msg)
             raise RuntimeError(msg)
 
-        if len(jsr) != 1:
-            self.logger.warning("Expected single deposition, got %d" %
-                                len(jsr))
+        if len(jsr) > 1:
+            msg = "Expected single deposition, query: %s, got: %d" % (
+                query, len(jsr))
+            self.logger.error(msg)
+            raise ValueError(msg)
+
+        if jsr == []:
             return
 
         return jsr[0]
@@ -93,6 +102,12 @@ class ZenStorage:
         url = self.api_root + "/deposit/depositions"
         params = {"access_token": self.key}
         headers = {"Content-Type": "application/json"}
+
+        if metadata.get("version", None) is None:
+            self.logger.debug("Deposition %s metadata assigned version 1.0.0"
+                              % metadata["title"])
+            metadata["version"] = "1.0.0"
+
         data = json.dumps({"metadata": metadata})
 
         response = requests.post(
@@ -106,30 +121,66 @@ class ZenStorage:
 
         return jsr
 
-    def new_deposition_version(self, metadata):
+    def update_deposition(self, deposition_url, metadata):
         """
-        Produce a new version of the given deposition archive, whether or not one
-        already exists
+        Update the metadata of an existing Deposition.
 
         Args:
-            metadata: deposition matadata, per
-                      https://developers.zenodo.org/#representation22
+            deposition_url: str, url for the deposition, as found in
+                deposition["links"]["self"]
+
+            metadata: dict, carrying the replacement metadata
+
+        Returns:
+            updated deposition data
+        """
+        data = json.dumps({"metadata": metadata})
+        params = {"access_token": self.key}
+        headers = {"Content-Type": "application/json"}
+
+        response = requests.put(
+            deposition_url, params=params, data=data, headers=headers)
+        jsr = response.json()
+
+        if response.status_code != 200:
+            msg = "Failed to update: %s / %s" % (jsr, json.dumps(metadata))
+            self.logger.error(msg)
+            raise RuntimeError(msg)
+
+        return jsr
+
+    def new_deposition_version(self, conceptdoi, version_info=None):
+        """
+        Produce a new version for a given deposition archive
+
+        Args:
+            conceptdoi: str, deposition conceptdoi, per
+                        https://help.zenodo.org/#versioning
+
+                        The deposition provided must already exist on Zenodo.
+
+            version_info: a semantic_version.Version.  By default the version metadata
+                will be incremented by on major semantic version number
 
         Returns:
             deposition data as dict, per
             https://developers.zenodo.org/?python#depositions
         """
-        deposition = self.get_deposition("title:(%s)" % metadata["title"])
+        query = 'conceptdoi:"%s"' % conceptdoi
+        deposition = self.get_deposition(query)
 
         if deposition is None:
-            return self.create_deposition(metadata)
+            raise ValueError("Deposition '%s' does not exist" % query)
 
         if deposition["state"] == "unsubmitted":
+            self.logger.debug("deposition '%s' is already a new version" %
+                              deposition["id"])
             return deposition
 
         url = self.api_root + "/deposit/depositions/%d/actions/newversion" \
             % deposition["id"]
 
+        # Create the new version
         params = {"access_token": self.key}
         response = requests.post(url, params=params)
         jsr = response.json()
@@ -139,7 +190,23 @@ class ZenStorage:
             self.logger.error(msg)
             raise RuntimeError(msg)
 
-        return jsr
+        # When the API creates a new version, it does not return the new one.
+        # It returns the old one with a link to the new one.
+        source_metadata = jsr["metadata"]
+        metadata = {}
+
+        for key, val in source_metadata.items():
+            if key not in ["doi", "prereserve_doi"]:
+                metadata[key] = val
+
+        if version_info is None:
+            previous = semantic_version.Version(jsr["metadata"]["version"])
+            version_info = previous.next_major()
+
+        metadata["version"] = str(version_info)
+
+        new_version = self.get_deposition('conceptdoi:"%s"' % conceptdoi)
+        return self.update_deposition(new_version["links"]["self"], metadata)
 
     def file_api_upload(self, deposition, file_name, file_handle):
         """

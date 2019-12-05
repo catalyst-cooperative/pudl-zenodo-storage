@@ -4,6 +4,7 @@ import io
 import os
 import random
 import requests
+import semantic_version
 
 from zs import ZenStorage
 
@@ -29,7 +30,7 @@ class TestZenStorage:
         td = copy.deepcopy(self.test_deposition)
         td["title"] += ": %d" % random.randint(1000, 9999)
 
-        lookup = self.zs.get_deposition(td["title"])
+        lookup = self.zs.get_deposition('title:"%s"' % td["title"])
         assert(lookup is None)
 
         create = self.zs.create_deposition(td)
@@ -40,8 +41,24 @@ class TestZenStorage:
         requests.post(
             create["links"]["publish"], data={"access_token": self.zs.key})
 
-        lookup = self.zs.get_deposition(td["title"])
+        lookup = self.zs.get_deposition('title:"%s"' % td["title"])
         assert(lookup["metadata"]["title"] == td["title"])
+
+    def test_update(self):
+        """Ensure updating a deposition's metadata works."""
+        td = copy.deepcopy(self.test_deposition)
+
+        td["title"] += ": %d" % random.randint(1000, 9999)
+        deposition = self.zs.create_deposition(td)
+
+        newtd = copy.deepcopy(self.test_deposition)
+        newtd["title"] += " - updated"
+        newtd["description"] += " ... also updated."
+
+        update = self.zs.update_deposition(deposition["links"]["self"], newtd)
+        assert update["metadata"]["title"] == newtd["title"]
+        assert update["metadata"]["description"] == newtd["description"]
+        assert update["metadata"]["keywords"] == newtd["keywords"]
 
     def test_new_version_and_file_api_upload(self):
         """Ensure we can create new versions of a deposition"""
@@ -66,11 +83,14 @@ class TestZenStorage:
         assert published["state"] == "done"
         assert published["submitted"]
 
-        new_version = self.zs.new_deposition_version(td)
+        new_version = self.zs.new_deposition_version(published["conceptdoi"])
 
         assert new_version["title"] == first["title"]
         assert new_version["state"] == "unsubmitted"
         assert not new_version["submitted"]
+
+        assert semantic_version.Version(published["metadata"]["version"]) < \
+            semantic_version.Version(new_version["metadata"]["version"])
 
     def test_bucket_api_upload(self):
         """Verify the bucket api upload"""
@@ -89,5 +109,5 @@ class TestZenStorage:
                 "Failed to save test deposition: code %d, %s" %
                 (response.status_code, published))
 
-        lookup = self.zs.get_deposition(td["title"])
+        lookup = self.zs.get_deposition('title:"%s"' % td["title"])
         assert lookup["files"][0]["filename"] == "testing.txt"
