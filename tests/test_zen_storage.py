@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import json
 import copy
 import io
 import os
@@ -47,24 +46,16 @@ class TestZenStorage:
 
     def test_update(self):
         """Ensure updating a deposition's metadata works."""
-        td = copy.deepcopy(self.test_depostion)
+        td = copy.deepcopy(self.test_deposition)
+
         td["title"] += ": %d" % random.randint(1000, 9999)
         deposition = self.zs.create_deposition(td)
 
-        response = requests.post(disposition["links"]["publish"],
-                                 data={"access_token": self.zs.key})
-        published = response.json()
-
-        if response.status_code > 299:
-            raise AssertionError(
-                "Failed to save test deposition: code %d, %s" %
-                (response.status_code, published))
-
-        newtd = copy.copy(td)
+        newtd = copy.deepcopy(self.test_deposition)
         newtd["title"] += " - updated"
         newtd["description"] += " ... also updated."
 
-        update = self.zs.update_disposition(disposition["links"]["self"], newtd)
+        update = self.zs.update_deposition(deposition["links"]["self"], newtd)
         assert update["metadata"]["title"] == newtd["title"]
         assert update["metadata"]["description"] == newtd["description"]
         assert update["metadata"]["keywords"] == newtd["keywords"]
@@ -94,15 +85,12 @@ class TestZenStorage:
 
         new_version = self.zs.new_deposition_version(published["conceptdoi"])
 
-        msg = json.dumps([published, new_version], indent=4, sort_keys=True)
-        print(msg)
-
         assert new_version["title"] == first["title"]
         assert new_version["state"] == "unsubmitted"
         assert not new_version["submitted"]
 
         assert semantic_version.Version(published["metadata"]["version"]) < \
-               semantic_version.Version(new_version["metadata"]["version"])
+            semantic_version.Version(new_version["metadata"]["version"])
 
     def test_bucket_api_upload(self):
         """Verify the bucket api upload"""

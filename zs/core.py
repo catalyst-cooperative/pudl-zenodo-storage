@@ -122,14 +122,39 @@ class ZenStorage:
         return jsr
 
     def update_deposition(self, deposition_url, metadata):
-        raise NotImplementedError("Not ready yet.")
+        """
+        Update the metadata of an existing Deposition.
+
+        Args:
+            deposition_url: str, url for the deposition, as found in
+                deposition["links"]["self"]
+
+            metadata: dict, carrying the replacement metadata
+
+        Returns:
+            updated deposition data
+        """
+        data = json.dumps({"metadata": metadata})
+        params = {"access_token": self.key}
+        headers = {"Content-Type": "application/json"}
+
+        response = requests.put(
+            deposition_url, params=params, data=data, headers=headers)
+        jsr = response.json()
+
+        if response.status_code != 200:
+            msg = "Failed to update: %s / %s" % (jsr, json.dumps(metadata))
+            self.logger.error(msg)
+            raise RuntimeError(msg)
+
+        return jsr
 
     def new_deposition_version(self, conceptdoi, version_info=None):
         """
         Produce a new version for a given deposition archive
 
         Args:
-            conceptdoi: deposition conceptdoi, per
+            conceptdoi: str, deposition conceptdoi, per
                         https://help.zenodo.org/#versioning
 
                         The deposition provided must already exist on Zenodo.
@@ -167,16 +192,21 @@ class ZenStorage:
 
         # When the API creates a new version, it does not return the new one.
         # It returns the old one with a link to the new one.
-        metadata = jsr["metadata"]
+        source_metadata = jsr["metadata"]
+        metadata = {}
+
+        for key, val in source_metadata.items():
+            if key not in ["doi", "prereserve_doi"]:
+                metadata[key] = val
 
         if version_info is None:
-            previous = semantic_version.Version(metadata["version"])
+            previous = semantic_version.Version(jsr["metadata"]["version"])
             version_info = previous.next_major()
 
         metadata["version"] = str(version_info)
 
         new_version = self.get_deposition('conceptdoi:"%s"' % conceptdoi)
-        return self.update_deposition(new_version, metadata)
+        return self.update_deposition(new_version["links"]["self"], metadata)
 
     def file_api_upload(self, deposition, file_name, file_handle):
         """
