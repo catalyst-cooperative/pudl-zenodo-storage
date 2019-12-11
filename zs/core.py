@@ -6,20 +6,6 @@ import requests
 import semantic_version
 
 
-eia860_metadata = {
-    "title": "Eia860 Source",
-    "upload_type": "dataset",
-    "description": "Eia860 Form Data, archived from "
-                   "https://www.eia.gov/electricity/data/eia860/",
-    "creators": [
-        {"name": "Source: US Energy Information Administration"},
-        {"name": "Uploaded: Catalyst Cooperative"}
-    ],
-    "access_right": "open",
-    "keywords": ["eia860", "electricity", "usa"]
-}
-
-
 class ZenStorage:
     """Thin interface to store data with zenodo.org via their api"""
 
