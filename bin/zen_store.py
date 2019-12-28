@@ -6,7 +6,6 @@ import io
 import json
 from hashlib import md5
 import os
-import random
 import requests
 import sys
 
@@ -21,7 +20,7 @@ zen_store.py [--noop] [--test] eia860 ~/tmp/*.zip
 """
 
 
-def local_md5s(file_paths):
+def local_fileinfo(file_paths):
     """
     Produce a dict describing file names, paths, and md5 hashes.
 
@@ -29,7 +28,7 @@ def local_md5s(file_paths):
         file_paths: a list file path strings, as provided from the CLI
 
     Returns:
-        dict of form {filename: {path: str, hash: str (md5)}}
+        dict of form {filename: {path: str, checksum: str (md5)}}
     """
     def file_md5s(file_path):
         hash_md5 = md5()
@@ -44,16 +43,68 @@ def local_md5s(file_paths):
 
     for fp in file_paths:
         path, name = os.path.split(os.path.abspath(fp))
-        file_hash = file_md5s(fp)
+        checksum = file_md5s(fp)
 
         if name in metadata:
             msg = "File names must be unique: %s name conflicts with %s/%s" % (
                 path, metadata[name]["path"], name)
             raise ValueError(msg)
 
-        metadata[name] = {"path": path, "hash": file_hash}
+        metadata[name] = {"path": path, "checksum": checksum}
 
     return metadata
+
+
+def remote_fileinfo(zenodo, metadata):
+    """
+    Collect and shape file data from an existing Zenodo deposition
+
+    Args:
+        zenodo: a zs.ZenStorage manager
+        metadata: the zen_store metadata for the deposition, such as
+            zen_store.metadata.eia860
+
+    Returns:
+        dict of form {filename: {path: str, checksum: str (md5)}}
+    """
+    deposition = zenodo.get_deposition('title:"%s"' % metadata["title"])
+    return {item["filename"]: item for item in deposition["files"]}
+
+
+def action_steps(new_files, old_files):
+    """
+    Determine which files need to be created, updated, and deleted
+
+    Args:
+        new_files: dict of local files, per local_fileinfo(...)
+        old_files: dict of previous files, per remote_fileinfo(...)
+
+    Returns:
+        dict of:
+            {create: {<fileinfo>}, update: {<fileinfo>}, delete: {<fileinfo>}}
+    """
+    actions = {"create": {}, "update": {}, "delete": {}}
+
+    for filename, data in new_files.items():
+
+        if filename == "datapackage.json":
+            continue
+
+        if filename not in old_files:
+            actions["create"][filename] = data
+        elif data["checksum"] != old_files[filename]["checksum"]:
+            actions["update"][filename] = old_files[filename]
+            actions["update"][filename]["path"] = data["path"]
+
+    for filename, data in old_files.items():
+
+        if filename == "datapackage.json":
+            continue
+
+        if filename not in new_files:
+            actions["delete"][filename] = data
+
+    return actions
 
 
 def initial_run(zenodo, metadata, datapackage, file_paths):
@@ -69,7 +120,7 @@ def initial_run(zenodo, metadata, datapackage, file_paths):
         file_paths: a list of files to upload
 
     Returns:
-        True on success, raises an error on failure
+        None, raises an error on failure
     """
     # Only run if the archive really has never been created
     try:
@@ -109,6 +160,46 @@ def initial_run(zenodo, metadata, datapackage, file_paths):
     return True
 
 
+def execute_actions(zenodo, deposition, steps):
+    """
+    Execute all actions from the given steps.
+
+    Args:
+        zenodo: a zs.ZenStorage manager
+        deposition: deposition descriptor as retrieved from Zenodo.
+        steps: dict of file info to create, update, and delete, per
+            action_steps(...)
+
+    Return:
+        None, or error on failure
+    """
+    if steps["create"] == {} and steps["update"] == {} and \
+            steps["delete"] == {}:
+        return
+
+    new_deposition = zenodo.new_deposition_version(deposition["conceptdoi"])
+    nd_files = {item["filename"]: item for item in new_deposition["files"]}
+
+    for filename, data in steps["create"]:
+        path = os.path.join(data["path"], filename)
+
+        with open(path, "rb") as f:
+            zenodo.bucket_api_upload(new_deposition, filename, f)
+
+    for filename, data in steps["update"]:
+        requests.delete(nd_files[filename]["links"]["self"],
+                        params={"access_token": zenodo.key})
+
+        path = os.path.join(data["path"], filename)
+
+        with open(path, "rb") as f:
+            zenodo.bucket_api_upload(new_deposition, filename, f)
+
+    for filename, data in steps["delete"]:
+        requests.delete(nd_files[filename]["links"]["self"],
+                        params={"access_token": zenodo.key})
+
+
 def parse_main():
     """
     Process base commands from the CLI
@@ -140,7 +231,7 @@ if __name__ == "__main__":
 
     if args.deposition == "eia860":
         metadata = zs.metadata.eia860_source
-        metadata["title"] += ": Test #%d" % random.randint(1000, 9999)
+        metadata["title"] += ": Test #%d" % 8494
         fl = frictionless.eia860.eia860
     else:
         raise ValueError("Unsupported archive: %s" % args.deposition)
@@ -150,3 +241,8 @@ if __name__ == "__main__":
             sys.exit()
         initial_run(zenodo, metadata, fl, args.files)
         sys.exit()
+
+    local = local_fileinfo(args.files)
+    remote = remote_fileinfo(zenodo, metadata)
+    actions = action_steps(local, remote)
+    print(json.dumps(actions, indent=4, sort_keys=True))
