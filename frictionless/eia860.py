@@ -10,7 +10,7 @@ from . import mediatype
 Provide datapackage details specific to the Eia860 archives
 """
 
-eia860 = {
+eia860_archive = {
     "name": "Eia860",
     "title": "Eia860",
     "description":
@@ -39,7 +39,17 @@ eia860 = {
 
 
 def archive_resource(name, url, size, md5_hash):
-    """Produce the resource descriptor for a single file"""
+    """
+    Produce the resource descriptor for a single file
+
+    Args:
+        name: str, file name
+        url: str, url to download the file from Zenodo
+        size: int, size it bytes
+        md5_hash: str, the md5 checksum of the file
+
+    Return: None
+    """
     match = re.search(r"([\d]{4})", name)
 
     if match is None:
@@ -61,3 +71,14 @@ def archive_resource(name, url, size, md5_hash):
         "bytes": size,
         "hash": md5_hash
     }
+
+
+def datapackager(dfiles):
+    """Produce the datapackage json for the eia860 archival collection."""
+    resources = [
+        archive_resource(x["filename"],
+        x["links"]["self"],
+        x["filesize"], x["checksum"])
+        for x in dfiles]
+
+    return dict(**eia860_archive, **{"resources": resources})

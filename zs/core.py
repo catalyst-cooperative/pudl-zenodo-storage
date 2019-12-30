@@ -247,3 +247,26 @@ class ZenStorage:
             raise RuntimeError(msg)
 
         return jsr
+
+    def upload(self, deposition, file_name, file_handle):
+        """
+        Upload a file for the given deposition.  Attempt using the bucket api
+        and fall back on the file api
+
+        Args:
+            deposition: the dict of the deposition resource
+            file_name: the desired file name
+            file_handle: an open file handle or bytes like object.
+                Must be < 100MB
+
+        Returns:
+            dict of the deposition file resource, per
+                https://developers.zenodo.org/#deposition-files
+        """
+        try:
+            jsr = self.bucket_api_upload(deposition, file_name, file_handle)
+        except Exception:
+            file_handle.seek(0,0)
+            jsr = self.file_api_upload(deposition, file_name, file_handle)
+
+        return jsr

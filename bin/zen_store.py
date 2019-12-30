@@ -55,20 +55,26 @@ def local_fileinfo(file_paths):
     return metadata
 
 
-def remote_fileinfo(zenodo, metadata):
+def remote_fileinfo(zenodo, deposition):
     """
     Collect and shape file data from an existing Zenodo deposition
 
     Args:
         zenodo: a zs.ZenStorage manager
-        metadata: the zen_store metadata for the deposition, such as
-            zen_store.metadata.eia860
+        metadata: the deposition details, as retrieved from Zenodo
 
     Returns:
         dict of form {filename: {path: str, checksum: str (md5)}}
     """
-    deposition = zenodo.get_deposition('title:"%s"' % metadata["title"])
-    return {item["filename"]: item for item in deposition["files"]}
+
+    if "files" in deposition:
+        files = deposition["files"]
+    else:
+        response = requests.get(deposition["links"]["files"],
+                                params={"access_token": zenodo.key})
+        files = response.json()
+
+    return {item["filename"]: item for item in files}
 
 
 def action_steps(new_files, old_files):
@@ -107,7 +113,7 @@ def action_steps(new_files, old_files):
     return actions
 
 
-def initial_run(zenodo, metadata, datapackage, file_paths):
+def initial_run(zenodo, metadata, datapackager, file_paths):
     """
     Create the first version of a Zenodo archive.
 
@@ -115,8 +121,10 @@ def initial_run(zenodo, metadata, datapackage, file_paths):
         zenodo: a zs.ZenStorage manager
         metadata: the zen_store metadata (NOT frictionless datapackage data!) for
             the deposition, such as zen_store.metadata.eia860
-        datapackage: the frictionless data package metadata, such as
-            frictionless.eia860.eia860
+        datapackager: a data package generation function that takes a list of
+            Zenodo file descriptors and produces the complete frictionless
+            datapackage json.
+            e.g. frictionless.eia860_archive.datapackager
         file_paths: a list of files to upload
 
     Returns:
@@ -136,17 +144,27 @@ def initial_run(zenodo, metadata, datapackage, file_paths):
     # New deposition
     deposition = zenodo.create_deposition(metadata)
 
-    # Save the datapackage.json
-    fstr = json.dumps(datapackage, indent=4, sort_keys=True)
-    fcontents = io.BytesIO(bytes(fstr, encoding="utf-8"))
-    zenodo.bucket_api_upload(deposition, "datapackage.json", fcontents)
-
     # Upload all requested files
     for fp in file_paths:
         path, name = os.path.split(fp)
 
         with open(fp, "rb") as f:
-            zenodo.bucket_api_upload(deposition, name, f)
+            zenodo.upload(deposition, name, f)
+
+    # Save the datapackage.json
+    raise NotImplementedError("Replacing the datapackage should be a function.")
+    response = requests.get(deposition["links"]["self"],
+                            params={"access_token": zenodo.key})
+    jsr = response.json()
+
+    if response.status_code > 299:
+        raise RuntimeError(
+            "Could not retrieve updated deposition file list: %s" % jsr)
+
+    datapackage = datapackager(jsr["files"])
+    fstr = json.dumps(datapackage, indent=4, sort_keys=True)
+    fcontents = io.BytesIO(bytes(fstr, encoding="utf-8"))
+    zenodo.upload(deposition, "datapackage.json", fcontents)
 
     # Publish
     response = requests.post(
@@ -160,13 +178,17 @@ def initial_run(zenodo, metadata, datapackage, file_paths):
     return True
 
 
-def execute_actions(zenodo, deposition, steps):
+def execute_actions(zenodo, deposition, datapackager, steps):
     """
     Execute all actions from the given steps.
 
     Args:
         zenodo: a zs.ZenStorage manager
         deposition: deposition descriptor as retrieved from Zenodo.
+        datapackager: a data package generation function that takes a list of
+            Zenodo file descriptors and produces the complete frictionless
+            datapackage json.
+            e.g. frictionless.eia860_archive.datapackager
         steps: dict of file info to create, update, and delete, per
             action_steps(...)
 
@@ -178,26 +200,41 @@ def execute_actions(zenodo, deposition, steps):
         return
 
     new_deposition = zenodo.new_deposition_version(deposition["conceptdoi"])
-    nd_files = {item["filename"]: item for item in new_deposition["files"]}
+    nd_files = remote_fileinfo(zenodo, new_deposition)
 
-    for filename, data in steps["create"]:
+    for filename, data in steps["create"].items():
         path = os.path.join(data["path"], filename)
 
         with open(path, "rb") as f:
-            zenodo.bucket_api_upload(new_deposition, filename, f)
+            zenodo.upload(new_deposition, filename, f)
 
-    for filename, data in steps["update"]:
+    for filename, data in steps["update"].items():
         requests.delete(nd_files[filename]["links"]["self"],
                         params={"access_token": zenodo.key})
 
         path = os.path.join(data["path"], filename)
 
         with open(path, "rb") as f:
-            zenodo.bucket_api_upload(new_deposition, filename, f)
+            zenodo.upload(new_deposition, filename, f)
 
-    for filename, data in steps["delete"]:
+    for filename, data in steps["delete"].items():
         requests.delete(nd_files[filename]["links"]["self"],
                         params={"access_token": zenodo.key})
+
+    # Replace the datapackage json
+    old_datapackage = nd_files.get("datapackage.json", None)
+    raise NotImplementedError("Replacing the datapackage should be a function.")
+
+    # Publish
+    response = requests.post(
+            new_deposition["links"]["publish"], data={"access_token": zenodo.key})
+    jsr = response.json()
+
+    if response.status_code > 299:
+        msg = "Failed to publish %s: %s" % (metadata["title"], json.dumps(jsr))
+        raise RuntimeError(msg)
+
+    return True
 
 
 def parse_main():
@@ -206,7 +243,7 @@ def parse_main():
     """
     parser = argparse.ArgumentParser(
         description="Upload PUDL data archives to Zenodo")
-    parser.add_argument("--noop", action="store_true",
+    parser.add_argument("--noop", action="store_true", default=False,
                         help="Review changes without uploading")
     parser.add_argument("--sandbox", action="store_true",
                         help="Use Zenodo sandbox server")
@@ -214,7 +251,7 @@ def parse_main():
         "--initialize", action="store_true",
         help="Produce the first version of a new Zenodo deposition.")
     parser.add_argument("deposition", help="Name of the Zenodo deposition."
-                        " Supported: eia860")
+                        " Supported: eia860_source")
 
     parser.add_argument("files", nargs="*", help="All files to upload")
     return parser.parse_args()
@@ -229,20 +266,27 @@ if __name__ == "__main__":
         # Because this is still just in development!
         zenodo = ZenStorage(key=os.environ["ZENODO_TEST_KEY"], testing=True)
 
-    if args.deposition == "eia860":
+    if args.deposition == "eia860_source":
         metadata = zs.metadata.eia860_source
-        metadata["title"] += ": Test #%d" % 8494
-        fl = frictionless.eia860.eia860
+        metadata["title"] += ": Test #%d" % 8495  # TODO: REMOVE THIS
+        datapackager = frictionless.eia860.datapackager
     else:
         raise ValueError("Unsupported archive: %s" % args.deposition)
 
     if args.initialize:
         if args.noop:
             sys.exit()
-        initial_run(zenodo, metadata, fl, args.files)
+        initial_run(zenodo, metadata, datapackager, args.files)
         sys.exit()
 
     local = local_fileinfo(args.files)
-    remote = remote_fileinfo(zenodo, metadata)
-    actions = action_steps(local, remote)
-    print(json.dumps(actions, indent=4, sort_keys=True))
+
+    deposition = zenodo.get_deposition('title: "%s"' % metadata["title"])
+    remote = remote_fileinfo(zenodo, deposition)
+    steps = action_steps(local, remote)
+
+    if args.noop:
+        print(json.dumps(steps, indent=4, sort_keys=True))
+        sys.exit()
+
+    execute_actions(zenodo, deposition, datapackager, steps)
