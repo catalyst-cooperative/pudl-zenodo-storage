@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from datetime import datetime, timezone
 import re
 
 from . import licenses
@@ -82,4 +83,6 @@ def datapackager(dfiles):
             x["filesize"], x["checksum"])
         for x in dfiles]
 
-    return dict(**eia860_archive, **{"resources": resources})
+    return dict(**eia860_archive,
+                **{"resources": resources,
+                   "created": datetime.now(timezone.utc).isoformat()})
