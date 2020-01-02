@@ -254,7 +254,7 @@ class ZenStorage:
         and fall back on the file api
 
         Args:
-            deposition: the dict of the deposition resource
+            deposition: dict of the deposition resource
             file_name: the desired file name
             file_handle: an open file handle or bytes like object.
                 Must be < 100MB
@@ -266,7 +266,32 @@ class ZenStorage:
         try:
             jsr = self.bucket_api_upload(deposition, file_name, file_handle)
         except Exception:
-            file_handle.seek(0,0)
+            file_handle.seek(0, 0)
             jsr = self.file_api_upload(deposition, file_name, file_handle)
+
+        return jsr
+
+    def publish(self, deposition):
+        """
+        Publish a given deposition.
+
+        Args:
+            deposition: dict of the deposition
+
+        Returns:
+            dict of the published deposition, per
+            https://developers.zenodo.org/#depositions
+        """
+        if deposition["submitted"]:
+            return deposition
+
+        response = requests.post(
+                deposition["links"]["publish"], params={"access_token": self.key})
+        jsr = response.json()
+
+        if response.status_code != 202:
+            msg = "Failed to publish %s: %s" % (deposition["title"], json.dumps(jsr))
+            self.logger.error(msg)
+            raise RuntimeError(msg)
 
         return jsr
