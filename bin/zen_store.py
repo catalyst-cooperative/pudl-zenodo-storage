@@ -9,7 +9,7 @@ import os
 import requests
 import sys
 
-import frictionless.eia860
+import frictionless.eia860_source
 from zs import ZenStorage
 import zs.metadata
 
@@ -86,7 +86,7 @@ def new_datapackage(zenodo, datapackager, deposition):
         datapackager: a data package generation function that takes a list of
             Zenodo file descriptors and produces the complete frictionless
             datapackage json.
-            e.g. frictionless.eia860_archive.datapackager
+            e.g. frictionless.eia860_source.datapackager
         deposition: the deposition details, as retrieved from Zenodo. Must be
                     in an editable state.
 
@@ -152,7 +152,7 @@ def execute_actions(zenodo, deposition, datapackager, steps):
         datapackager: a data package generation function that takes a list of
             Zenodo file descriptors and produces the complete frictionless
             datapackage json.
-            e.g. frictionless.eia860_archive.datapackager
+            e.g. frictionless.eia860_source.datapackager
         steps: dict of file info to create, update, and delete, per
             action_steps(...)
 
@@ -197,11 +197,11 @@ def initial_run(zenodo, metadata, datapackager, file_paths):
     Args:
         zenodo: a zs.ZenStorage manager
         metadata: the zen_store metadata (NOT frictionless datapackage data!) for
-            the deposition, such as zen_store.metadata.eia860
+            the deposition, such as zs.metadata.eia860_source
         datapackager: a data package generation function that takes a list of
             Zenodo file descriptors and produces the complete frictionless
             datapackage json.
-            e.g. frictionless.eia860_archive.datapackager
+            e.g. frictionless.eia860_source.datapackager
         file_paths: a list of files to upload
 
     Returns:
@@ -262,12 +262,11 @@ if __name__ == "__main__":
         zenodo = ZenStorage(key=os.environ["ZENODO_TEST_KEY"], testing=True)
     else:
         # Because this is still just in development!
-        zenodo = ZenStorage(key=os.environ["ZENODO_TEST_KEY"], testing=True)
+        raise NotImplementedError("For now, use --sandbox.")
 
     if args.deposition == "eia860_source":
         metadata = zs.metadata.eia860_source
-        metadata["title"] += ": Test #%d" % 8499  # TODO: REMOVE THIS
-        datapackager = frictionless.eia860.datapackager
+        datapackager = frictionless.eia860_source.datapackager
     else:
         raise ValueError("Unsupported archive: %s" % args.deposition)
 

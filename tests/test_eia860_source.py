@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import random
 
-from frictionless import eia860
+from frictionless import eia860_source
+
 
 class TestEia860:
     """Ensure we can create proper frictionless datapackage descriptions"""
@@ -22,7 +23,7 @@ class TestEia860:
             "https://sandbox.zenodo.org/api/deposit/depositions/430193/files/bc8c0768-24c1-4e2e-9b10-276a5b686c41",
             "https://sandbox.zenodo.org/api/deposit/depositions/430193/files/b425e22a-3e84-412a-a29e-f8d87a1fc58a"])
 
-        res = eia860.archive_resource(name, url, size, md5_hash)
+        res = eia860_source.archive_resource(name, url, size, md5_hash)
 
         assert(res["name"] == name)
         assert(res["title"] == "eia860-%d" % year)

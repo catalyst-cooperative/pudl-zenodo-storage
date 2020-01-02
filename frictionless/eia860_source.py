@@ -76,9 +76,10 @@ def archive_resource(name, url, size, md5_hash):
 def datapackager(dfiles):
     """Produce the datapackage json for the eia860 archival collection."""
     resources = [
-        archive_resource(x["filename"],
-        x["links"]["self"],
-        x["filesize"], x["checksum"])
+        archive_resource(
+            x["filename"],
+            x["links"]["self"],
+            x["filesize"], x["checksum"])
         for x in dfiles]
 
     return dict(**eia860_archive, **{"resources": resources})
