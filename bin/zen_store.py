@@ -190,12 +190,13 @@ def execute_actions(zenodo, deposition, datapackager, steps):
     zenodo.publish(new_deposition)
 
 
-def initial_run(zenodo, metadata, datapackager, file_paths):
+def initial_run(zenodo, key_id, metadata, datapackager, file_paths):
     """
     Create the first version of a Zenodo archive.
 
     Args:
         zenodo: a zs.ZenStorage manager
+        key_id: keyword uuid, such as zs.metadata.eia860_source_uuid
         metadata: the zen_store metadata (NOT frictionless datapackage data!) for
             the deposition, such as zs.metadata.eia860_source
         datapackager: a data package generation function that takes a list of
@@ -208,8 +209,14 @@ def initial_run(zenodo, metadata, datapackager, file_paths):
         None, raises an error on failure
     """
     # Only run if the archive really has never been created
+
+    if key_id not in metadata["keywords"]:
+        # Not auto-correcting because it could mean a mixup between the
+        # frictionless datapackage and the zenodo metadata
+        raise ValueError("key_id missing from metadata keywords")
+
     try:
-        deposition = zenodo.get_deposition('title="%s"' % metadata["title"])
+        deposition = zenodo.get_deposition('keyword="%s"' % key_id)
         exists = deposition is not None
     except RuntimeError as err:
         exists = False
@@ -266,6 +273,7 @@ if __name__ == "__main__":
 
     if args.deposition == "eia860_source":
         metadata = zs.metadata.eia860_source
+        key_id = zs.metadata.eia860_source_uuid
         datapackager = frictionless.eia860_source.datapackager
     else:
         raise ValueError("Unsupported archive: %s" % args.deposition)
@@ -273,12 +281,12 @@ if __name__ == "__main__":
     if args.initialize:
         if args.noop:
             sys.exit()
-        initial_run(zenodo, metadata, datapackager, args.files)
+        initial_run(zenodo, key_id, metadata, datapackager, args.files)
         sys.exit()
 
     local = local_fileinfo(args.files)
 
-    deposition = zenodo.get_deposition('title: "%s"' % metadata["title"])
+    deposition = zenodo.get_deposition('keywords: "%s"' % key_id)
 
     if deposition is None:
         raise ValueError("Deposition not found. You may need to --initialize")
