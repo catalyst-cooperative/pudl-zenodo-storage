@@ -8,28 +8,28 @@ from . import contributors
 Provide datapackage details specific to the Eia860 archives
 """
 
-eia860_source = {
-    "name": "Eia860",
-    "title": "Eia860",
+ferc1_source = {
+    "name": "FERC Form No. 1",
+    "title": "FERC Form No. 1",
     "description":
-        "Form Eia860 data for electric power plants with 1 megawatt "
-        "greater compbined nameplate capacity.",
+        "Form No. 1 financial and operating report from the Federal Energy "
+        "regulatory commission.",
 
     "profile": "data-package",
     "keywords": [
-        "electricity", "electric", "boiler", "generator", "plant", "utility",
-        "fuel", "coal", "natural gas", " prime mover", "eia860", "retirement",
-        "capacity", "planned", "proposed", "energy", "hydro", "solar", "wind",
-        "nuclear", "form 860", "eia", "annual", "gas", "ownership", "steam",
-        "turbine", "combustion", "combined cycle", "eia",
-        "energy information administration"
+        'electricity', 'electric', 'utility', 'plant', 'steam', 'generation',
+        'cost', 'expense', 'price', 'heat content', 'ferc', 'form 1',
+        'federal energy regulatory commission', 'capital', 'accounting',
+        'depreciation', 'finance', 'plant in service', 'hydro', 'coal',
+        'natural gas', 'gas', 'opex', 'capex', 'accounts', 'investment',
+        'capacity'
     ],
     "licenses": [licenses.us_govt, licenses.cc_by],
     "homepage": "https://catalyst.coop/pudl/",
     "sources": [
         {
             "title": "US Energy Information Administration",
-            "path": "https://www.eia.gov/electricity/data/eia860/"
+            "path": "https://www.ferc.gov/docs-filing/forms/form-1/data.asp"
         }
     ],
     "contributors": [contributors.catalyst_cooperative]
@@ -47,4 +47,4 @@ def datapackager(dfiles):
         dict of fields suited to the frictionless datapackage spec
             https://frictionlessdata.io/specs/data-package/
     """
-    return core.annual_resource_datapackager(eia860_source, dfiles)
+    return core.annual_resource_datapackager(ferc1_source, dfiles)

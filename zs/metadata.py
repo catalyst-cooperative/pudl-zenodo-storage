@@ -16,5 +16,34 @@ eia860_source = {
         {"name": "Uploaded: Catalyst Cooperative"}
     ],
     "access_right": "open",
-    "keywords": ["eia860", "electricity", "usa", eia860_source_uuid]
+    "keywords": [
+        "electricity", "electric", "boiler", "generator", "plant", "utility",
+        "fuel", "coal", "natural gas", " prime mover", "eia860", "retirement",
+        "capacity", "planned", "proposed", "energy", "hydro", "solar", "wind",
+        "nuclear", "form 860", "eia", "annual", "gas", "ownership", "steam",
+        "turbine", "combustion", "combined cycle", "eia",
+        "energy information administration", "usa", eia860_source_uuid]
+}
+
+
+# For the unaltered Ferc1 archive.
+ferc1_source_uuid = "7e0df893-9496-4052-bbb8-5f3d3f1ae3a6"
+ferc1_source = {
+    "title": "FERC Form 1 Source",
+    "upload_type": "dataset",
+    "description": "Federal Energy Regulatory Commission Form 1 Data, "
+                   "archived from "
+                   "https://www.ferc.gov/docs-filing/forms/form-1/data.asp",
+    "creators": [
+        {"name": "Source: US Federal Energy Regulatory Commission"},
+        {"name": "Uploaded: Catalyst Cooperative"}
+    ],
+    "access_right": "open",
+    "keywords": [
+        "electricity", "electric", "utility", "plant", "steam", "generation",
+        "cost", "expense", "price", "heat content", "ferc", "form 1",
+        "federal energy regulatory commission", "capital", "accounting",
+        "depreciation", "finance", "plant in service", "hydro", "coal",
+        "natural gas", "gas", "opex", "capex", "accounts", "investment",
+        "capacity", "usa", ferc1_source_uuid]
 }

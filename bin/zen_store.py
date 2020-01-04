@@ -10,6 +10,8 @@ import requests
 import sys
 
 import frictionless.eia860_source
+import frictionless.ferc1_source
+
 from zs import ZenStorage
 import zs.metadata
 
@@ -262,6 +264,34 @@ def parse_main():
     return parser.parse_args()
 
 
+def archive_selection(deposition_name):
+    """
+    Produce the datasets needed to run the archiver
+
+    Args:
+        argument: str name for a deposition, as input from the cli.
+
+    Returns:
+        a uuid string from zs.metadata,
+        a metadata descriptor from zs.metadata
+        a datapackager from the appropriate frictionless library
+    """
+    if deposition_name == "eia860_source":
+        key_id = zs.metadata.eia860_source_uuid
+        metadata = zs.metadata.eia860_source
+        datapackager = frictionless.eia860_source.datapackager
+
+    if deposition_name == "ferc1_source":
+        key_id = zs.metadata.ferc1_source_uuid
+        metadata = zs.metadata.ferc1_source
+        datapackager = frictionless.ferc1_source.datapackager
+
+    else:
+        raise ValueError("Unsupported archive: %s" % args.deposition)
+
+    return key_id, metadata, datapackager
+
+
 if __name__ == "__main__":
     args = parse_main()
 
@@ -271,12 +301,7 @@ if __name__ == "__main__":
         # Because this is still just in development!
         raise NotImplementedError("For now, use --sandbox.")
 
-    if args.deposition == "eia860_source":
-        metadata = zs.metadata.eia860_source
-        key_id = zs.metadata.eia860_source_uuid
-        datapackager = frictionless.eia860_source.datapackager
-    else:
-        raise ValueError("Unsupported archive: %s" % args.deposition)
+    key_id, metadata, datapackager = archive_selection(args.deposition)
 
     if args.initialize:
         if args.noop:
