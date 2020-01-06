@@ -10,6 +10,7 @@ import requests
 import sys
 
 import frictionless.eia860_source
+import frictionless.eia923_source
 import frictionless.ferc1_source
 
 from zs import ZenStorage
@@ -257,8 +258,9 @@ def parse_main():
     parser.add_argument(
         "--initialize", action="store_true",
         help="Produce the first version of a new Zenodo deposition.")
-    parser.add_argument("deposition", help="Name of the Zenodo deposition."
-                        " Supported: eia860_source")
+    parser.add_argument("deposition", help="Name of the Zenodo deposition. "
+                        "Supported: eia860_source, eia923_source, "
+                        "ferc1_source")
 
     parser.add_argument("files", nargs="*", help="All files to upload")
     return parser.parse_args()
@@ -280,12 +282,14 @@ def archive_selection(deposition_name):
         key_id = zs.metadata.eia860_source_uuid
         metadata = zs.metadata.eia860_source
         datapackager = frictionless.eia860_source.datapackager
-
-    if deposition_name == "ferc1_source":
+    elif deposition_name == "eia923_source":
+        key_id = zs.metadata.eia923_source_uuid
+        metadata = zs.metadata.eia923_source
+        datapackager = frictionless.eia923_source.datapackager
+    elif deposition_name == "ferc1_source":
         key_id = zs.metadata.ferc1_source_uuid
         metadata = zs.metadata.ferc1_source
         datapackager = frictionless.ferc1_source.datapackager
-
     else:
         raise ValueError("Unsupported archive: %s" % args.deposition)
 

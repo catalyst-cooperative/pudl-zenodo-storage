@@ -16,7 +16,7 @@ eia923_source = {
         "> The survey Form EIA-923 collects detailed electric power data -- "
         "monthly and annually -- on electricity generation, fuel "
         "consumption, fossil fuel stocks, and receipts at the power plant "
-        "and prime mover level.", 
+        "and prime mover level.",
     "profile": "data-package",
     "keywords": [
         "fuel", "boiler", "generator", "plant", "utility", "cost", "price",
@@ -50,4 +50,3 @@ def datapackager(dfiles):
             https://frictionlessdata.io/specs/data-package/
     """
     return core.annual_resource_datapackager(eia923_source, dfiles)
-
