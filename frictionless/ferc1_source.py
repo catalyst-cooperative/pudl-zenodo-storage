@@ -28,7 +28,7 @@ ferc1_source = {
     "homepage": "https://catalyst.coop/pudl/",
     "sources": [
         {
-            "title": "US Energy Information Administration",
+            "title": "Federal Energy Regulatory Commission",
             "path": "https://www.ferc.gov/docs-filing/forms/form-1/data.asp"
         }
     ],
