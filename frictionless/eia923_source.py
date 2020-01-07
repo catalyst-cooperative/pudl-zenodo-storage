@@ -40,7 +40,7 @@ eia923_source = {
 
 def datapackager(dfiles):
     """
-    Produce the datapackage json for the eia860 archival collection.
+    Produce the datapackage json for the eia923 archival collection.
 
     Args:
         metadata: dict of fixed metadata descriptors

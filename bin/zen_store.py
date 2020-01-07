@@ -10,6 +10,7 @@ import requests
 import sys
 
 import frictionless.eia860_source
+import frictionless.eia861_source
 import frictionless.eia923_source
 import frictionless.ferc1_source
 
@@ -282,15 +283,23 @@ def archive_selection(deposition_name):
         key_id = zs.metadata.eia860_source_uuid
         metadata = zs.metadata.eia860_source
         datapackager = frictionless.eia860_source.datapackager
+
+    elif deposition_name == "eia861_source":
+        key_id = zs.metadata.eia861_source_uuid
+        metadata = zs.metadata.eia861_source
+        datapackager = frictionless.eia861_source.datapackager
+
     elif deposition_name == "eia923_source":
         key_id = zs.metadata.eia923_source_uuid
         metadata = zs.metadata.eia923_source
         datapackager = frictionless.eia923_source.datapackager
+
     elif deposition_name == "ferc1_source":
         key_id = zs.metadata.ferc1_source_uuid
         metadata = zs.metadata.ferc1_source
         datapackager = frictionless.ferc1_source.datapackager
     else:
+
         raise ValueError("Unsupported archive: %s" % args.deposition)
 
     return key_id, metadata, datapackager
