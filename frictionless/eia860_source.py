@@ -9,8 +9,8 @@ Provide datapackage details specific to the Eia860 archives
 """
 
 eia860_source = {
-    "name": "Eia860",
-    "title": "Eia860",
+    "name": "Eia860 Source",
+    "title": "Eia860 Source",
     "description":
         "Form Eia860 data for electric power plants with 1 megawatt "
         "greater compbined nameplate capacity.",

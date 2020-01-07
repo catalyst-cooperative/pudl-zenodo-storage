@@ -5,7 +5,7 @@ from . import licenses
 from . import contributors
 
 """
-Provide datapackage details specific to the Eia860 archives
+Provide datapackage details specific to the Eia923 archives
 """
 
 eia923_source = {
