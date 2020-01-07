@@ -9,6 +9,7 @@ from enum import Enum
 class MediaType(Enum):
     """Enumerate file extention -> mediatype descriptors"""
     zip = "application/zip"
+    xlsx = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
 
 def annual_archive_resource(name, url, size, md5_hash):
@@ -21,7 +22,8 @@ def annual_archive_resource(name, url, size, md5_hash):
         size: int, size it bytes
         md5_hash: str, the md5 checksum of the file
 
-    Return: None
+    Return: frictionless datapackage file resource descriptor, per
+            https://frictionlessdata.io/specs/data-resource/
     """
     match = re.search(r"([\d]{4})", name)
 
