@@ -12,16 +12,12 @@ import sys
 import frictionless.eia860_source
 import frictionless.eia861_source
 import frictionless.eia923_source
+import frictionless.epacems_source
 import frictionless.ferc1_source
+import frictionless.ipm_source
 
 from zs import ZenStorage
 import zs.metadata
-
-
-"""
-zen_store.py --help
-zen_store.py [--noop] [--test] eia860 ~/tmp/*.zip
-"""
 
 
 def local_fileinfo(file_paths):
@@ -260,8 +256,9 @@ def parse_main():
         "--initialize", action="store_true",
         help="Produce the first version of a new Zenodo deposition.")
     parser.add_argument("deposition", help="Name of the Zenodo deposition. "
-                        "Supported: eia860_source, eia923_source, "
-                        "ferc1_source")
+                        "Supported: eia860_source, eia861_source, "
+                        "eia923_source, epacems_source, ferc1_source, "
+                        "ipm_source")
 
     parser.add_argument("files", nargs="*", help="All files to upload")
     return parser.parse_args()
@@ -283,26 +280,40 @@ def archive_selection(deposition_name):
         key_id = zs.metadata.eia860_source_uuid
         metadata = zs.metadata.eia860_source
         datapackager = frictionless.eia860_source.datapackager
+        return key_id, metadata, datapackager
 
-    elif deposition_name == "eia861_source":
+    if deposition_name == "eia861_source":
         key_id = zs.metadata.eia861_source_uuid
         metadata = zs.metadata.eia861_source
         datapackager = frictionless.eia861_source.datapackager
+        return key_id, metadata, datapackager
 
-    elif deposition_name == "eia923_source":
+    if deposition_name == "eia923_source":
         key_id = zs.metadata.eia923_source_uuid
         metadata = zs.metadata.eia923_source
         datapackager = frictionless.eia923_source.datapackager
+        return key_id, metadata, datapackager
 
-    elif deposition_name == "ferc1_source":
+    if deposition_name == "epacems_source":
+        key_id = zs.metadata.epacems_source_uuid
+        metadata = zs.metadata.epacems_source
+        datapackager = frictionless.epacems_source.datapackager
+        return key_id, metadata, datapackager
+
+    if deposition_name == "ferc1_source":
         key_id = zs.metadata.ferc1_source_uuid
         metadata = zs.metadata.ferc1_source
         datapackager = frictionless.ferc1_source.datapackager
-    else:
+        return key_id, metadata, datapackager
 
-        raise ValueError("Unsupported archive: %s" % args.deposition)
+    if deposition_name == "ipm_source":
+        key_id = zs.metadata.ipm_source_uuid
+        metadata = zs.metadata.ipm_source
+        datapackager = frictionless.ipm_source.datapackager
+        return key_id, metadata, datapackager
 
-    return key_id, metadata, datapackager
+    raise ValueError("Unsupported archive: %s" % args.deposition)
+
 
 
 if __name__ == "__main__":

@@ -70,6 +70,29 @@ eia923_source = {
 }
 
 
+# Unaltered EPA CEMS archive
+
+epacems_source_uuid = "7fc36b8c-436e-41bd-a4a6-8fcd72a9eec9"
+epacems_source = {
+    "title": "EPA CEMS Source",
+    "upload_type": "dataset",
+    "description": "US EPA hourly Continuous Emissions Monitoring System "
+                   "(CEMS) data, archived from "
+                   "ftp://newftp.epa.gov/dmdnload/emissions/hourly/monthly",
+    "creators": [
+        {"name": "Source: US Energy Information Administration"},
+        {"name": "Uploaded: Catalyst Cooperative"}
+    ],
+    "access_right": "open",
+    "keywords": [
+        "epa", "us", "emissions", "pollution", "ghg", "so2", "co2", "sox",
+        "nox", "load", "utility", "electricity", "plant", "generator", "unit",
+        "generation", "capacity", "output", "power", "heat content", "mmbtu",
+        "steam", "cems", "continuous emissions monitoring system", "hourly"
+        "environmental protection agency", "ampd", "air markets program data",
+        epacems_source_uuid]
+}
+
 # For the unaltered Ferc1 archive.
 ferc1_source_uuid = "7e0df893-9496-4052-bbb8-5f3d3f1ae3a6"
 ferc1_source = {
@@ -90,4 +113,22 @@ ferc1_source = {
         "depreciation", "finance", "plant in service", "hydro", "coal",
         "natural gas", "gas", "opex", "capex", "accounts", "investment",
         "capacity", "usa", ferc1_source_uuid]
+}
+
+
+# For the unaltered IPM archive.
+ipm_source_uuid = "ad1f19ee-d0aa-4667-b1e8-05da6ff98d2e"
+ipm_source = {
+    "title": "IPM NEEDS Source",
+    "upload_type": "dataset",
+    "description": "EPA National Electric Energy Data System data, archived "
+                   "from https://www.epa.gov/airmarkets/"
+                   "national-electric-energy-data-system-needs-v6",
+    "creators": [
+        {"name": "Source: US Environmental Prectection Agency"},
+        {"name": "Uploaded: Catalyst Cooperative"}
+    ],
+    "access_right": "open",
+    "keywords": ["epa", "ipm", "needs", "usa", "integrated planning",
+                 ipm_source_uuid],
 }
