@@ -46,21 +46,32 @@ def ipm_resource(name, url, size, md5_hash):
     Return: frictionless datapackage file resource descriptor, per
             https://frictionlessdata.io/specs/data-resource/
     """
-    match = re.search(r"([\d]{4})-([\d]{2})-([\d]{2})", name)
 
-    if match is None:
-        raise ValueError("No date found in %s" % name)
+    def make_parts():
+        match = re.search(r"([\d]{4})-([\d]{2})-([\d]{2})", name)
 
-    year, month, day = [int(x) for x in match.groups()]
+        if match is not None:
+            year, month, day = [int(x) for x in match.groups()]
+            return {"year": year, "month": month, "day": day}
+
+        match = re.search(r"(19|20[\d]{2})", name)
+
+        if match is not None:
+            year = match.groups()[0]
+            return {"year": int(year)}
+
+        return
+
     title, file_format = name.split(".")
     mt = core.MediaType[file_format].value
+    parts = make_parts()
 
     return {
         "profile": "data-resource",
         "name": name,
         "path": url,
         "title": title,
-        "parts": {"year": year, "month": month, "day": day},
+        "parts": parts,
         "encoding": "utf-8",
         "mediatype": mt,
         "format": file_format,
