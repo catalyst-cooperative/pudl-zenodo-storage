@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime, timezone
+import os.path
 import re
 
 from enum import Enum
@@ -31,7 +32,8 @@ def annual_archive_resource(name, url, size, md5_hash):
         raise ValueError("No year present in filename %s" % name)
 
     year = int(match.groups()[0])
-    title, file_format = name.split(".")
+    title, file_format = os.path.splitext(name)
+    file_format = file_format[1:]
     mt = MediaType[file_format].value
 
     return {

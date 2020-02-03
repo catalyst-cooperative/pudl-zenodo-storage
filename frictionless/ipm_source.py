@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime, timezone
+import os.path
 import re
 
 
@@ -62,7 +63,8 @@ def ipm_resource(name, url, size, md5_hash):
 
         return
 
-    title, file_format = name.split(".")
+    title, file_format = os.path.splitext(name)
+    file_format = file_format[1:]
     mt = core.MediaType[file_format].value
     parts = make_parts()
 
