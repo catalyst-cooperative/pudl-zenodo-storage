@@ -51,8 +51,9 @@ class TestIpmSource:
     def test_year_only_file(self):
         """Files with a year and no other date info still get the year"""
         year = random.randint(1990, 2020)
-        name = "needs_v6_november_%d_reference_case_%d.xlsx" % (
-            year, random.randint(0, 9))
+        name = "table_3-%d_annual_transmission_capabilities_of_u.s._" \
+               "model_regions_in_epa_platform_v6_-_%d.xlsx" % (
+                    random.randint(1,99), year)
 
         fake_resource = self.fake_resource(name)
         package = ipm_source.datapackager([fake_resource])
