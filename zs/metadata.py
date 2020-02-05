@@ -117,13 +117,14 @@ ferc1_source = {
 
 
 # For the unaltered IPM archive.
-ipm_source_uuid = "ad1f19ee-d0aa-4667-b1e8-05da6ff98d2e"
+ipm_source_uuid = "4d8f577e-c938-4e4b-a6ec-c835cc76a586"
 ipm_source = {
-    "title": "IPM NEEDS Source",
+    "title": "EPA Integrated Planning Model (IPM) National Electric Energy "
+             "Data System (NEEDS) database",
     "upload_type": "dataset",
-    "description": "EPA National Electric Energy Data System data, archived "
-                   "from https://www.epa.gov/airmarkets/"
-                   "national-electric-energy-data-system-needs-v6",
+    "description": "EPA is making the latest power sector modeling platform "
+                   "available, including the associated input data and "
+                   "modeling assumptions, outputs, and documentation.",
     "creators": [
         {"name": "Source: US Environmental Prectection Agency"},
         {"name": "Uploaded: Catalyst Cooperative"}
