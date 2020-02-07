@@ -13,7 +13,7 @@ from . import contributors
 Provide datapackage details specific to the Eia860 archives
 """
 
-ipm_source = {
+epaipm_source = {
     "name": "IPM Source",
     "title": "IPM Source",
     "description": "EPA National Electric Energy Data System data, archived "
@@ -34,7 +34,7 @@ ipm_source = {
 }
 
 
-def ipm_resource(name, url, size, md5_hash):
+def epaipm_resource(name, url, size, md5_hash):
     """
     Produce the resource descriptor for a single file
 
@@ -95,12 +95,12 @@ def datapackager(dfiles):
             https://frictionlessdata.io/specs/data-package/
     """
     resources = [
-        ipm_resource(
+        epaipm_resource(
             x["filename"], 
             x["links"]["self"],
             x["filesize"], x["checksum"])
         for x in dfiles]
 
-    return dict(**ipm_source,
+    return dict(**epaipm_source,
                 **{"resources": resources,
                    "created": datetime.now(timezone.utc).isoformat()})

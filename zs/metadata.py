@@ -117,8 +117,8 @@ ferc1_source = {
 
 
 # For the unaltered IPM archive.
-ipm_source_uuid = "4d8f577e-c938-4e4b-a6ec-c835cc76a586"
-ipm_source = {
+epaipm_source_uuid = "4d8f577e-c938-4e4b-a6ec-c835cc76a586"
+epaipm_source = {
     "title": "EPA Integrated Planning Model (IPM) National Electric Energy "
              "Data System (NEEDS) database",
     "upload_type": "dataset",
@@ -131,5 +131,5 @@ ipm_source = {
     ],
     "access_right": "open",
     "keywords": ["epa", "ipm", "needs", "usa", "integrated planning",
-                 ipm_source_uuid],
+                 epaipm_source_uuid],
 }

@@ -3,7 +3,7 @@ from faker import Faker
 import uuid
 import random
 
-from frictionless import ipm_source
+from frictionless import epaipm_source
 
 
 class TestIpmSource:
@@ -28,14 +28,14 @@ class TestIpmSource:
         """Ensure a single xlsx file gets a good resource descriptor"""
         fake = Faker()
         date = fake.date_between(start_date="-1y", end_date="today")
-        name = "ipm-v6-rev-%s.xlsx" % date.isoformat()
+        name = "epaipm-v6-rev-%s.xlsx" % date.isoformat()
 
         fake_resource = self.fake_resource(name)
-        package = ipm_source.datapackager([fake_resource])
+        package = epaipm_source.datapackager([fake_resource])
         res = package["resources"][0]
 
         assert res["name"] == name
-        assert res["title"] == "ipm-v6-rev-%s" % date.isoformat()
+        assert res["title"] == "epaipm-v6-rev-%s" % date.isoformat()
         assert res["parts"]["year"] == date.year
         assert res["parts"]["month"] == date.month
         assert res["parts"]["day"] == date.day
@@ -56,7 +56,7 @@ class TestIpmSource:
                     random.randint(1,99), year)
 
         fake_resource = self.fake_resource(name)
-        package = ipm_source.datapackager([fake_resource])
+        package = epaipm_source.datapackager([fake_resource])
         res = package["resources"][0]
 
         assert res["name"] == name
@@ -75,7 +75,7 @@ class TestIpmSource:
         """Files with no year are accepted"""
         name = "epaipm.zip"
         fake_resource = self.fake_resource(name)
-        package = ipm_source.datapackager([fake_resource])
+        package = epaipm_source.datapackager([fake_resource])
         res = package["resources"][0]
 
         assert res["name"] == name
