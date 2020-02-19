@@ -277,43 +277,48 @@ def archive_selection(deposition_name):
         a datapackager from the appropriate frictionless library
     """
     if deposition_name == "eia860_source":
-        key_id = zs.metadata.eia860_source_uuid
-        metadata = zs.metadata.eia860_source
-        datapackager = frictionless.eia860_source.datapackager
-        return key_id, metadata, datapackager
+        return {
+            "key_id": zs.metadata.eia860_source_uuid,
+            "metadata": zs.metadata.eia860_source,
+            "datapackager": frictionless.eia860_source.datapackager
+        }
 
     if deposition_name == "eia861_source":
-        key_id = zs.metadata.eia861_source_uuid
-        metadata = zs.metadata.eia861_source
-        datapackager = frictionless.eia861_source.datapackager
-        return key_id, metadata, datapackager
+        return {
+            "key_id": zs.metadata.eia861_source_uuid,
+            "metadata": zs.metadata.eia861_source,
+            "datapackager": frictionless.eia861_source.datapackager
+        }
 
     if deposition_name == "eia923_source":
-        key_id = zs.metadata.eia923_source_uuid
-        metadata = zs.metadata.eia923_source
-        datapackager = frictionless.eia923_source.datapackager
-        return key_id, metadata, datapackager
+        return {
+            "key_id": zs.metadata.eia923_source_uuid,
+            "metadata": zs.metadata.eia923_source,
+            "datapackager": frictionless.eia923_source.datapackager
+        }
 
     if deposition_name == "epacems_source":
-        key_id = zs.metadata.epacems_source_uuid
-        metadata = zs.metadata.epacems_source
-        datapackager = frictionless.epacems_source.datapackager
-        return key_id, metadata, datapackager
+        return {
+            "key_id": zs.metadata.epacems_source_uuid,
+            "metadata": zs.metadata.epacems_source,
+            "datapackager": frictionless.epacems_source.datapackager
+        }
 
     if deposition_name == "ferc1_source":
-        key_id = zs.metadata.ferc1_source_uuid
-        metadata = zs.metadata.ferc1_source
-        datapackager = frictionless.ferc1_source.datapackager
-        return key_id, metadata, datapackager
+        return {
+            "key_id": zs.metadata.ferc1_source_uuid,
+            "metadata": zs.metadata.ferc1_source,
+            "datapackager": frictionless.ferc1_source.datapackager
+        }
 
     if deposition_name == "epaipm_source":
-        key_id = zs.metadata.epaipm_source_uuid
-        metadata = zs.metadata.epaipm_source
-        datapackager = frictionless.epaipm_source.datapackager
-        return key_id, metadata, datapackager
+        return {
+            "key_id": zs.metadata.epaipm_source_uuid,
+            "metadata": zs.metadata.epaipm_source,
+            "datapackager": frictionless.epaipm_source.datapackager
+        }
 
     raise ValueError("Unsupported archive: %s" % args.deposition)
-
 
 
 if __name__ == "__main__":
@@ -325,17 +330,19 @@ if __name__ == "__main__":
         # Because this is still just in development!
         raise NotImplementedError("For now, use --sandbox.")
 
-    key_id, metadata, datapackager = archive_selection(args.deposition)
+    sel = archive_selection(args.deposition)
 
     if args.initialize:
         if args.noop:
             sys.exit()
-        initial_run(zenodo, key_id, metadata, datapackager, args.files)
+
+        initial_run(zenodo, sel["key_id"], sel["metadata"], sel["datapackager"],
+                    args.files)
         sys.exit()
 
     local = local_fileinfo(args.files)
 
-    deposition = zenodo.get_deposition('keywords: "%s"' % key_id)
+    deposition = zenodo.get_deposition('keywords: "%s"' % sel["key_id"])
 
     if deposition is None:
         raise ValueError("Deposition not found. You may need to --initialize")
@@ -347,4 +354,4 @@ if __name__ == "__main__":
         print(json.dumps(steps, indent=4, sort_keys=True))
         sys.exit()
 
-    execute_actions(zenodo, deposition, datapackager, steps)
+    execute_actions(zenodo, deposition, sel["datapackager"], steps)
