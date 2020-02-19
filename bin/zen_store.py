@@ -5,6 +5,7 @@ import argparse
 import io
 import json
 from hashlib import md5
+import glob
 import os
 import requests
 import sys
@@ -272,50 +273,74 @@ def archive_selection(deposition_name):
         argument: str name for a deposition, as input from the cli.
 
     Returns:
-        a uuid string from zs.metadata,
-        a metadata descriptor from zs.metadata
-        a datapackager from the appropriate frictionless library
+        {
+            key_id: a uuid string from zs.metadata,
+            metadata: a metadata descriptor from zs.metadata
+            datapackager: a datapackager from the appropriate frictionless
+                          library
+            latest_files: str path of the most recently scraped copy of the
+                         archive
+        }
     """
+    def latest_files(name):
+        root = os.environ.get(
+            "PUDL_IN",
+            os.path.join(os.path.expanduser("~"), "Downloads", "pudl"))
+        root = os.path.join(root, "scrape", name, "*")
+
+        previous = sorted(glob.glob(root))
+
+        if previous == []:
+            return []
+
+        return glob.glob(os.path.join(previous[-1], "*"))
+
     if deposition_name == "eia860_source":
         return {
             "key_id": zs.metadata.eia860_source_uuid,
             "metadata": zs.metadata.eia860_source,
-            "datapackager": frictionless.eia860_source.datapackager
+            "datapackager": frictionless.eia860_source.datapackager,
+            "latest_files": latest_files("eia860")
         }
 
     if deposition_name == "eia861_source":
         return {
             "key_id": zs.metadata.eia861_source_uuid,
             "metadata": zs.metadata.eia861_source,
-            "datapackager": frictionless.eia861_source.datapackager
+            "datapackager": frictionless.eia861_source.datapackager,
+            "latest_files": latest_files("eia861")
         }
 
     if deposition_name == "eia923_source":
         return {
             "key_id": zs.metadata.eia923_source_uuid,
             "metadata": zs.metadata.eia923_source,
-            "datapackager": frictionless.eia923_source.datapackager
+            "datapackager": frictionless.eia923_source.datapackager,
+            "latest_files": latest_files("eia923")
         }
 
     if deposition_name == "epacems_source":
         return {
             "key_id": zs.metadata.epacems_source_uuid,
             "metadata": zs.metadata.epacems_source,
-            "datapackager": frictionless.epacems_source.datapackager
+            "datapackager": frictionless.epacems_source.datapackager,
+            "latest_files": latest_files("epacems")
         }
 
     if deposition_name == "ferc1_source":
         return {
             "key_id": zs.metadata.ferc1_source_uuid,
             "metadata": zs.metadata.ferc1_source,
-            "datapackager": frictionless.ferc1_source.datapackager
+            "datapackager": frictionless.ferc1_source.datapackager,
+            "latest_files": latest_files("ferc1")
         }
 
     if deposition_name == "epaipm_source":
         return {
             "key_id": zs.metadata.epaipm_source_uuid,
             "metadata": zs.metadata.epaipm_source,
-            "datapackager": frictionless.epaipm_source.datapackager
+            "datapackager": frictionless.epaipm_source.datapackager,
+            "latest_files": latest_files("epaipm")
         }
 
     raise ValueError("Unsupported archive: %s" % args.deposition)
@@ -331,6 +356,8 @@ if __name__ == "__main__":
         raise NotImplementedError("For now, use --sandbox.")
 
     sel = archive_selection(args.deposition)
+    print(sel["latest_files"])
+    sys.exit()
 
     if args.initialize:
         if args.noop:
