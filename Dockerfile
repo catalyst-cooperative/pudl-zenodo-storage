@@ -4,6 +4,7 @@ ENV USER=pudl
 ENV UID=50000
 ENV GID=50000
 ENV HOME=/home/pudl
+ENV PUDL_IN=${HOME}/pudl/
 
 RUN apk add build-base
 

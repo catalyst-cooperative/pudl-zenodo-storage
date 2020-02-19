@@ -20,6 +20,11 @@ import frictionless.ferc1_source
 from zs import ZenStorage
 import zs.metadata
 
+ROOT_DIR = os.environ.get(
+    "PUDL_IN",
+    os.path.join(os.path.expanduser("~"), "Downloads", "pudl"))
+ROOT_DIR = os.path.join(ROOT_DIR, "scrape")
+
 
 def local_fileinfo(file_paths):
     """
@@ -158,7 +163,8 @@ def execute_actions(zenodo, deposition, datapackager, steps):
             action_steps(...)
 
     Return:
-        None, or error on failure
+        New deposition data, per https://developers.zenodo.org/#depositions,
+        or error on failure
     """
     if steps["create"] == {} and steps["update"] == {} and \
             steps["delete"] == {}:
@@ -188,7 +194,7 @@ def execute_actions(zenodo, deposition, datapackager, steps):
 
     # Replace the datapackage json
     new_datapackage(zenodo, datapackager, new_deposition)
-    zenodo.publish(new_deposition)
+    return new_deposition
 
 
 def initial_run(zenodo, key_id, metadata, datapackager, file_paths):
@@ -207,7 +213,8 @@ def initial_run(zenodo, key_id, metadata, datapackager, file_paths):
         file_paths: a list of files to upload
 
     Returns:
-        None, raises an error on failure
+        Deposition data per https://developers.zenodo.org/#depositions,
+        raises an error on failure
     """
     # Only run if the archive really has never been created
 
@@ -239,8 +246,7 @@ def initial_run(zenodo, key_id, metadata, datapackager, file_paths):
     # Save the datapackage.json
     new_datapackage(zenodo, datapackager, deposition)
 
-    # Publish
-    zenodo.publish(deposition)
+    return deposition
 
 
 def parse_main():
@@ -256,12 +262,18 @@ def parse_main():
     parser.add_argument(
         "--initialize", action="store_true",
         help="Produce the first version of a new Zenodo deposition.")
+
+    parser.add_argument("--files", nargs="*",
+                        help="Override default file list. By default, the "
+                             "most recent files from %s will be uploaded." %
+                             (ROOT_DIR))
+    parser.add_argument("--verbose", action="store_true", default=False,
+                        help="Print logging messages to stdout")
     parser.add_argument("deposition", help="Name of the Zenodo deposition. "
                         "Supported: eia860_source, eia861_source, "
                         "eia923_source, epacems_source, ferc1_source, "
                         "epaipm_source")
 
-    parser.add_argument("files", nargs="*", help="All files to upload")
     return parser.parse_args()
 
 
@@ -283,12 +295,8 @@ def archive_selection(deposition_name):
         }
     """
     def latest_files(name):
-        root = os.environ.get(
-            "PUDL_IN",
-            os.path.join(os.path.expanduser("~"), "Downloads", "pudl"))
-        root = os.path.join(root, "scrape", name, "*")
-
-        previous = sorted(glob.glob(root))
+        sources = os.path.join(ROOT_DIR, name, "*")
+        previous = sorted(glob.glob(sources))
 
         if previous == []:
             return []
@@ -350,24 +358,31 @@ if __name__ == "__main__":
     args = parse_main()
 
     if args.sandbox:
-        zenodo = ZenStorage(key=os.environ["ZENODO_TEST_KEY"], testing=True)
+        zenodo = ZenStorage(key=os.environ["ZENODO_TEST_KEY"], testing=True,
+                            verbose=args.verbose)
     else:
         # Because this is still just in development!
         raise NotImplementedError("For now, use --sandbox.")
 
     sel = archive_selection(args.deposition)
-    print(sel["latest_files"])
-    sys.exit()
+
+    if getattr(args, "files", None) is None:
+        files = sel["latest_files"]
+    else:
+        files = args.files
 
     if args.initialize:
         if args.noop:
             sys.exit()
 
-        initial_run(zenodo, sel["key_id"], sel["metadata"], sel["datapackager"],
-                    args.files)
+        result = initial_run(
+            zenodo, sel["key_id"], sel["metadata"], sel["datapackager"], files)
+
+        zenodo.logger.info("Your new deposition archive is ready for review "
+                           "at %s" % (result["links"]["html"]))
         sys.exit()
 
-    local = local_fileinfo(args.files)
+    local = local_fileinfo(files)
 
     deposition = zenodo.get_deposition('keywords: "%s"' % sel["key_id"])
 
@@ -381,4 +396,8 @@ if __name__ == "__main__":
         print(json.dumps(steps, indent=4, sort_keys=True))
         sys.exit()
 
-    execute_actions(zenodo, deposition, sel["datapackager"], steps)
+    result = execute_actions(zenodo, deposition, sel["datapackager"], steps)
+
+    if result is not None:
+        zenodo.logger.info("A new version of your deposition is ready for review "
+                           "at %s" % (result["links"]["html"]))

@@ -96,7 +96,7 @@ def datapackager(dfiles):
     """
     resources = [
         epaipm_resource(
-            x["filename"], 
+            x["filename"],
             x["links"]["self"],
             x["filesize"], x["checksum"])
         for x in dfiles]

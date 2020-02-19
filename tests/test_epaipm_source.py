@@ -53,7 +53,7 @@ class TestIpmSource:
         year = random.randint(1990, 2020)
         name = "table_3-%d_annual_transmission_capabilities_of_u.s._" \
                "model_regions_in_epa_platform_v6_-_%d.xlsx" % (
-                    random.randint(1,99), year)
+                    random.randint(1, 99), year)
 
         fake_resource = self.fake_resource(name)
         package = epaipm_source.datapackager([fake_resource])

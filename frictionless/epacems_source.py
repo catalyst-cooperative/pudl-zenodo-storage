@@ -75,6 +75,7 @@ def epacems_resource(name, url, size, md5_hash):
         "hash": md5_hash
     }
 
+
 def datapackager(dfiles):
     """
     Produce the datapackage json for the epacems archival collection.
