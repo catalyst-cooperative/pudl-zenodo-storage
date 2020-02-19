@@ -1,8 +1,8 @@
 FROM python:alpine
 
+ARG UID
+ARG GID
 ENV USER=pudl
-ENV UID=50000
-ENV GID=50000
 ENV HOME=/home/pudl
 ENV PUDL_IN=${HOME}/pudl/
 
@@ -34,5 +34,6 @@ RUN addgroup --gid ${GID} ${USER} \
 
 WORKDIR ${HOME}
 USER ${USER}
+RUN mkdir -m 775 -p ${PUDL_IN}
 
 CMD zen_store.py --help;
