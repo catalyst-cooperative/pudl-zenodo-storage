@@ -9,7 +9,7 @@ import semantic_version
 class ZenStorage:
     """Thin interface to store data with zenodo.org via their api"""
 
-    def __init__(self, key, testing=False, verbose=False):
+    def __init__(self, key, testing=False, verbose=False, loglevel="WARNING"):
         """
         Prepare the ZenStorage interface
 
@@ -22,6 +22,7 @@ class ZenStorage:
             ZenStorage
         """
         logger = logging.Logger(__name__)
+        logger.setLevel(loglevel)
 
         if verbose:
             logger.addHandler(logging.StreamHandler())

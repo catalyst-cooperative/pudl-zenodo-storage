@@ -23,7 +23,7 @@ import zs.metadata
 ROOT_DIR = os.environ.get(
     "PUDL_IN",
     os.path.join(os.path.expanduser("~"), "Downloads", "pudl"))
-ROOT_DIR = os.path.join(ROOT_DIR, "scrape")
+ROOT_DIR = os.path.join(ROOT_DIR, "scraped")
 
 
 def local_fileinfo(file_paths):
@@ -72,12 +72,18 @@ def remote_fileinfo(zenodo, deposition):
     Returns:
         dict of form {filename: {path: str, checksum: str (md5)}}
     """
-    response = requests.get(deposition["links"]["files"],
-                            params={"access_token": zenodo.key})
-    jsr = response.json()
+    url = deposition["links"]["files"]
+    response = requests.get(url, params={"access_token": zenodo.key})
 
     if response.status_code > 299:
-        raise RuntimeError("Unable to get files: %s" % jsr)
+        msg = "Unable to get files for %s: %s" % (url, response)
+        raise RuntimeError(msg)
+
+    try:
+        jsr = response.json()
+    except:
+        msg = "Invalid remote file data at %s: %s" % (url, response)
+        raise ValueError(msg)
 
     files = jsr
     return {item["filename"]: item for item in files}
@@ -168,9 +174,16 @@ def execute_actions(zenodo, deposition, datapackager, steps):
     """
     if steps["create"] == {} and steps["update"] == {} and \
             steps["delete"] == {}:
+
+        zenodo.logger.info("No changes for deposition %s" %
+                           deposition["title"])
         return
 
-    new_deposition = zenodo.new_deposition_version(deposition["conceptdoi"])
+    if deposition["submitted"]:
+        new_deposition = zenodo.new_deposition_version(deposition["conceptdoi"])
+    else:
+        new_deposition = deposition
+
     nd_files = remote_fileinfo(zenodo, new_deposition)
 
     for filename, data in steps["create"].items():
@@ -178,6 +191,7 @@ def execute_actions(zenodo, deposition, datapackager, steps):
 
         with open(path, "rb") as f:
             zenodo.upload(new_deposition, filename, f)
+            zenodo.logger.debug("Uploaded %s" % path)
 
     for filename, data in steps["update"].items():
         requests.delete(nd_files[filename]["links"]["self"],
@@ -187,10 +201,12 @@ def execute_actions(zenodo, deposition, datapackager, steps):
 
         with open(path, "rb") as f:
             zenodo.upload(new_deposition, filename, f)
+            zenodo.logger.debug("Replaced %s" % path)
 
     for filename, data in steps["delete"].items():
         requests.delete(nd_files[filename]["links"]["self"],
                         params={"access_token": zenodo.key})
+        zenodo.logger.debug("Deleted %s" % filename)
 
     # Replace the datapackage json
     new_datapackage(zenodo, datapackager, new_deposition)
@@ -242,6 +258,7 @@ def initial_run(zenodo, key_id, metadata, datapackager, file_paths):
 
         with open(fp, "rb") as f:
             zenodo.upload(deposition, name, f)
+            zenodo.logger.debug("Uploaded %s" % fp)
 
     # Save the datapackage.json
     new_datapackage(zenodo, datapackager, deposition)
@@ -259,6 +276,9 @@ def parse_main():
                         help="Review changes without uploading")
     parser.add_argument("--sandbox", action="store_true",
                         help="Use Zenodo sandbox server")
+    parser.add_argument("--verbose", action="store_true", default=False,
+                        help="Print logging messages to stdout")
+    parser.add_argument("--loglevel", help="Set log level", default="INFO")
     parser.add_argument(
         "--initialize", action="store_true",
         help="Produce the first version of a new Zenodo deposition.")
@@ -267,8 +287,6 @@ def parse_main():
                         help="Override default file list. By default, the "
                              "most recent files from %s will be uploaded." %
                              (ROOT_DIR))
-    parser.add_argument("--verbose", action="store_true", default=False,
-                        help="Print logging messages to stdout")
     parser.add_argument("deposition", help="Name of the Zenodo deposition. "
                         "Supported: eia860_source, eia861_source, "
                         "eia923_source, epacems_source, ferc1_source, "
@@ -359,7 +377,7 @@ if __name__ == "__main__":
 
     if args.sandbox:
         zenodo = ZenStorage(key=os.environ["ZENODO_TEST_KEY"], testing=True,
-                            verbose=args.verbose)
+                            verbose=args.verbose, loglevel=args.loglevel)
     else:
         # Because this is still just in development!
         raise NotImplementedError("For now, use --sandbox.")
@@ -370,6 +388,8 @@ if __name__ == "__main__":
         files = sel["latest_files"]
     else:
         files = args.files
+
+    zenodo.logger.debug("Archive contents: %s" % files)
 
     if args.initialize:
         if args.noop:

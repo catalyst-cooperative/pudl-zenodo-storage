@@ -72,7 +72,7 @@ eia923_source = {
 
 # Unaltered EPA CEMS archive
 
-epacems_source_uuid = "7fc36b8c-436e-41bd-a4a6-8fcd72a9eec9"
+epacems_source_uuid = "92dde9fe-4b4f-4884-8610-03fd9adeadef"
 epacems_source = {
     "title": "EPA CEMS Source",
     "upload_type": "dataset",

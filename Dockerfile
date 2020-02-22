@@ -36,4 +36,4 @@ WORKDIR ${HOME}
 USER ${USER}
 RUN mkdir -m 775 -p ${PUDL_IN}
 
-CMD zen_store.py --help;
+ENTRYPOINT ["zen_store.py", "--verbose"]
