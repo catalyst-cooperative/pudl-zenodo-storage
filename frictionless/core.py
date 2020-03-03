@@ -66,7 +66,7 @@ def annual_resource_datapackager(metadata, dfiles):
     resources = [
         annual_archive_resource(
             x["filename"],
-            x["links"]["self"],
+            x["links"]["download"],
             x["filesize"], x["checksum"])
         for x in dfiles]
 

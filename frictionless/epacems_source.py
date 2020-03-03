@@ -89,7 +89,7 @@ def datapackager(dfiles):
     """
     resources = [epacems_resource(
         x["filename"],
-        x["links"]["self"],
+        x["links"]["download"],
         x["filesize"], x["checksum"])
 
         for x in dfiles]

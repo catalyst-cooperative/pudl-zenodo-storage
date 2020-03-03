@@ -5,7 +5,7 @@ Zenodo deposition metadata
 """
 
 # Unaltered Eia860 archive.
-eia860_source_uuid = "2201451b-5a7c-4ab6-9613-bb91481c6d2c"
+eia860_source_uuid = "a93cdabd-706f-48c7-ae02-4463dacf1419"
 eia860_source = {
     "title": "Eia860 Source",
     "upload_type": "dataset",
@@ -27,7 +27,7 @@ eia860_source = {
 
 
 # Unaltered Eia861 archive.
-eia861_source_uuid = "d8401d71-5be1-491d-ae45-3092c8ac75e6"
+eia861_source_uuid = "70999ef2-50e9-47ae-a4f6-5d69e6ff98d1"
 eia861_source = {
     "title": "Eia861 Source",
     "upload_type": "dataset",
@@ -49,7 +49,7 @@ eia861_source = {
 
 
 # Unaltered Eia923 archive.
-eia923_source_uuid = "c170d19e-71e6-4ab7-aa7c-cfa9425e5056"
+eia923_source_uuid = "53831f63-fa82-475a-bef4-5b5f0b7c41a4"
 eia923_source = {
     "title": "Eia923 Source",
     "upload_type": "dataset",
@@ -72,7 +72,7 @@ eia923_source = {
 
 # Unaltered EPA CEMS archive
 
-epacems_source_uuid = "92dde9fe-4b4f-4884-8610-03fd9adeadef"
+epacems_source_uuid = "ac9b45d8-81bf-4970-8af3-912a2ad62784"
 epacems_source = {
     "title": "EPA CEMS Source",
     "upload_type": "dataset",
@@ -94,7 +94,7 @@ epacems_source = {
 }
 
 # For the unaltered Ferc1 archive.
-ferc1_source_uuid = "7e0df893-9496-4052-bbb8-5f3d3f1ae3a6"
+ferc1_source_uuid = "d3d91c87-c595-49d5-a7f3-e5f5669c8306"
 ferc1_source = {
     "title": "FERC Form 1 Source",
     "upload_type": "dataset",
@@ -117,7 +117,7 @@ ferc1_source = {
 
 
 # For the unaltered IPM archive.
-epaipm_source_uuid = "4d8f577e-c938-4e4b-a6ec-c835cc76a586"
+epaipm_source_uuid = "2aabbc52-c33c-4b85-be7b-331933a866ec"
 epaipm_source = {
     "title": "EPA Integrated Planning Model (IPM) National Electric Energy "
              "Data System (NEEDS) database",

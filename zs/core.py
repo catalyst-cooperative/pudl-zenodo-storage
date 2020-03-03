@@ -161,6 +161,10 @@ class ZenStorage:
         if deposition is None:
             raise ValueError("Deposition '%s' does not exist" % query)
 
+        self.logger.debug(
+            "Deposition '%s' found at %s" %
+            (query, deposition["links"]["self"]))
+
         if deposition["state"] == "unsubmitted":
             self.logger.debug("deposition '%s' is already a new version" %
                               deposition["id"])
