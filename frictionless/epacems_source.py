@@ -50,14 +50,13 @@ def epacems_resource(name, url, size, md5_hash):
     Return: frictionless datapackage file resource descriptor, per
             https://frictionlessdata.io/specs/data-resource/
     """
-    match = re.search(r"([\d]{4})([\w]{2})([\d]{2})", name)
+    match = re.search(r"([\d]{4})-([\w]{2})", name)
 
     if match is None:
         raise ValueError("Invalid filename %s" % name)
 
-    year, state, month = match.groups()
+    year, state = match.groups()
     year = int(year)
-    month = int(month)
 
     title, file_format = name.split(".")
     mt = core.MediaType[file_format].value
@@ -67,7 +66,7 @@ def epacems_resource(name, url, size, md5_hash):
         "name": name,
         "path": url,
         "title": title,
-        "parts": {"year": year, "month": month, "state": state},
+        "parts": {"year": year, "state": state},
         "encoding": "utf-8",
         "mediatype": mt,
         "format": file_format,
