@@ -176,12 +176,13 @@ class ZenStorage:
         # Create the new version
         params = {"access_token": self.key}
         response = requests.post(url, params=params)
-        jsr = response.json()
 
         if response.status_code != 201:
-            msg = "Could not create new version: %s" % jsr
+            msg = "Could not create new version: %s" % response.text
             self.logger.error(msg)
             raise RuntimeError(msg)
+
+        jsr = response.json()
 
         # When the API creates a new version, it does not return the new one.
         # It returns the old one with a link to the new one.
