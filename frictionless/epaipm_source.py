@@ -50,18 +50,19 @@ def epaipm_resource(name, url, size, md5_hash):
 
     def make_parts():
         match = re.search(r"([\d]{4})-([\d]{2})-([\d]{2})", name)
+        remote = {"remote_url": url}
 
         if match is not None:
             year, month, day = [int(x) for x in match.groups()]
-            return {"year": year, "month": month, "day": day}
+            return {"year": year, "month": month, "day": day, **remote}
 
-        match = re.search(r"(19|20[\d]{2})", name)
+        match = re.search(r"(19|20)([\d]{2})", name)
 
         if match is not None:
-            year = match.groups()[0]
-            return {"year": int(year)}
+            year = "".join(match.groups())
+            return {"year": int(year), **remote}
 
-        return
+        return remote
 
     title, file_format = os.path.splitext(name)
     file_format = file_format[1:]

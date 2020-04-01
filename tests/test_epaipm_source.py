@@ -19,7 +19,7 @@ class TestIpmSource:
 
         return {
             "filename": filename,
-            "links": {"self": url},
+            "links": {"download": url},
             "filesize": size,
             "checksum": md5_hash
             }
@@ -40,7 +40,7 @@ class TestIpmSource:
         assert res["parts"]["month"] == date.month
         assert res["parts"]["day"] == date.day
 
-        assert res["path"] == fake_resource["links"]["self"]
+        assert res["path"] == fake_resource["links"]["download"]
         assert(res["mediatype"] == "application/vnd.openxmlformats-"
                                    "officedocument.spreadsheetml.sheet")
         assert res["format"] == "xlsx"
@@ -54,6 +54,7 @@ class TestIpmSource:
         name = "table_3-%d_annual_transmission_capabilities_of_u.s._" \
                "model_regions_in_epa_platform_v6_-_%d.xlsx" % (
                     random.randint(1, 99), year)
+        print(name)
 
         fake_resource = self.fake_resource(name)
         package = epaipm_source.datapackager([fake_resource])
@@ -61,9 +62,10 @@ class TestIpmSource:
 
         assert res["name"] == name
         assert res["title"] == name[:-5]
-        assert res["parts"] == {"year": year}
+        assert res["parts"]["year"] == year
 
-        assert res["path"] == fake_resource["links"]["self"]
+        assert res["path"] == fake_resource["links"]["download"]
+        assert res["parts"]["remote_url"] == fake_resource["links"]["download"]
         assert(res["mediatype"] == "application/vnd.openxmlformats-"
                                    "officedocument.spreadsheetml.sheet")
         assert res["format"] == "xlsx"
@@ -80,9 +82,9 @@ class TestIpmSource:
 
         assert res["name"] == name
         assert res["title"] == name[:-4]
-        assert res["parts"] is None
+        assert res["parts"]["remote_url"] == fake_resource["links"]["download"]
 
-        assert res["path"] == fake_resource["links"]["self"]
+        assert res["path"] == fake_resource["links"]["download"]
         assert res["mediatype"] == "application/zip"
         assert res["format"] == "zip"
 

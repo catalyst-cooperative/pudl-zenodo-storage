@@ -25,7 +25,7 @@ class TestEia860:
 
         fake_resource = {
             "filename": name,
-            "links": {"self": url},
+            "links": {"download": url},
             "filesize": size,
             "checksum": md5_hash
             }
@@ -37,6 +37,7 @@ class TestEia860:
         assert(res["title"] == "eia860-%d" % year)
         assert(res["path"] == url)
         assert(res["parts"]["year"] == year)
+        assert(res["parts"]["remote_url"] == url)
 
         assert(res["mediatype"] == "application/zip")
         assert(res["format"] == "zip")

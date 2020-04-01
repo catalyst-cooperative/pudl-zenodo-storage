@@ -66,7 +66,7 @@ def epacems_resource(name, url, size, md5_hash):
         "name": name,
         "path": url,
         "title": title,
-        "parts": {"year": year, "state": state},
+        "parts": {"year": year, "state": state, "remote_url": url},
         "encoding": "utf-8",
         "mediatype": mt,
         "format": file_format,

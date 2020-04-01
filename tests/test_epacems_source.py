@@ -6,7 +6,7 @@ import random
 from frictionless import epacems_source
 
 
-class TestIpmSource:
+class TestCemsSource:
     """Ensure we can create proper frictionless datapackage descriptions"""
 
     def test_single_file(self):
@@ -15,7 +15,7 @@ class TestIpmSource:
         date = fake.date_between(start_date="-10y", end_date="today")
         state = fake.state_abbr(include_territories=False).lower()
 
-        name = "%d%s%02d.zip" % (date.year, state, date.month)
+        name = "%d-%s.zip" % (date.year, state)
         size = random.randint(500000, 800000)
         md5_hash = fake.md5(raw_output=False)
 
@@ -24,7 +24,7 @@ class TestIpmSource:
 
         fake_resource = {
             "filename": name,
-            "links": {"self": url},
+            "links": {"download": url},
             "filesize": size,
             "checksum": md5_hash
             }
@@ -36,8 +36,8 @@ class TestIpmSource:
         assert(res["title"] == name[:-4])
         assert(res["path"] == url)
         assert(res["parts"]["year"] == date.year)
-        assert(res["parts"]["month"] == date.month)
         assert(res["parts"]["state"] == state)
+        assert(res["parts"]["remote_url"] == url)
 
         assert(res["mediatype"] == "application/zip")
         assert(res["format"] == "zip")
