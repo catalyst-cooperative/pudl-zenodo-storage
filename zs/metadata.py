@@ -117,10 +117,10 @@ ferc1_source = {
 
 
 # For the unaltered IPM archive.
-epaipm_source_uuid = "2aabbc52-c33c-4b85-be7b-331933a866ec"
+epaipm_source_uuid = "75b29994-bd39-4518-a5b2-ec180a18ac23"
 epaipm_source = {
     "title": "EPA Integrated Planning Model (IPM) National Electric Energy "
-             "Data System (NEEDS) database",
+             "Data",
     "upload_type": "dataset",
     "description": "EPA is making the latest power sector modeling platform "
                    "available, including the associated input data and "

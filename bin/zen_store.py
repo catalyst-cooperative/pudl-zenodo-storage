@@ -246,8 +246,8 @@ def initial_run(zenodo, key_id, metadata, datapackager, file_paths):
         exists = False
 
     if exists:
-        raise RuntimeError("Cannot initialize %s, it already exists" %
-                           metadata["title"])
+        raise RuntimeError("Cannot initialize %s, it already exists at %s" %
+                           (metadata["title"], deposition["links"]["html"]))
 
     # New deposition
     deposition = zenodo.create_deposition(metadata)
