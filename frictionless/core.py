@@ -11,6 +11,7 @@ class MediaType(Enum):
     """Enumerate file extention -> mediatype descriptors"""
     zip = "application/zip"
     xlsx = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    csv = "text/csv"
 
 
 def annual_archive_resource(name, url, size, md5_hash):

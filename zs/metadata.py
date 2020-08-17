@@ -8,6 +8,7 @@ Zenodo deposition metadata
 eia860_source_uuid = "a93cdabd-706f-48c7-ae02-4463dacf1419"
 eia860_source = {
     "title": "Eia860 Source",
+    "language": "eng",
     "upload_type": "dataset",
     "description": "Eia860 Form Data, archived from "
                    "https://www.eia.gov/electricity/data/eia860/",
@@ -30,6 +31,7 @@ eia860_source = {
 eia861_source_uuid = "70999ef2-50e9-47ae-a4f6-5d69e6ff98d1"
 eia861_source = {
     "title": "Eia861 Source",
+    "language": "eng",
     "upload_type": "dataset",
     "description": "Eia861 Form Data, archived from "
                    "https://www.eia.gov/electricity/data/eia861/",
@@ -52,6 +54,7 @@ eia861_source = {
 eia923_source_uuid = "53831f63-fa82-475a-bef4-5b5f0b7c41a4"
 eia923_source = {
     "title": "Eia923 Source",
+    "language": "eng",
     "upload_type": "dataset",
     "description": "Eia923 Form Data, archived from "
                    "https://www.eia.gov/electricity/data/eia923/",
@@ -75,6 +78,7 @@ eia923_source = {
 epacems_source_uuid = "8bd99e7d-b11a-4bd1-8af0-bccf984dcc43"
 epacems_source = {
     "title": "EPA CEMS Source",
+    "language": "eng",
     "upload_type": "dataset",
     "description": "US EPA hourly Continuous Emissions Monitoring System "
                    "(CEMS) data, archived from "
@@ -97,6 +101,7 @@ epacems_source = {
 ferc1_source_uuid = "d3d91c87-c595-49d5-a7f3-e5f5669c8306"
 ferc1_source = {
     "title": "FERC Form 1 Source",
+    "language": "eng",
     "upload_type": "dataset",
     "description": "Federal Energy Regulatory Commission Form 1 Data, "
                    "archived from "
@@ -115,12 +120,36 @@ ferc1_source = {
         "capacity", "usa", ferc1_source_uuid]
 }
 
+# Unaltered Ferc714 archive.
+ferc714_source_uuid = "f31f0894-639e-4bc2-9b7f-8a84713bcc87"
+ferc714_source = {
+    "title": "FERC Form 714 Source",
+    "language": "eng",
+    "upload_type": "dataset",
+    "description": "Federal Energy Regulatory Commission Form 714 Data, "
+                   "archived from "
+                   "https://www.ferc.gov/industries-data/electric/"
+                   "general-information/electric-industry-forms/"
+                   "form-no-714-annual-electric/data",
+    "creators": [
+        {"name": "Source: US Federal Energy Regulatory Commission"},
+        {"name": "Uploaded: Catalyst Cooperative"}
+    ],
+    "keywords": [
+        "electricity", "electric", "utility", "plant", "steam", "generation",
+        "cost", "expense", "price", "heat content", "ferc", "form 714",
+        "federal energy regulatory commission", "capital", "accounting",
+        "depreciation", "finance", "plant in service", "hydro", "coal",
+        "natural gas", "gas", "opex", "capex", "accounts", "investment",
+        "capacity", "usa", ferc714_source_uuid]
+}
 
 # For the unaltered IPM archive.
 epaipm_source_uuid = "75b29994-bd39-4518-a5b2-ec180a18ac23"
 epaipm_source = {
     "title": "EPA Integrated Planning Model (IPM) National Electric Energy "
              "Data",
+    "language": "eng",
     "upload_type": "dataset",
     "description": "EPA is making the latest power sector modeling platform "
                    "available, including the associated input data and "

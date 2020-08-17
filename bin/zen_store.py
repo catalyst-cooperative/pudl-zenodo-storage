@@ -16,6 +16,7 @@ import frictionless.eia923_source
 import frictionless.epacems_source
 import frictionless.epaipm_source
 import frictionless.ferc1_source
+import frictionless.ferc714_source
 
 from zs import ZenStorage
 import zs.metadata
@@ -242,7 +243,7 @@ def initial_run(zenodo, key_id, metadata, datapackager, file_paths):
     try:
         deposition = zenodo.get_deposition('keyword="%s"' % key_id)
         exists = deposition is not None
-    except RuntimeError as err:
+    except RuntimeError:
         exists = False
 
     if exists:
@@ -290,7 +291,7 @@ def parse_main():
     parser.add_argument("deposition", help="Name of the Zenodo deposition. "
                         "Supported: eia860_source, eia861_source, "
                         "eia923_source, epacems_source, ferc1_source, "
-                        "epaipm_source")
+                        "ferc714_source, epaipm_source")
 
     return parser.parse_args()
 
@@ -359,6 +360,14 @@ def archive_selection(deposition_name):
             "metadata": zs.metadata.ferc1_source,
             "datapackager": frictionless.ferc1_source.datapackager,
             "latest_files": latest_files("ferc1")
+        }
+
+    if deposition_name == "ferc714_source":
+        return {
+            "key_id": zs.metadata.ferc714_source_uuid,
+            "metadata": zs.metadata.ferc714_source,
+            "datapackager": frictionless.ferc714_source.datapackager,
+            "latest_files": latest_files("ferc714")
         }
 
     if deposition_name == "epaipm_source":

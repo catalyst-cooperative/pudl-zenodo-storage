@@ -5,7 +5,7 @@ from . import licenses
 from . import contributors
 
 """
-Provide datapackage details specific to the Eia860 archives
+Provide datapackage details specific to the Ferc Form 1 archives.
 """
 
 ferc1_source = {
@@ -13,7 +13,7 @@ ferc1_source = {
     "title": "FERC Form No. 1",
     "description":
         "Form No. 1 financial and operating report from the Federal Energy "
-        "regulatory commission.",
+        "Regulatory Commission.",
 
     "profile": "data-package",
     "keywords": [
@@ -38,7 +38,7 @@ ferc1_source = {
 
 def datapackager(dfiles):
     """
-    Produce the datapackage json for the eia860 archival collection.
+    Produce the datapackage json for the ferc1 archival collection.
 
     Args:
         metadata: dict of fixed metadata descriptors

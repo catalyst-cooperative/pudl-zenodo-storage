@@ -6,7 +6,7 @@ from frictionless import ferc1_source
 
 
 class TestFerc1Source:
-    """Ensure we can create proper frictionless datapackage descriptions"""
+    """Ensure we can create proper frictionless datapackage descriptions."""
 
     def test_single_file_resource(self):
         """Ensure a single file gets a good resource descriptor"""
