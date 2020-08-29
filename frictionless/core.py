@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from pathlib import Path
 from datetime import datetime, timezone
 import os.path
 import re
@@ -72,5 +73,51 @@ def annual_resource_datapackager(metadata, dfiles):
         for x in dfiles]
 
     return dict(**metadata,
+                **{"resources": resources,
+                   "created": datetime.now(timezone.utc).isoformat()})
+
+
+def minimal_datapackager(package_meta, dfiles):
+    """
+    Produce the datapackage json for the given archival collection.
+
+    Args:
+        package_meta: required package metadata, per the frictionless spec,
+            excluding resources.
+        dfiles: iterable of file descriptors, as expected from Zenodo.
+            https://developers.zenodo.org/#deposition-files
+
+    Returns:
+        dict of fields suited to the frictionless datapackage spec
+            https://frictionlessdata.io/specs/data-package/
+    """
+    def resource_descriptor(dfile):
+
+        name = dfile["filename"]
+        url = dfile["links"]["download"]
+        size = dfile["filesize"]
+        md5_hash = dfile["checksum"]
+
+        fp = Path(name)
+        title = fp.stem
+        file_format = fp.suffix[1:]
+        mt = MediaType[file_format].value
+
+        return {
+            "profile": "data-resource",
+            "name": name,
+            "path": url,
+            "title": title,
+            "parts": {"remote_url": url},
+            "encoding": "utf-8",
+            "mediatype": mt,
+            "format": file_format,
+            "bytes": size,
+            "hash": md5_hash
+        }
+
+    resources = [resource_descriptor(df) for df in dfiles]
+
+    return dict(**package_meta,
                 **{"resources": resources,
                    "created": datetime.now(timezone.utc).isoformat()})

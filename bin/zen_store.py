@@ -10,6 +10,7 @@ import os
 import requests
 import sys
 
+import frictionless.census_source
 import frictionless.eia860_source
 import frictionless.eia861_source
 import frictionless.eia923_source
@@ -289,9 +290,9 @@ def parse_main():
                              "most recent files from %s will be uploaded." %
                              (ROOT_DIR))
     parser.add_argument("deposition", help="Name of the Zenodo deposition. "
-                        "Supported: eia860_source, eia861_source, "
-                        "eia923_source, epacems_source, ferc1_source, "
-                        "ferc714_source, epaipm_source")
+                        "Supported: census_source, eia860_source, "
+                        "eia861_source, eia923_source, epacems_source, "
+                        "ferc1_source, ferc714_source, epaipm_source")
 
     return parser.parse_args()
 
@@ -321,6 +322,14 @@ def archive_selection(deposition_name):
             return []
 
         return glob.glob(os.path.join(previous[-1], "*"))
+
+    if deposition_name == "census_source":
+        return {
+            "key_id": zs.metadata.census_source_uuid,
+            "metadata": zs.metadata.census_source,
+            "datapackager": frictionless.census_source.datapackager,
+            "latest_files": latest_files("census")
+        }
 
     if deposition_name == "eia860_source":
         return {

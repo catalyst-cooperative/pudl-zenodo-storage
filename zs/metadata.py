@@ -162,3 +162,20 @@ epaipm_source = {
     "keywords": ["epa", "ipm", "needs", "usa", "integrated planning",
                  epaipm_source_uuid],
 }
+
+# For the census archive.
+census_source_uuid = "beb36017-3fca-49be-a93a-7298f30ca3a3"
+census_source = {
+    "title": "GeoData from the 2010 census",
+    "language": "eng",
+    "upload_type": "dataset",
+    "description": "US Census 2010 GeoData, archived from"
+                   "http://www2.census.gov/geo/tiger/TIGER2010DP1/"
+                   "Profile-County_Tract.zip",
+    "creators": [
+        {"name": "Source: US Census Bureau"},
+        {"name": "Uploaded: Catalyst Cooperative"}
+    ],
+    "access_right": "open",
+    "keywords": ["census", "usa", "integrated planning", census_source_uuid]
+}
