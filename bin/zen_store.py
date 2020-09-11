@@ -24,7 +24,7 @@ import zs.metadata
 
 ROOT_DIR = os.environ.get(
     "PUDL_IN",
-    os.path.join(os.path.expanduser("~"), "Downloads", "pudl"))
+    os.path.join(os.path.expanduser("~"), "Downloads", "pudl_scrapers"))
 ROOT_DIR = os.path.join(ROOT_DIR, "scraped")
 
 
@@ -311,7 +311,7 @@ def archive_selection(deposition_name):
             datapackager: a datapackager from the appropriate frictionless
                           library
             latest_files: str path of the most recently scraped copy of the
-                         archive
+                          archive
         }
     """
     def latest_files(name):
