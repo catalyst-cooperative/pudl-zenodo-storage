@@ -20,6 +20,8 @@ jobs:
         pip install ./
 
     - name: Run PyTest
+      env:
+        ZENODO_TEST_KEY: ${{ secrets.ZENODO_TEST_KEY }}
       run: pytest
 
     - name: Inform the Codemonkeys
