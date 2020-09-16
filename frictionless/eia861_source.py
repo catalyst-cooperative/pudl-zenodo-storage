@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
+"""Provide datapackage details specific to the EIA 861 archives."""
 
 from . import core
 from . import licenses
 from . import contributors
 
-"""
-Provide datapackage details specific to the Eia861 archives
-"""
-
 eia861_source = {
-    "name": "Eia861 Source",
-    "title": "Eia861 Source",
+    "name": "pudl-raw-eia861",
+    "title": "PUDL Raw EIA Form 861",
     "description":
         "Annual Electric Power Industry Report, Form EIA-861 detailed data "
         "files",
@@ -43,7 +40,7 @@ def datapackager(dfiles):
         metadata: dict of fixed metadata descriptors
 
     Returns:
-        dict of fields suited to the frictionless datapackage spec
-            https://frictionlessdata.io/specs/data-package/
+        dict: fields suited to the frictionless datapackage spec
+        https://frictionlessdata.io/specs/data-package/
     """
     return core.annual_resource_datapackager(eia861_source, dfiles)

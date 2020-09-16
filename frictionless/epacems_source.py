@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Provide datapackage details specific to the EPA CEMS Hourly archives."""
 
 from datetime import datetime, timezone
 import re
@@ -7,13 +8,9 @@ from . import core
 from . import licenses
 from . import contributors
 
-"""
-Provide datapackage details specific to the Eia860 archives
-"""
-
 epacems_source = {
-    "name": "EPA CEMS Source",
-    "title": "EPA CEMS Source",
+    "name": "pudl-raw-epacems",
+    "title": "PUDL Raw EPA CEMS Hourly",
     "description": "US EPA hourly Continuous Emissions Monitoring System "
                    "(CEMS) data, archived from "
                    "ftp://newftp.epa.gov/dmdnload/emissions/hourly/monthly",
@@ -24,7 +21,7 @@ epacems_source = {
         "generation", "capacity", "output", "power", "heat content", "mmbtu",
         "steam", "cems", "continuous emissions monitoring system", "hourly"
         "environmental protection agency", "ampd", "air markets program data"
-        ],
+    ],
     "licenses": [licenses.us_govt, licenses.cc_by],
     "homepage": "https://catalyst.coop/pudl/",
     "sources": [
@@ -39,16 +36,17 @@ epacems_source = {
 
 def epacems_resource(name, url, size, md5_hash):
     """
-    Produce the resource descriptor for a single file
+    Produce the resource descriptor for a single file.
 
     Args:
-        name: str, file name: must include a 4 digit year, and no other 4 digits
-        url: str, url to download the file from Zenodo
-        size: int, size it bytes
-        md5_hash: str, the md5 checksum of the file
+        name (str): file name: must include a 4 digit year, and no other 4 digits.
+        url (str): url to download the file from Zenodo.
+        size (int): size it bytes.
+        md5_hash (str): the md5 checksum of the file.
 
-    Return: frictionless datapackage file resource descriptor, per
-            https://frictionlessdata.io/specs/data-resource/
+    Returns:
+        frictionless datapackage file resource descriptor, per
+        https://frictionlessdata.io/specs/data-resource/
     """
     match = re.search(r"([\d]{4})-([\w]{2})", name)
 
@@ -83,8 +81,8 @@ def datapackager(dfiles):
         metadata: dict of fixed metadata descriptors
 
     Returns:
-        dict of fields suited to the frictionless datapackage spec
-            https://frictionlessdata.io/specs/data-package/
+        dict: fields suited to the frictionless datapackage spec
+        https://frictionlessdata.io/specs/data-package/
     """
     resources = [epacems_resource(
         x["filename"],

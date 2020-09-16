@@ -1,21 +1,16 @@
 # -*- coding: utf-8 -*-
+"""Provide datapackage details specific to the Ferc Form 714 archives."""
 
 from . import core
 from . import contributors
 from . import licenses
 
-"""
-Provide datapackage details specific to the Ferc Form 714 archives.
-"""
-
 ferc714_source = {
-    "name": "FERC Form 714",
-    "title": "FERC Form 714",
+    "name": "pudl-raw-ferc714",
+    "title": "PUDL Raw FERC Form 714",
     "description":
         "Form 714 Annual Electric Balancing Authority Area and Planning Area "
-        "Report from the Federal Energy "
-        "Regulatory Commission.",
-
+        "Report from the Federal Energy Regulatory Commission (FERC).",
     "profile": "data-package",
     "keywords": [
         'electricity', 'electric', 'utility', 'plant', 'steam', 'generation',
@@ -48,7 +43,8 @@ def datapackager(dfiles):
             https://developers.zenodo.org/#deposition-files
 
     Returns:
-        dict of fields suited to the frictionless datapackage spec
-            https://frictionlessdata.io/specs/data-package/
+        dict: fields suited to the frictionless datapackage spec
+        https://frictionlessdata.io/specs/data-package/
+
     """
     return core.minimal_datapackager(ferc714_source, dfiles)

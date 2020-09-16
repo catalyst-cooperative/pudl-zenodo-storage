@@ -10,7 +10,7 @@ import os
 import requests
 import sys
 
-import frictionless.census_source
+import frictionless.censusdp1tract_source
 import frictionless.eia860_source
 import frictionless.eia861_source
 import frictionless.eia923_source
@@ -33,10 +33,11 @@ def local_fileinfo(file_paths):
     Produce a dict describing file names, paths, and md5 hashes.
 
     Args:
-        file_paths: a list file path strings, as provided from the CLI
+        file_paths (list): file path strings, as provided from the CLI.
 
     Returns:
-        dict of form {filename: {path: str, checksum: str (md5)}}
+        dict: of form {filename: {path: str, checksum: str (md5)}}
+
     """
     def file_md5s(file_path):
         hash_md5 = md5()
@@ -65,14 +66,15 @@ def local_fileinfo(file_paths):
 
 def remote_fileinfo(zenodo, deposition):
     """
-    Collect and shape file data from an existing Zenodo deposition
+    Collect and shape file data from an existing Zenodo deposition.
 
     Args:
         zenodo: a zs.ZenStorage manager
         deposition: the deposition details, as retrieved from Zenodo
 
     Returns:
-        dict of form {filename: {path: str, checksum: str (md5)}}
+        dict: of form {filename: {path: str, checksum: str (md5)}}
+
     """
     url = deposition["links"]["files"]
     response = requests.get(url, params={"access_token": zenodo.key})
@@ -93,7 +95,7 @@ def remote_fileinfo(zenodo, deposition):
 
 def new_datapackage(zenodo, datapackager, deposition):
     """
-    Add a new datapackage.json file to the given deposition
+    Add a new datapackage.json file to the given deposition.
 
     Args:
         zenodo: a zs.ZenStorage manager
@@ -105,7 +107,8 @@ def new_datapackage(zenodo, datapackager, deposition):
                     in an editable state.
 
     Returns:
-        None. Raises errors on failure.
+        None: Raises errors on failure.
+
     """
     files = remote_fileinfo(zenodo, deposition)
 
@@ -115,22 +118,23 @@ def new_datapackage(zenodo, datapackager, deposition):
             params={"access_token": zenodo.key})
         files.pop("datapackage.json")
 
-    datapackage = json.dumps(datapackager(files.values()))
+    datapackage = json.dumps(datapackager(files.values()), indent=4, sort_keys=True)
     fcontents = io.BytesIO(bytes(datapackage, encoding="utf-8"))
     zenodo.upload(deposition, "datapackage.json", fcontents)
 
 
 def action_steps(new_files, old_files):
     """
-    Determine which files need to be created, updated, and deleted
+    Determine which files need to be created, updated, and deleted.
 
     Args:
-        new_files: dict of local files, per local_fileinfo(...)
-        old_files: dict of previous files, per remote_fileinfo(...)
+        new_files (dict): local files, per local_fileinfo(...)
+        old_files (dict): previous files, per remote_fileinfo(...)
 
     Returns:
-        dict of:
-            {create: {<fileinfo>}, update: {<fileinfo>}, delete: {<fileinfo>}}
+        dict: containing:
+        {create: {<fileinfo>}, update: {<fileinfo>}, delete: {<fileinfo>}}
+
     """
     actions = {"create": {}, "update": {}, "delete": {}}
 
@@ -170,9 +174,10 @@ def execute_actions(zenodo, deposition, datapackager, steps):
         steps: dict of file info to create, update, and delete, per
             action_steps(...)
 
-    Return:
+    Returns:
         New deposition data, per https://developers.zenodo.org/#depositions,
         or error on failure
+
     """
     if steps["create"] == {} and steps["update"] == {} and \
             steps["delete"] == {}:
@@ -233,6 +238,7 @@ def initial_run(zenodo, key_id, metadata, datapackager, file_paths):
     Returns:
         Deposition data per https://developers.zenodo.org/#depositions,
         raises an error on failure
+
     """
     # Only run if the archive really has never been created
 
@@ -269,9 +275,7 @@ def initial_run(zenodo, key_id, metadata, datapackager, file_paths):
 
 
 def parse_main():
-    """
-    Process base commands from the CLI
-    """
+    """Process base commands from the CLI."""
     parser = argparse.ArgumentParser(
         description="Upload PUDL data archives to Zenodo")
     parser.add_argument("--noop", action="store_true", default=False,
@@ -290,7 +294,7 @@ def parse_main():
                              "most recent files from %s will be uploaded." %
                              (ROOT_DIR))
     parser.add_argument("deposition", help="Name of the Zenodo deposition. "
-                        "Supported: census_source, eia860_source, "
+                        "Supported: censusdp1tract_source, eia860_source, "
                         "eia861_source, eia923_source, epacems_source, "
                         "ferc1_source, ferc714_source, epaipm_source")
 
@@ -299,7 +303,7 @@ def parse_main():
 
 def archive_selection(deposition_name):
     """
-    Produce the datasets needed to run the archiver
+    Produce the datasets needed to run the archiver.
 
     Args:
         argument: str name for a deposition, as input from the cli.
@@ -313,6 +317,7 @@ def archive_selection(deposition_name):
             latest_files: str path of the most recently scraped copy of the
                           archive
         }
+
     """
     def latest_files(name):
         sources = os.path.join(ROOT_DIR, name, "*")
@@ -323,11 +328,11 @@ def archive_selection(deposition_name):
 
         return glob.glob(os.path.join(previous[-1], "*"))
 
-    if deposition_name == "census_source":
+    if deposition_name == "censusdp1tract_source":
         return {
-            "key_id": zs.metadata.census_source_uuid,
-            "metadata": zs.metadata.census_source,
-            "datapackager": frictionless.census_source.datapackager,
+            "key_id": zs.metadata.censusdp1tract_source_uuid,
+            "metadata": zs.metadata.censusdp1tract_source,
+            "datapackager": frictionless.censusdp1tract_source.datapackager,
             "latest_files": latest_files("census")
         }
 

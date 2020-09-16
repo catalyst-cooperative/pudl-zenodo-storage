@@ -1,21 +1,17 @@
 # -*- coding: utf-8 -*-
+"""Provide datapackage details specific to the EPA IPM/NEEDS archives."""
 
 from datetime import datetime, timezone
 import os.path
 import re
 
-
 from . import core
 from . import licenses
 from . import contributors
 
-"""
-Provide datapackage details specific to the Eia860 archives
-"""
-
 epaipm_source = {
-    "name": "IPM Source",
-    "title": "IPM Source",
+    "name": "pudl-raw-epaipm",
+    "title": "PUDL Raw EPA IPM/NEEDS",
     "description": "EPA National Electric Energy Data System data, archived "
                    "from https://www.epa.gov/airmarkets/"
                    "national-electric-energy-data-system-needs-v6",
@@ -36,16 +32,18 @@ epaipm_source = {
 
 def epaipm_resource(name, url, size, md5_hash):
     """
-    Produce the resource descriptor for a single file
+    Produce the resource descriptor for a single file.
 
     Args:
-        name: str, file name: must include a 4 digit year, and no other 4 digits
-        url: str, url to download the file from Zenodo
-        size: int, size it bytes
-        md5_hash: str, the md5 checksum of the file
+        name (str): file name: must include a 4 digit year, and no other 4 digits.
+        url (str): url to download the file from Zenodo.
+        size (int): size it bytes.
+        md5_hash (str): the md5 checksum of the file.
 
-    Return: frictionless datapackage file resource descriptor, per
-            https://frictionlessdata.io/specs/data-resource/
+    Returns:
+        frictionless datapackage file resource descriptor, per
+        https://frictionlessdata.io/specs/data-resource/
+
     """
 
     def make_parts():
@@ -88,12 +86,13 @@ def datapackager(dfiles):
     Produce the datapackage json for the IPM archival collection.
 
     Arguments:
-        dfiles: a list of file descriptor dictionaries as expected from Zenodo,
-                per https://developers.zenodo.org/#deposition-files
+        dfiles (list): file descriptor dictionaries as expected from Zenodo,
+        per https://developers.zenodo.org/#deposition-files
 
     Returns:
-        dict of fields suited to the frictionless datapackage spec
-            https://frictionlessdata.io/specs/data-package/
+        dict: fields suited to the frictionless datapackage spec
+        https://frictionlessdata.io/specs/data-package/
+
     """
     resources = [
         epaipm_resource(

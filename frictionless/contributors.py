@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """Provide data package details for contributors used on multiple archives."""
 
 catalyst_cooperative = {

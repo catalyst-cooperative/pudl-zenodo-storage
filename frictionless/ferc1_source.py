@@ -1,19 +1,16 @@
 # -*- coding: utf-8 -*-
+"""Provide datapackage details specific to the FERC Form 1 archives."""
 
 from . import core
 from . import licenses
 from . import contributors
 
-"""
-Provide datapackage details specific to the Ferc Form 1 archives.
-"""
-
 ferc1_source = {
-    "name": "FERC Form No. 1",
-    "title": "FERC Form No. 1",
+    "name": "pudl-raw-ferc1",
+    "title": "PUDL Raw FERC Form 1",
     "description":
         "Form No. 1 financial and operating report from the Federal Energy "
-        "Regulatory Commission.",
+        "Regulatory Commission (FERC).",
 
     "profile": "data-package",
     "keywords": [
@@ -28,8 +25,10 @@ ferc1_source = {
     "homepage": "https://catalyst.coop/pudl/",
     "sources": [
         {
-            "title": "Federal Energy Regulatory Commission",
-            "path": "https://www.ferc.gov/docs-filing/forms/form-1/data.asp"
+            "title": "Federal Energy Regulatory Commission (FERC)",
+            "path": "https://www.ferc.gov/industries-data/electric/"
+                    "general-information/electric-industry-forms/"
+                    "form-1-electric-utility-annual"
         }
     ],
     "contributors": [contributors.catalyst_cooperative]
@@ -44,7 +43,8 @@ def datapackager(dfiles):
         metadata: dict of fixed metadata descriptors
 
     Returns:
-        dict of fields suited to the frictionless datapackage spec
-            https://frictionlessdata.io/specs/data-package/
+        dict: fields suited to the frictionless datapackage spec
+        https://frictionlessdata.io/specs/data-package/
+
     """
     return core.annual_resource_datapackager(ferc1_source, dfiles)

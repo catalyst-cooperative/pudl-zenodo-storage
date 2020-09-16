@@ -9,7 +9,8 @@ from enum import Enum
 
 
 class MediaType(Enum):
-    """Enumerate file extention -> mediatype descriptors"""
+    """Enumerate file extention -> mediatype descriptors."""
+
     zip = "application/zip"
     xlsx = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     csv = "text/csv"
@@ -17,16 +18,18 @@ class MediaType(Enum):
 
 def annual_archive_resource(name, url, size, md5_hash):
     """
-    Produce the resource descriptor for a single file
+    Produce the resource descriptor for a single file.
 
     Args:
-        name: str, file name: must include a 4 digit year, and no other 4 digits
-        url: str, url to download the file from Zenodo
-        size: int, size it bytes
-        md5_hash: str, the md5 checksum of the file
+        name (str): file name: must include a 4 digit year, and no other 4 digits.
+        url (str): url to download the file from Zenodo.
+        size (int): size in bytes.
+        md5_hash (str): the md5 checksum of the file.
 
-    Return: frictionless datapackage file resource descriptor, per
-            https://frictionlessdata.io/specs/data-resource/
+    Returns:
+        dict: a frictionless data package resource descriptor, per
+        https://frictionlessdata.io/specs/data-resource/
+
     """
     match = re.search(r"([\d]{4})", name)
 
@@ -57,7 +60,7 @@ def annual_resource_datapackager(metadata, dfiles):
     Produce the datapackage json for a collection of annually named files.
 
     Args:
-        metadata: dict of fixed metadata descriptors
+        metadata (dict): fixed metadata descriptors.
         dfiles: iterable of file descriptors, as expected from Zenodo.
             https://developers.zenodo.org/#deposition-files
 
@@ -82,14 +85,15 @@ def minimal_datapackager(package_meta, dfiles):
     Produce the datapackage json for the given archival collection.
 
     Args:
-        package_meta: required package metadata, per the frictionless spec,
+        package_meta (dict): required package metadata, per the frictionless spec,
             excluding resources.
         dfiles: iterable of file descriptors, as expected from Zenodo.
             https://developers.zenodo.org/#deposition-files
 
     Returns:
-        dict of fields suited to the frictionless datapackage spec
-            https://frictionlessdata.io/specs/data-package/
+        dict: fields suited to the frictionless datapackage spec
+        https://frictionlessdata.io/specs/data-package/
+
     """
     def resource_descriptor(dfile):
 

@@ -1,26 +1,25 @@
 # -*- coding: utf-8 -*-
+"""Provide datapackage details specific to the Census DP1 data."""
 
 from . import core
 from . import contributors
 from . import licenses
 
-"""
-Provide datapackage details specific to the census data.
-"""
-
-census_source = {
-    "name": "GeoData from the 2010 Census",
-    "title": "GeoData from the 2010 Census",
-    "description": "GeoData from the 2010 Census, archived from "
-                   "http://www2.census.gov/geo/tiger/TIGER2010DP1/"
-                   "Profile-County_Tract.zip",
+censusdp1tract_source = {
+    "name": "pudl-raw-censusdp1tract",
+    "title": "PUDL Raw Census DP1 Tract Geodatabase",
+    "description": "US Census Demographic Profile 1 (DP1) County and Tract "
+                   "GeoDatabase.",
     "profile": "data-package",
-    "keywords": ['geodata', 'usa', 'census'],
+    "keywords": [
+        "geodata", "usa", "census", "geodatabase", "gis", "spatial", "demographic",
+        "dp1", "population", "county", "fips", "tract"
+    ],
     "licenses": [licenses.us_govt, licenses.cc_by],
     "homepage": "https://catalyst.coop/pudl/",
     "sources": [
         {
-            "title": "US Census",
+            "title": "US Census Bureau",
             "path": "http://www2.census.gov/geo/tiger/TIGER2010DP1/"
                     "Profile-County_Tract.zip",
         }
@@ -38,7 +37,8 @@ def datapackager(dfiles):
             https://developers.zenodo.org/#deposition-files
 
     Returns:
-        dict of fields suited to the frictionless datapackage spec
-            https://frictionlessdata.io/specs/data-package/
+        dict: fields suited to the frictionless datapackage spec
+        https://frictionlessdata.io/specs/data-package/
+
     """
-    return core.minimal_datapackager(census_source, dfiles)
+    return core.minimal_datapackager(censusdp1tract_source, dfiles)
