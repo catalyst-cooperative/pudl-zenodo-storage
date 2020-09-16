@@ -1,26 +1,23 @@
 # -*- coding: utf-8 -*-
+
 import uuid
 import random
+from frictionless import censusdp1tract_source
 
-from frictionless import ferc1_source
 
-
-class TestFerc1Source:
+class TestCensusDp1TractSource:
     """Ensure we can create proper frictionless datapackage descriptions."""
 
-    def test_single_file_resource(self):
-        """Ensure a single file gets a good resource descriptor."""
-        year = random.randint(1997, 2020)
-        name = "ferc1-%d.zip" % year
-        size = random.randint(500000, 800000)
-
-        md5_hash = random.choice([
-            "3122e77806b1a1fb2c8af8d404457fd7",
-            "d7292a7175af8c08b12594e21de3af1f",
-            "01c58b5a83dd55ec1fc46f34065b30e6"])
-
+    def test_file_resource(self):
+        """Test that file resources are made correctly."""
+        name = "censusdp1tract-2010.zip"
         url = "https://zenodo.org/api/deposit/depositions/%d/files/%s" % (
             random.randint(10000, 99999), uuid.uuid4())
+        size = random.randint(500000, 800000)
+        md5_hash = random.choice([
+            "a07e61999fff9ba2cd240bfb874db45e",
+            "6a45164181cef4f86fab24dd2c4fa9a2",
+            "4dd146387c256d4424ebc94ed2976d0c"])
 
         fake_resource = {
             "filename": name,
@@ -29,13 +26,12 @@ class TestFerc1Source:
             "checksum": md5_hash
         }
 
-        package = ferc1_source.datapackager([fake_resource])
+        package = censusdp1tract_source.datapackager([fake_resource])
         res = package["resources"][0]
 
         assert(res["name"] == name)
-        assert(res["title"] == "ferc1-%d" % year)
+        assert(res["title"] == name[:-4])
         assert(res["path"] == url)
-        assert(res["parts"]["year"] == year)
         assert(res["parts"]["remote_url"] == url)
 
         assert(res["mediatype"] == "application/zip")

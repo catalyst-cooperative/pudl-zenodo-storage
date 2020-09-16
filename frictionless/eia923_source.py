@@ -1,20 +1,16 @@
 # -*- coding: utf-8 -*-
+"""Provide datapackage details specific to the EIA Form 923 archives."""
 
 from . import core
 from . import licenses
 from . import contributors
 
-"""
-Provide datapackage details specific to the Eia923 archives
-"""
-
 eia923_source = {
-    "name": "Eia 923: Source",
-    "title": "Eia 923: Source",
+    "name": "pudl-raw-eia923",
+    "title": "PUDL Raw EIA Form 923",
     "description":
-        "From the US Energy Information Administration:\n"
-        "> The survey Form EIA-923 collects detailed electric power data -- "
-        "monthly and annually -- on electricity generation, fuel "
+        "The EIA Form 923 collects detailed monthly and annual "
+        "electric power data on electricity generation, fuel "
         "consumption, fossil fuel stocks, and receipts at the power plant "
         "and prime mover level.",
     "profile": "data-package",
@@ -46,7 +42,7 @@ def datapackager(dfiles):
         metadata: dict of fixed metadata descriptors
 
     Returns:
-        dict of fields suited to the frictionless datapackage spec
-            https://frictionlessdata.io/specs/data-package/
+        dict: fields suited to the frictionless datapackage spec
+        https://frictionlessdata.io/specs/data-package/
     """
     return core.annual_resource_datapackager(eia923_source, dfiles)

@@ -1,20 +1,16 @@
 # -*- coding: utf-8 -*-
+"""Datapackage details specific to the EIA Form 860 archives."""
 
 from . import core
 from . import licenses
 from . import contributors
 
-"""
-Provide datapackage details specific to the Eia860 archives
-"""
-
 eia860_source = {
-    "name": "Eia860 Source",
-    "title": "Eia860 Source",
+    "name": "pudl-raw-eia860",
+    "title": "PUDL Raw EIA Form 860",
     "description":
-        "Form Eia860 data for electric power plants with 1 megawatt "
-        "greater compbined nameplate capacity.",
-
+        "US Energy Information Administration (EIA) Form 860 data for electric power "
+        "plants with 1 megawatt or greater combined nameplate capacity.",
     "profile": "data-package",
     "keywords": [
         "electricity", "electric", "boiler", "generator", "plant", "utility",
@@ -44,7 +40,7 @@ def datapackager(dfiles):
         metadata: dict of fixed metadata descriptors
 
     Returns:
-        dict of fields suited to the frictionless datapackage spec
-            https://frictionlessdata.io/specs/data-package/
+        dict: fields suited to the frictionless datapackage spec
+        https://frictionlessdata.io/specs/data-package/
     """
     return core.annual_resource_datapackager(eia860_source, dfiles)

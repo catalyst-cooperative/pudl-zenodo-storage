@@ -11,8 +11,10 @@ from zs import ZenStorage
 
 class TestZenStorage:
     """
-    Ensure that we are able to use the Zenodo service, via sandbox. Integration
-    test, accesses extertal resources.
+    Ensure that we are able to use the Zenodo service, via the sandbox.
+
+    Integration test, accesses extertal resources.
+
     """
 
     zs = ZenStorage(key=os.environ["ZENODO_TEST_KEY"], testing=True)
@@ -61,7 +63,7 @@ class TestZenStorage:
         assert update["metadata"]["keywords"] == newtd["keywords"]
 
     def test_new_version_and_file_api_upload(self):
-        """Ensure we can create new versions of a deposition"""
+        """Ensure we can create new versions of a deposition."""
         # It would be better if we could test a single function at a time,
         # however the api does not support versioning without a file upload.
         td = copy.deepcopy(self.test_deposition)
@@ -93,7 +95,7 @@ class TestZenStorage:
             semantic_version.Version(new_version["metadata"]["version"])
 
     def test_bucket_api_upload(self):
-        """Verify the bucket api upload"""
+        """Verify the bucket api upload."""
         td = copy.deepcopy(self.test_deposition)
         td["title"] += ": %d" % random.randint(1000, 9999)
 
