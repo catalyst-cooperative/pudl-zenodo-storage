@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import copy
 import io
 import os
@@ -6,10 +5,10 @@ import random
 import requests
 import semantic_version
 
-from zs import ZenStorage
+from zs import ZenodoStorage
 
 
-class TestZenStorage:
+class TestZenodoStorage:
     """
     Ensure that we are able to use the Zenodo service, via the sandbox.
 
@@ -17,7 +16,7 @@ class TestZenStorage:
 
     """
 
-    zs = ZenStorage(key=os.environ["ZENODO_TEST_KEY"], testing=True)
+    zs = ZenodoStorage(key=os.environ["ZENODO_SANDBOX_TOKEN_PUBLISH"], testing=True)
     test_deposition = {
         "title": "PUDL Test",
         "upload_type": "dataset",

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from pathlib import Path
 from datetime import datetime, timezone
 import os.path
@@ -45,8 +43,9 @@ def annual_archive_resource(name, url, size, md5_hash):
         "profile": "data-resource",
         "name": name,
         "path": url,
+        "remote_url": url,
         "title": title,
-        "parts": {"year": year, "remote_url": url},
+        "parts": {"year": year},
         "encoding": "utf-8",
         "mediatype": mt,
         "format": file_format,
@@ -112,7 +111,8 @@ def minimal_datapackager(package_meta, dfiles):
             "name": name,
             "path": url,
             "title": title,
-            "parts": {"remote_url": url},
+            "remote_url": url,
+            "parts": {},
             "encoding": "utf-8",
             "mediatype": mt,
             "format": file_format,

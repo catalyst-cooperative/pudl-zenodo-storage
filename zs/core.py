@@ -1,17 +1,15 @@
-# -*- coding: utf-8 -*-
-
 import json
 import logging
 import requests
 import semantic_version
 
 
-class ZenStorage:
+class ZenodoStorage:
     """Thin interface to store data with zenodo.org via their api"""
 
     def __init__(self, key, testing=False, verbose=False, loglevel="WARNING"):
         """
-        Prepare the ZenStorage interface
+        Prepare the ZenodoStorage interface.
 
         Args:
             key (str): The API key required to authenticate with Zenodo
@@ -19,7 +17,8 @@ class ZenStorage:
                 production service
 
         Returns:
-            ZenStorage
+            ZenodoStorage
+
         """
         logger = logging.Logger(__name__)
         logger.setLevel(loglevel)
@@ -37,8 +36,9 @@ class ZenStorage:
 
     def get_deposition(self, query):
         """
-        Get data for a single Deposition (see developers.zenodo.org) based on
-        the provided query.
+        Get data for a single Zenodo Deposition based on the provided query.
+
+        See https://developers.zenodo.org for more information.
 
         Args:
             query (str): A Zenodo (elasticsearch) compatible query string.
@@ -294,7 +294,7 @@ class ZenStorage:
             return deposition
 
         response = requests.post(
-                deposition["links"]["publish"], params={"access_token": self.key})
+            deposition["links"]["publish"], params={"access_token": self.key})
         jsr = response.json()
 
         if response.status_code != 202:

@@ -8,7 +8,7 @@ from . import core
 from . import licenses
 from . import contributors
 
-epacems_source = {
+epacems_raw = {
     "name": "pudl-raw-epacems",
     "title": "PUDL Raw EPA CEMS Hourly",
     "description": "US EPA hourly Continuous Emissions Monitoring System "
@@ -22,7 +22,7 @@ epacems_source = {
         "steam", "cems", "continuous emissions monitoring system", "hourly"
         "environmental protection agency", "ampd", "air markets program data"
     ],
-    "licenses": [licenses.us_govt, licenses.cc_by],
+    "licenses": [licenses.us_govt, ],
     "homepage": "https://catalyst.coop/pudl/",
     "sources": [
         {
@@ -63,8 +63,9 @@ def epacems_resource(name, url, size, md5_hash):
         "profile": "data-resource",
         "name": name,
         "path": url,
+        "remote_url": url,
         "title": title,
-        "parts": {"year": year, "state": state, "remote_url": url},
+        "parts": {"year": year, "state": state},
         "encoding": "utf-8",
         "mediatype": mt,
         "format": file_format,
@@ -91,6 +92,6 @@ def datapackager(dfiles):
 
         for x in dfiles]
 
-    return dict(**epacems_source,
+    return dict(**epacems_raw,
                 **{"resources": resources,
                    "created": datetime.now(timezone.utc).isoformat()})

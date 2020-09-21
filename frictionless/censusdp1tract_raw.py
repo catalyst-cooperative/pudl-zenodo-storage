@@ -5,7 +5,7 @@ from . import core
 from . import contributors
 from . import licenses
 
-censusdp1tract_source = {
+censusdp1tract_raw = {
     "name": "pudl-raw-censusdp1tract",
     "title": "PUDL Raw Census DP1 Tract Geodatabase",
     "description": "US Census Demographic Profile 1 (DP1) County and Tract "
@@ -41,4 +41,4 @@ def datapackager(dfiles):
         https://frictionlessdata.io/specs/data-package/
 
     """
-    return core.minimal_datapackager(censusdp1tract_source, dfiles)
+    return core.minimal_datapackager(censusdp1tract_raw, dfiles)

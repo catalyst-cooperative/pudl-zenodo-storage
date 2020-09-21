@@ -10,16 +10,18 @@ import os
 import requests
 import sys
 
-import frictionless.censusdp1tract_source
-import frictionless.eia860_source
-import frictionless.eia861_source
-import frictionless.eia923_source
-import frictionless.epacems_source
-import frictionless.epaipm_source
-import frictionless.ferc1_source
-import frictionless.ferc714_source
+import datapackage
 
-from zs import ZenStorage
+import frictionless.censusdp1tract_raw
+import frictionless.eia860_raw
+import frictionless.eia861_raw
+import frictionless.eia923_raw
+import frictionless.epacems_raw
+import frictionless.epaipm_raw
+import frictionless.ferc1_raw
+import frictionless.ferc714_raw
+
+from zs import ZenodoStorage
 import zs.metadata
 
 ROOT_DIR = os.environ.get(
@@ -69,7 +71,7 @@ def remote_fileinfo(zenodo, deposition):
     Collect and shape file data from an existing Zenodo deposition.
 
     Args:
-        zenodo: a zs.ZenStorage manager
+        zenodo: a zs.ZenodoStorage manager
         deposition: the deposition details, as retrieved from Zenodo
 
     Returns:
@@ -98,11 +100,11 @@ def new_datapackage(zenodo, datapackager, deposition):
     Add a new datapackage.json file to the given deposition.
 
     Args:
-        zenodo: a zs.ZenStorage manager
+        zenodo: a zs.ZenodoStorage manager
         datapackager: a data package generation function that takes a list of
             Zenodo file descriptors and produces the complete frictionless
             datapackage json.
-            e.g. frictionless.eia860_source.datapackager
+            e.g. frictionless.eia860_raw.datapackager
         deposition: the deposition details, as retrieved from Zenodo. Must be
                     in an editable state.
 
@@ -118,8 +120,16 @@ def new_datapackage(zenodo, datapackager, deposition):
             params={"access_token": zenodo.key})
         files.pop("datapackage.json")
 
-    datapackage = json.dumps(datapackager(files.values()), indent=4, sort_keys=True)
-    fcontents = io.BytesIO(bytes(datapackage, encoding="utf-8"))
+    datapkg_descriptor = datapackager(files.values())
+    datapkg_json = json.dumps(datapkg_descriptor, indent=4, sort_keys=True)
+    datapkg = datapackage.Package(datapkg_descriptor)
+    if not datapkg.valid:
+        zenodo.logger.error(
+            f"Found the following {len(datapkg.errors)} datapackage validation errors:")
+        for e in datapkg.errors:
+            print(f"  * {e}")
+            raise datapkg.errors[0]
+    fcontents = io.BytesIO(bytes(datapkg_json, encoding="utf-8"))
     zenodo.upload(deposition, "datapackage.json", fcontents)
 
 
@@ -165,12 +175,12 @@ def execute_actions(zenodo, deposition, datapackager, steps):
     Execute all actions from the given steps.
 
     Args:
-        zenodo: a zs.ZenStorage manager
+        zenodo: a zs.ZenodoStorage manager
         deposition: deposition descriptor as retrieved from Zenodo.
         datapackager: a data package generation function that takes a list of
             Zenodo file descriptors and produces the complete frictionless
             datapackage json.
-            e.g. frictionless.eia860_source.datapackager
+            e.g. frictionless.eia860_raw.datapackager
         steps: dict of file info to create, update, and delete, per
             action_steps(...)
 
@@ -217,6 +227,7 @@ def execute_actions(zenodo, deposition, datapackager, steps):
 
     # Replace the datapackage json
     new_datapackage(zenodo, datapackager, new_deposition)
+
     return new_deposition
 
 
@@ -225,14 +236,14 @@ def initial_run(zenodo, key_id, metadata, datapackager, file_paths):
     Create the first version of a Zenodo archive.
 
     Args:
-        zenodo: a zs.ZenStorage manager
-        key_id: keyword uuid, such as zs.metadata.eia860_source_uuid
-        metadata: the zen_store metadata (NOT frictionless datapackage data!) for
-            the deposition, such as zs.metadata.eia860_source
+        zenodo: a zs.ZenodoStorage manager
+        key_id: keyword uuid, such as zs.metadata.eia860_raw_uuid
+        metadata: the zenodo_store metadata (NOT frictionless datapackage data!)
+            for the deposition, such as zs.metadata.eia860_raw
         datapackager: a data package generation function that takes a list of
             Zenodo file descriptors and produces the complete frictionless
             datapackage json.
-            e.g. frictionless.eia860_source.datapackager
+            e.g. frictionless.eia860_raw.datapackager
         file_paths: a list of files to upload
 
     Returns:
@@ -294,9 +305,9 @@ def parse_main():
                              "most recent files from %s will be uploaded." %
                              (ROOT_DIR))
     parser.add_argument("deposition", help="Name of the Zenodo deposition. "
-                        "Supported: censusdp1tract_source, eia860_source, "
-                        "eia861_source, eia923_source, epacems_source, "
-                        "ferc1_source, ferc714_source, epaipm_source")
+                        "Supported: censusdp1tract_raw, eia860_raw, "
+                        "eia861_raw, eia923_raw, epacems_raw, "
+                        "ferc1_raw, ferc714_raw, epaipm_raw")
 
     return parser.parse_args()
 
@@ -328,67 +339,67 @@ def archive_selection(deposition_name):
 
         return glob.glob(os.path.join(previous[-1], "*"))
 
-    if deposition_name == "censusdp1tract_source":
+    if deposition_name == "censusdp1tract_raw":
         return {
-            "key_id": zs.metadata.censusdp1tract_source_uuid,
-            "metadata": zs.metadata.censusdp1tract_source,
-            "datapackager": frictionless.censusdp1tract_source.datapackager,
+            "key_id": zs.metadata.censusdp1tract_raw_uuid,
+            "metadata": zs.metadata.censusdp1tract_raw,
+            "datapackager": frictionless.censusdp1tract_raw.datapackager,
             "latest_files": latest_files("census")
         }
 
-    if deposition_name == "eia860_source":
+    if deposition_name == "eia860_raw":
         return {
-            "key_id": zs.metadata.eia860_source_uuid,
-            "metadata": zs.metadata.eia860_source,
-            "datapackager": frictionless.eia860_source.datapackager,
+            "key_id": zs.metadata.eia860_raw_uuid,
+            "metadata": zs.metadata.eia860_raw,
+            "datapackager": frictionless.eia860_raw.datapackager,
             "latest_files": latest_files("eia860")
         }
 
-    if deposition_name == "eia861_source":
+    if deposition_name == "eia861_raw":
         return {
-            "key_id": zs.metadata.eia861_source_uuid,
-            "metadata": zs.metadata.eia861_source,
-            "datapackager": frictionless.eia861_source.datapackager,
+            "key_id": zs.metadata.eia861_raw_uuid,
+            "metadata": zs.metadata.eia861_raw,
+            "datapackager": frictionless.eia861_raw.datapackager,
             "latest_files": latest_files("eia861")
         }
 
-    if deposition_name == "eia923_source":
+    if deposition_name == "eia923_raw":
         return {
-            "key_id": zs.metadata.eia923_source_uuid,
-            "metadata": zs.metadata.eia923_source,
-            "datapackager": frictionless.eia923_source.datapackager,
+            "key_id": zs.metadata.eia923_raw_uuid,
+            "metadata": zs.metadata.eia923_raw,
+            "datapackager": frictionless.eia923_raw.datapackager,
             "latest_files": latest_files("eia923")
         }
 
-    if deposition_name == "epacems_source":
+    if deposition_name == "epacems_raw":
         return {
-            "key_id": zs.metadata.epacems_source_uuid,
-            "metadata": zs.metadata.epacems_source,
-            "datapackager": frictionless.epacems_source.datapackager,
+            "key_id": zs.metadata.epacems_raw_uuid,
+            "metadata": zs.metadata.epacems_raw,
+            "datapackager": frictionless.epacems_raw.datapackager,
             "latest_files": latest_files("epacems")
         }
 
-    if deposition_name == "ferc1_source":
+    if deposition_name == "ferc1_raw":
         return {
-            "key_id": zs.metadata.ferc1_source_uuid,
-            "metadata": zs.metadata.ferc1_source,
-            "datapackager": frictionless.ferc1_source.datapackager,
+            "key_id": zs.metadata.ferc1_raw_uuid,
+            "metadata": zs.metadata.ferc1_raw,
+            "datapackager": frictionless.ferc1_raw.datapackager,
             "latest_files": latest_files("ferc1")
         }
 
-    if deposition_name == "ferc714_source":
+    if deposition_name == "ferc714_raw":
         return {
-            "key_id": zs.metadata.ferc714_source_uuid,
-            "metadata": zs.metadata.ferc714_source,
-            "datapackager": frictionless.ferc714_source.datapackager,
+            "key_id": zs.metadata.ferc714_raw_uuid,
+            "metadata": zs.metadata.ferc714_raw,
+            "datapackager": frictionless.ferc714_raw.datapackager,
             "latest_files": latest_files("ferc714")
         }
 
-    if deposition_name == "epaipm_source":
+    if deposition_name == "epaipm_raw":
         return {
-            "key_id": zs.metadata.epaipm_source_uuid,
-            "metadata": zs.metadata.epaipm_source,
-            "datapackager": frictionless.epaipm_source.datapackager,
+            "key_id": zs.metadata.epaipm_raw_uuid,
+            "metadata": zs.metadata.epaipm_raw,
+            "datapackager": frictionless.epaipm_raw.datapackager,
             "latest_files": latest_files("epaipm")
         }
 
@@ -399,8 +410,12 @@ if __name__ == "__main__":
     args = parse_main()
 
     if args.sandbox:
-        zenodo = ZenStorage(key=os.environ["ZENODO_TEST_KEY"], testing=True,
-                            verbose=args.verbose, loglevel=args.loglevel)
+        zenodo = ZenodoStorage(
+            key=os.environ["ZENODO_SANDBOX_TOKEN_UPLOAD"],
+            testing=True,
+            verbose=args.verbose,
+            loglevel=args.loglevel
+        )
     else:
         # Because this is still just in development!
         raise NotImplementedError("For now, use --sandbox.")
@@ -412,7 +427,9 @@ if __name__ == "__main__":
     else:
         files = args.files
 
-    zenodo.logger.debug("Archive contents: %s" % files)
+    files.sort()
+    for f in files:
+        zenodo.logger.debug(f"Archive contains: {f}")
 
     if args.initialize:
         if args.noop:

@@ -1,26 +1,23 @@
-# -*- coding: utf-8 -*-
 """Provide datapackage details specific to the EIA 861 archives."""
 
 from . import core
 from . import licenses
 from . import contributors
 
-eia861_source = {
+eia861_raw = {
     "name": "pudl-raw-eia861",
     "title": "PUDL Raw EIA Form 861",
     "description":
-        "Annual Electric Power Industry Report, Form EIA-861 detailed data "
-        "files",
+        "EIA Form 861 Annual Electric Power Industry Report, detailed data "
+        "files.",
     "profile": "data-package",
     "keywords": [
-        'electricity', 'electric', 'boiler', 'generator', 'plant', 'utility',
-        'fuel', 'coal', 'natural gas', ' prime mover', 'eia861', 'retirement',
-        'capacity', 'planned', 'proposed', 'energy', 'hydro', 'solar', 'wind',
-        'nuclear', 'form 861', 'eia', 'annual', 'gas', 'ownership', 'steam',
-        'turbine', 'combustion', 'combined cycle', 'eia',
-        'energy information administration'
+        "electricity", "electric", "utility", "balancing area",
+        "eia861", "sales", "energy efficiency", "dsm", "demand response",
+        "demand side management", "service territory", "form 861", "eia",
+        "energy information administration", "usa", "customers",
     ],
-    "licenses": [licenses.us_govt, licenses.cc_by],
+    "licenses": [licenses.us_govt, ],
     "homepage": "https://catalyst.coop/pudl/",
     "sources": [
         {
@@ -43,4 +40,4 @@ def datapackager(dfiles):
         dict: fields suited to the frictionless datapackage spec
         https://frictionlessdata.io/specs/data-package/
     """
-    return core.annual_resource_datapackager(eia861_source, dfiles)
+    return core.annual_resource_datapackager(eia861_raw, dfiles)

@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
-
 import uuid
 import random
-from frictionless import ferc714_source
+from frictionless import ferc714_raw
 
 
 class TestFerc714Source:
@@ -26,13 +24,13 @@ class TestFerc714Source:
             "checksum": md5_hash
         }
 
-        package = ferc714_source.datapackager([fake_resource])
+        package = ferc714_raw.datapackager([fake_resource])
         res = package["resources"][0]
 
         assert(res["name"] == name)
         assert(res["title"] == name[:-4])
         assert(res["path"] == url)
-        assert(res["parts"]["remote_url"] == url)
+        assert(res["remote_url"] == url)
 
         assert(res["mediatype"] == "application/zip")
         assert(res["format"] == "zip")

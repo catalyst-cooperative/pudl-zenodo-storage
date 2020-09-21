@@ -9,7 +9,7 @@ from . import core
 from . import licenses
 from . import contributors
 
-epaipm_source = {
+epaipm_raw = {
     "name": "pudl-raw-epaipm",
     "title": "PUDL Raw EPA IPM/NEEDS",
     "description": "EPA National Electric Energy Data System data, archived "
@@ -17,7 +17,7 @@ epaipm_source = {
                    "national-electric-energy-data-system-needs-v6",
     "profile": "data-package",
     "keywords": ["epa", "ipm", "needs", "usa", "integrated planning"],
-    "licenses": [licenses.us_govt, licenses.cc_by],
+    "licenses": [licenses.us_govt, ],
     "homepage": "https://catalyst.coop/pudl/",
     "sources": [
         {
@@ -48,19 +48,16 @@ def epaipm_resource(name, url, size, md5_hash):
 
     def make_parts():
         match = re.search(r"([\d]{4})-([\d]{2})-([\d]{2})", name)
-        remote = {"remote_url": url}
-
         if match is not None:
             year, month, day = [int(x) for x in match.groups()]
-            return {"year": year, "month": month, "day": day, **remote}
+            return {"year": year, "month": month, "day": day}
 
         match = re.search(r"(19|20)([\d]{2})", name)
-
         if match is not None:
             year = "".join(match.groups())
-            return {"year": int(year), **remote}
+            return {"year": int(year)}
 
-        return remote
+        return {}
 
     title, file_format = os.path.splitext(name)
     file_format = file_format[1:]
@@ -71,6 +68,7 @@ def epaipm_resource(name, url, size, md5_hash):
         "profile": "data-resource",
         "name": name,
         "path": url,
+        "remote_url": url,
         "title": title,
         "parts": parts,
         "encoding": "utf-8",
@@ -101,6 +99,6 @@ def datapackager(dfiles):
             x["filesize"], x["checksum"])
         for x in dfiles]
 
-    return dict(**epaipm_source,
+    return dict(**epaipm_raw,
                 **{"resources": resources,
                    "created": datetime.now(timezone.utc).isoformat()})

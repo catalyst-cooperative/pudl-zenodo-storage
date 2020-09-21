@@ -5,7 +5,7 @@ from . import core
 from . import licenses
 from . import contributors
 
-eia923_source = {
+eia923_raw = {
     "name": "pudl-raw-eia923",
     "title": "PUDL Raw EIA Form 923",
     "description":
@@ -22,7 +22,7 @@ eia923_source = {
         "mercury", "sulfur", "ash", "lignite", "bituminous", "subbituminous",
         "heat content"
     ],
-    "licenses": [licenses.us_govt, licenses.cc_by],
+    "licenses": [licenses.us_govt, ],
     "homepage": "https://catalyst.coop/pudl/",
     "sources": [
         {
@@ -45,4 +45,4 @@ def datapackager(dfiles):
         dict: fields suited to the frictionless datapackage spec
         https://frictionlessdata.io/specs/data-package/
     """
-    return core.annual_resource_datapackager(eia923_source, dfiles)
+    return core.annual_resource_datapackager(eia923_raw, dfiles)

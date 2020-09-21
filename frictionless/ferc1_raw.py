@@ -1,33 +1,34 @@
 # -*- coding: utf-8 -*-
-"""Provide datapackage details specific to the Ferc Form 714 archives."""
+"""Provide datapackage details specific to the FERC Form 1 archives."""
 
 from . import core
-from . import contributors
 from . import licenses
+from . import contributors
 
-ferc714_source = {
-    "name": "pudl-raw-ferc714",
-    "title": "PUDL Raw FERC Form 714",
+ferc1_raw = {
+    "name": "pudl-raw-ferc1",
+    "title": "PUDL Raw FERC Form 1",
     "description":
-        "Form 714 Annual Electric Balancing Authority Area and Planning Area "
-        "Report from the Federal Energy Regulatory Commission (FERC).",
+        "Form No. 1 financial and operating report from the Federal Energy "
+        "Regulatory Commission (FERC).",
+
     "profile": "data-package",
     "keywords": [
         'electricity', 'electric', 'utility', 'plant', 'steam', 'generation',
-        'cost', 'expense', 'price', 'heat content', 'ferc', 'form 714',
+        'cost', 'expense', 'price', 'heat content', 'ferc', 'form 1',
         'federal energy regulatory commission', 'capital', 'accounting',
         'depreciation', 'finance', 'plant in service', 'hydro', 'coal',
         'natural gas', 'gas', 'opex', 'capex', 'accounts', 'investment',
         'capacity'
     ],
-    "licenses": [licenses.us_govt, licenses.cc_by],
+    "licenses": [licenses.us_govt, ],
     "homepage": "https://catalyst.coop/pudl/",
     "sources": [
         {
-            "title": "Federal Energy Regulatory Commission",
+            "title": "Federal Energy Regulatory Commission (FERC)",
             "path": "https://www.ferc.gov/industries-data/electric/"
                     "general-information/electric-industry-forms/"
-                    "form-no-714-annual-electric/data"
+                    "form-1-electric-utility-annual"
         }
     ],
     "contributors": [contributors.catalyst_cooperative]
@@ -36,15 +37,14 @@ ferc714_source = {
 
 def datapackager(dfiles):
     """
-    Produce the datapackage json for the ferc714 archival collection.
+    Produce the datapackage json for the ferc1 archival collection.
 
     Args:
-        dfiles: iterable of file descriptors, as expected from Zenodo.
-            https://developers.zenodo.org/#deposition-files
+        metadata: dict of fixed metadata descriptors
 
     Returns:
         dict: fields suited to the frictionless datapackage spec
         https://frictionlessdata.io/specs/data-package/
 
     """
-    return core.minimal_datapackager(ferc714_source, dfiles)
+    return core.annual_resource_datapackager(ferc1_raw, dfiles)

@@ -1,24 +1,22 @@
-# -*- coding: utf-8 -*-
 import uuid
 import random
 
-from frictionless import eia923_source
+from frictionless import ferc1_raw
 
 
-class TestEia923Source:
-    """Ensure we can create proper frictionless datapackage descriptions"""
+class TestFerc1Source:
+    """Ensure we can create proper frictionless datapackage descriptions."""
 
     def test_single_file_resource(self):
-        """Ensure a single file gets a good resource descriptor"""
-
-        year = random.randint(2001, 2020)
-        name = "eia923-%d.zip" % year
+        """Ensure a single file gets a good resource descriptor."""
+        year = random.randint(1997, 2020)
+        name = "ferc1-%d.zip" % year
         size = random.randint(500000, 800000)
 
         md5_hash = random.choice([
-            "4bd7e1025c91c00b50b6cef87cb9bfad",
-            "883895453cb3144b97d0095472f6136e",
-            "c271dfc0ca452b6582f0e592f57351ef"])
+            "3122e77806b1a1fb2c8af8d404457fd7",
+            "d7292a7175af8c08b12594e21de3af1f",
+            "01c58b5a83dd55ec1fc46f34065b30e6"])
 
         url = "https://zenodo.org/api/deposit/depositions/%d/files/%s" % (
             random.randint(10000, 99999), uuid.uuid4())
@@ -28,16 +26,16 @@ class TestEia923Source:
             "links": {"download": url},
             "filesize": size,
             "checksum": md5_hash
-            }
+        }
 
-        package = eia923_source.datapackager([fake_resource])
+        package = ferc1_raw.datapackager([fake_resource])
         res = package["resources"][0]
 
         assert(res["name"] == name)
-        assert(res["title"] == "eia923-%d" % year)
+        assert(res["title"] == "ferc1-%d" % year)
         assert(res["path"] == url)
         assert(res["parts"]["year"] == year)
-        assert(res["parts"]["remote_url"] == url)
+        assert(res["remote_url"] == url)
 
         assert(res["mediatype"] == "application/zip")
         assert(res["format"] == "zip")

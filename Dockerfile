@@ -17,8 +17,8 @@ WORKDIR /install
 COPY requirements.txt ./
 RUN pip install --prefix /usr/local -r requirements.txt
 
-# Install zen_tools
-WORKDIR /install/zen_tools
+# Install zenodo_tools
+WORKDIR /install/zenodo_tools
 COPY ./ ./
 RUN pip install --prefix /usr/local ./
 
@@ -36,4 +36,4 @@ WORKDIR ${HOME}
 USER ${USER}
 RUN mkdir -m 775 -p ${PUDL_IN}
 
-ENTRYPOINT ["zen_store.py", "--verbose"]
+ENTRYPOINT ["zenodo_store.py", "--verbose"]

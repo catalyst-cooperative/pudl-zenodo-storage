@@ -2,7 +2,7 @@
 
 ## zs
 
-The zs.ZenStorage module provides an interface to create archives and upload
+The zs.ZenodoStorage class provides an interface to create archives and upload
 files to Zenodo.
 
 ## frictionless

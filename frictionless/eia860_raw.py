@@ -5,7 +5,7 @@ from . import core
 from . import licenses
 from . import contributors
 
-eia860_source = {
+eia860_raw = {
     "name": "pudl-raw-eia860",
     "title": "PUDL Raw EIA Form 860",
     "description":
@@ -20,7 +20,7 @@ eia860_source = {
         "turbine", "combustion", "combined cycle", "eia",
         "energy information administration"
     ],
-    "licenses": [licenses.us_govt, licenses.cc_by],
+    "licenses": [licenses.us_govt, ],
     "homepage": "https://catalyst.coop/pudl/",
     "sources": [
         {
@@ -43,4 +43,4 @@ def datapackager(dfiles):
         dict: fields suited to the frictionless datapackage spec
         https://frictionlessdata.io/specs/data-package/
     """
-    return core.annual_resource_datapackager(eia860_source, dfiles)
+    return core.annual_resource_datapackager(eia860_raw, dfiles)

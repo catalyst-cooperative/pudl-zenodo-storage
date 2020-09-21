@@ -1,16 +1,15 @@
-# -*- coding: utf-8 -*-
 from faker import Faker
 import uuid
 import random
 
-from frictionless import epacems_source
+from frictionless import epacems_raw
 
 
 class TestCemsSource:
-    """Ensure we can create proper frictionless datapackage descriptions"""
+    """Ensure we can create proper frictionless datapackage descriptions."""
 
     def test_single_file(self):
-        """Ensure a single file gets a good resource descriptor"""
+        """Ensure a single file gets a good resource descriptor."""
         fake = Faker()
         date = fake.date_between(start_date="-10y", end_date="today")
         state = fake.state_abbr(include_territories=False).lower()
@@ -27,9 +26,9 @@ class TestCemsSource:
             "links": {"download": url},
             "filesize": size,
             "checksum": md5_hash
-            }
+        }
 
-        package = epacems_source.datapackager([fake_resource])
+        package = epacems_raw.datapackager([fake_resource])
         res = package["resources"][0]
 
         assert(res["name"] == name)
@@ -37,7 +36,7 @@ class TestCemsSource:
         assert(res["path"] == url)
         assert(res["parts"]["year"] == date.year)
         assert(res["parts"]["state"] == state)
-        assert(res["parts"]["remote_url"] == url)
+        assert(res["remote_url"] == url)
 
         assert(res["mediatype"] == "application/zip")
         assert(res["format"] == "zip")

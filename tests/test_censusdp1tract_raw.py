@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
-
 import uuid
 import random
-from frictionless import censusdp1tract_source
+from frictionless import censusdp1tract_raw
 
 
 class TestCensusDp1TractSource:
@@ -26,13 +24,13 @@ class TestCensusDp1TractSource:
             "checksum": md5_hash
         }
 
-        package = censusdp1tract_source.datapackager([fake_resource])
+        package = censusdp1tract_raw.datapackager([fake_resource])
         res = package["resources"][0]
 
         assert(res["name"] == name)
         assert(res["title"] == name[:-4])
         assert(res["path"] == url)
-        assert(res["parts"]["remote_url"] == url)
+        assert(res["remote_url"] == url)
 
         assert(res["mediatype"] == "application/zip")
         assert(res["format"] == "zip")

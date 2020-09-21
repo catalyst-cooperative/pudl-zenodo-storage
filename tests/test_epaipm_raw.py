@@ -1,16 +1,15 @@
-# -*- coding: utf-8 -*-
 from faker import Faker
 import uuid
 import random
 
-from frictionless import epaipm_source
+from frictionless import epaipm_raw
 
 
 class TestIpmSource:
-    """Ensure we can create proper frictionless datapackage descriptions"""
+    """Ensure we can create proper frictionless datapackage descriptions."""
 
     def fake_resource(self, filename):
-        """Produce a fake file resource descriptor"""
+        """Produce a fake file resource descriptor."""
         fake = Faker()
         md5_hash = fake.md5(raw_output=False)
         size = random.randint(5000, 9999)
@@ -22,16 +21,16 @@ class TestIpmSource:
             "links": {"download": url},
             "filesize": size,
             "checksum": md5_hash
-            }
+        }
 
     def test_xlsx_file(self):
-        """Ensure a single xlsx file gets a good resource descriptor"""
+        """Ensure a single xlsx file gets a good resource descriptor."""
         fake = Faker()
         date = fake.date_between(start_date="-1y", end_date="today")
         name = "epaipm-v6-rev-%s.xlsx" % date.isoformat()
 
         fake_resource = self.fake_resource(name)
-        package = epaipm_source.datapackager([fake_resource])
+        package = epaipm_raw.datapackager([fake_resource])
         res = package["resources"][0]
 
         assert res["name"] == name
@@ -49,15 +48,15 @@ class TestIpmSource:
         assert res["hash"] == fake_resource["checksum"]
 
     def test_year_only_file(self):
-        """Files with a year and no other date info still get the year"""
+        """Files with a year and no other date info still get the year."""
         year = random.randint(1990, 2020)
         name = "table_3-%d_annual_transmission_capabilities_of_u.s._" \
                "model_regions_in_epa_platform_v6_-_%d.xlsx" % (
-                    random.randint(1, 99), year)
+                   random.randint(1, 99), year)
         print(name)
 
         fake_resource = self.fake_resource(name)
-        package = epaipm_source.datapackager([fake_resource])
+        package = epaipm_raw.datapackager([fake_resource])
         res = package["resources"][0]
 
         assert res["name"] == name
@@ -65,7 +64,7 @@ class TestIpmSource:
         assert res["parts"]["year"] == year
 
         assert res["path"] == fake_resource["links"]["download"]
-        assert res["parts"]["remote_url"] == fake_resource["links"]["download"]
+        assert res["remote_url"] == fake_resource["links"]["download"]
         assert(res["mediatype"] == "application/vnd.openxmlformats-"
                                    "officedocument.spreadsheetml.sheet")
         assert res["format"] == "xlsx"
@@ -74,15 +73,15 @@ class TestIpmSource:
         assert res["hash"] == fake_resource["checksum"]
 
     def test_file_sans_parts(self):
-        """Files with no year are accepted"""
+        """Files with no year are accepted."""
         name = "epaipm.zip"
         fake_resource = self.fake_resource(name)
-        package = epaipm_source.datapackager([fake_resource])
+        package = epaipm_raw.datapackager([fake_resource])
         res = package["resources"][0]
 
         assert res["name"] == name
         assert res["title"] == name[:-4]
-        assert res["parts"]["remote_url"] == fake_resource["links"]["download"]
+        assert res["remote_url"] == fake_resource["links"]["download"]
 
         assert res["path"] == fake_resource["links"]["download"]
         assert res["mediatype"] == "application/zip"
