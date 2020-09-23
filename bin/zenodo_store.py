@@ -128,7 +128,7 @@ def new_datapackage(zenodo, datapackager, deposition):
             f"Found the following {len(datapkg.errors)} datapackage validation errors:")
         for e in datapkg.errors:
             print(f"  * {e}")
-            raise datapkg.errors[0]
+        raise datapkg.errors[0]
     fcontents = io.BytesIO(bytes(datapkg_json, encoding="utf-8"))
     zenodo.upload(deposition, "datapackage.json", fcontents)
 
@@ -208,7 +208,7 @@ def execute_actions(zenodo, deposition, datapackager, steps):
 
         with open(path, "rb") as f:
             zenodo.upload(new_deposition, filename, f)
-            zenodo.logger.debug("Uploaded %s" % path)
+            zenodo.logger.info("Uploaded %s" % path)
 
     for filename, data in steps["update"].items():
         requests.delete(nd_files[filename]["links"]["self"],
@@ -218,12 +218,12 @@ def execute_actions(zenodo, deposition, datapackager, steps):
 
         with open(path, "rb") as f:
             zenodo.upload(new_deposition, filename, f)
-            zenodo.logger.debug("Replaced %s" % path)
+            zenodo.logger.info("Replaced %s" % path)
 
     for filename, data in steps["delete"].items():
         requests.delete(nd_files[filename]["links"]["self"],
                         params={"access_token": zenodo.key})
-        zenodo.logger.debug("Deleted %s" % filename)
+        zenodo.logger.info("Deleted %s" % filename)
 
     # Replace the datapackage json
     new_datapackage(zenodo, datapackager, new_deposition)
@@ -277,7 +277,7 @@ def initial_run(zenodo, key_id, metadata, datapackager, file_paths):
 
         with open(fp, "rb") as f:
             zenodo.upload(deposition, name, f)
-            zenodo.logger.debug("Uploaded %s" % fp)
+            zenodo.logger.info("Uploaded %s" % fp)
 
     # Save the datapackage.json
     new_datapackage(zenodo, datapackager, deposition)
@@ -428,11 +428,11 @@ if __name__ == "__main__":
         files = args.files
 
     files.sort()
-    for f in files:
-        zenodo.logger.debug(f"Archive contains: {f}")
 
     if args.initialize:
         if args.noop:
+            for f in files:
+                zenodo.logger.info(f"Archive would contain: {f}")
             sys.exit()
 
         result = initial_run(
