@@ -15,7 +15,7 @@ censusdp1tract_raw = {
         "geodata", "usa", "census", "geodatabase", "gis", "spatial", "demographic",
         "dp1", "population", "county", "fips", "tract"
     ],
-    "licenses": [licenses.us_govt, licenses.cc_by],
+    "licenses": [licenses.us_govt, ],
     "homepage": "https://catalyst.coop/pudl/",
     "sources": [
         {
@@ -41,4 +41,4 @@ def datapackager(dfiles):
         https://frictionlessdata.io/specs/data-package/
 
     """
-    return core.minimal_datapackager(censusdp1tract_raw, dfiles)
+    return core.annual_resource_datapackager(censusdp1tract_raw, dfiles)

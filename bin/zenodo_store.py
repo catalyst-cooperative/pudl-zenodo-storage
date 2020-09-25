@@ -344,7 +344,7 @@ def archive_selection(deposition_name):
             "key_id": zs.metadata.censusdp1tract_raw_uuid,
             "metadata": zs.metadata.censusdp1tract_raw,
             "datapackager": frictionless.censusdp1tract_raw.datapackager,
-            "latest_files": latest_files("census")
+            "latest_files": latest_files("censusdp1tract")
         }
 
     if deposition_name == "eia860_raw":
