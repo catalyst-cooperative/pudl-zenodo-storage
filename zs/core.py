@@ -59,7 +59,7 @@ class ZenodoStorage:
         jsr = lookup.json()
 
         if lookup.status_code != 200:
-            msg = "Could not look up deposition: %s" % jsr
+            msg = f"Could not look up deposition: {jsr}"
             self.logger.error(msg)
             raise RuntimeError(msg)
 
@@ -104,7 +104,7 @@ class ZenodoStorage:
         jsr = response.json()
 
         if response.status_code != 201:
-            msg = "Could not create deposition: %s" % jsr
+            msg = f"Could not create deposition: {jsr}"
             self.logger.error(msg)
             raise RuntimeError(msg)
 
@@ -132,7 +132,7 @@ class ZenodoStorage:
         jsr = response.json()
 
         if response.status_code != 200:
-            msg = "Failed to update: %s / %s" % (jsr, json.dumps(metadata))
+            msg = f"Failed to update: {jsr} / {json.dumps(metadata)}"
             self.logger.error(msg)
             raise RuntimeError(msg)
 
@@ -155,15 +155,14 @@ class ZenodoStorage:
             deposition data as dict, per
             https://developers.zenodo.org/?python#depositions
         """
-        query = 'conceptdoi:"%s"' % conceptdoi
+        query = f'conceptdoi:"{conceptdoi}"'
         deposition = self.get_deposition(query)
 
         if deposition is None:
-            raise ValueError("Deposition '%s' does not exist" % query)
+            raise ValueError(f"Deposition '{query}' does not exist")
 
         self.logger.debug(
-            "Deposition '%s' found at %s" %
-            (query, deposition["links"]["self"]))
+            f"Deposition '{query}' found at {deposition['links']['self']}")
 
         if deposition["state"] == "unsubmitted":
             self.logger.debug("deposition '%s' is already a new version" %
@@ -178,7 +177,7 @@ class ZenodoStorage:
         response = requests.post(url, params=params)
 
         if response.status_code != 201:
-            msg = "Could not create new version: %s" % response.text
+            msg = f"Could not create new version: {response.text}"
             self.logger.error(msg)
             raise RuntimeError(msg)
 
@@ -199,7 +198,7 @@ class ZenodoStorage:
 
         metadata["version"] = str(version_info)
 
-        new_version = self.get_deposition('conceptdoi:"%s"' % conceptdoi)
+        new_version = self.get_deposition(f'conceptdoi:"{conceptdoi}"')
         return self.update_deposition(new_version["links"]["self"], metadata)
 
     def file_api_upload(self, deposition, file_name, file_handle):
@@ -223,7 +222,7 @@ class ZenodoStorage:
         jsr = response.json()
 
         if response.status_code != 201:
-            msg = "Failed to upload file: %s" % jsr
+            msg = f"Failed to upload file: {jsr}"
             self.logger.error(msg)
             raise RuntimeError(msg)
 
@@ -298,7 +297,7 @@ class ZenodoStorage:
         jsr = response.json()
 
         if response.status_code != 202:
-            msg = "Failed to publish %s: %s" % (deposition["title"], json.dumps(jsr))
+            msg = f"Failed to publish {deposition['title']}: {json.dumps(jsr)}"
             self.logger.error(msg)
             raise RuntimeError(msg)
 

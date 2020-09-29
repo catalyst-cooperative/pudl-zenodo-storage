@@ -32,7 +32,7 @@ def annual_archive_resource(name, url, size, md5_hash):
     match = re.search(r"([\d]{4})", name)
 
     if match is None:
-        raise ValueError("No year present in filename %s" % name)
+        raise ValueError(f"No year present in filename {name}")
 
     year = int(match.groups()[0])
     title, file_format = os.path.splitext(name)

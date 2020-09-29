@@ -51,7 +51,7 @@ def epacems_resource(name, url, size, md5_hash):
     match = re.search(r"([\d]{4})-([\w]{2})", name)
 
     if match is None:
-        raise ValueError("Invalid filename %s" % name)
+        raise ValueError(f"Invalid filename {name}")
 
     year, state = match.groups()
     year = int(year)

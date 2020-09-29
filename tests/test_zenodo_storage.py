@@ -31,7 +31,7 @@ class TestZenodoStorage:
         td = copy.deepcopy(self.test_deposition)
         td["title"] += ": %d" % random.randint(1000, 9999)
 
-        lookup = self.zs.get_deposition('title:"%s"' % td["title"])
+        lookup = self.zs.get_deposition(f"title:\"{td['title']}\"")
         assert(lookup is None)
 
         create = self.zs.create_deposition(td)
@@ -42,7 +42,7 @@ class TestZenodoStorage:
         requests.post(
             create["links"]["publish"], data={"access_token": self.zs.key})
 
-        lookup = self.zs.get_deposition('title:"%s"' % td["title"])
+        lookup = self.zs.get_deposition(f"title:\"{td['title']}\"")
         assert(lookup["metadata"]["title"] == td["title"])
 
     def test_update(self):
@@ -110,5 +110,5 @@ class TestZenodoStorage:
                 "Failed to save test deposition: code %d, %s" %
                 (response.status_code, published))
 
-        lookup = self.zs.get_deposition('title:"%s"' % td["title"])
+        lookup = self.zs.get_deposition(f"title:\"{td['title']}\"")
         assert lookup["files"][0]["filename"] == "testing.txt"

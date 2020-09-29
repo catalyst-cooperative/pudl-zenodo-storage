@@ -82,13 +82,13 @@ def remote_fileinfo(zenodo, deposition):
     response = requests.get(url, params={"access_token": zenodo.key})
 
     if response.status_code > 299:
-        msg = "Unable to get files for %s: %s" % (url, response)
+        msg = f"Unable to get files for {url}: {response}"
         raise RuntimeError(msg)
 
     try:
         jsr = response.json()
     except:
-        msg = "Invalid remote file data at %s: %s" % (url, response)
+        msg = f"Invalid remote file data at {url}: {response}"
         raise ValueError(msg)
 
     files = jsr
@@ -192,8 +192,7 @@ def execute_actions(zenodo, deposition, datapackager, steps):
     if steps["create"] == {} and steps["update"] == {} and \
             steps["delete"] == {}:
 
-        zenodo.logger.info("No changes for deposition %s" %
-                           deposition["title"])
+        zenodo.logger.info(f"No changes for deposition {deposition['title']}")
         return
 
     if deposition["submitted"]:
@@ -208,7 +207,7 @@ def execute_actions(zenodo, deposition, datapackager, steps):
 
         with open(path, "rb") as f:
             zenodo.upload(new_deposition, filename, f)
-            zenodo.logger.info("Uploaded %s" % path)
+            zenodo.logger.info(f"Uploaded {path}")
 
     for filename, data in steps["update"].items():
         requests.delete(nd_files[filename]["links"]["self"],
@@ -218,12 +217,12 @@ def execute_actions(zenodo, deposition, datapackager, steps):
 
         with open(path, "rb") as f:
             zenodo.upload(new_deposition, filename, f)
-            zenodo.logger.info("Replaced %s" % path)
+            zenodo.logger.info(f"Replaced {path}")
 
     for filename, data in steps["delete"].items():
         requests.delete(nd_files[filename]["links"]["self"],
                         params={"access_token": zenodo.key})
-        zenodo.logger.info("Deleted %s" % filename)
+        zenodo.logger.info(f"Deleted {filename}")
 
     # Replace the datapackage json
     new_datapackage(zenodo, datapackager, new_deposition)
@@ -259,7 +258,7 @@ def initial_run(zenodo, key_id, metadata, datapackager, file_paths):
         raise ValueError("key_id missing from metadata keywords")
 
     try:
-        deposition = zenodo.get_deposition('keyword="%s"' % key_id)
+        deposition = zenodo.get_deposition(f'keyword="{key_id}"')
         exists = deposition is not None
     except RuntimeError:
         exists = False
@@ -277,7 +276,7 @@ def initial_run(zenodo, key_id, metadata, datapackager, file_paths):
 
         with open(fp, "rb") as f:
             zenodo.upload(deposition, name, f)
-            zenodo.logger.info("Uploaded %s" % fp)
+            zenodo.logger.info(f"Uploaded {fp}")
 
     # Save the datapackage.json
     new_datapackage(zenodo, datapackager, deposition)
@@ -403,7 +402,7 @@ def archive_selection(deposition_name):
             "latest_files": latest_files("epaipm")
         }
 
-    raise ValueError("Unsupported archive: %s" % args.deposition)
+    raise ValueError(f"Unsupported archive: {args.deposition}")
 
 
 if __name__ == "__main__":
@@ -444,7 +443,7 @@ if __name__ == "__main__":
 
     local = local_fileinfo(files)
 
-    deposition = zenodo.get_deposition('keywords: "%s"' % sel["key_id"])
+    deposition = zenodo.get_deposition(f"keywords: \"{sel['key_id']}\"")
 
     if deposition is None:
         raise ValueError("Deposition not found. You may need to --initialize")

@@ -27,14 +27,14 @@ class TestIpmSource:
         """Ensure a single xlsx file gets a good resource descriptor."""
         fake = Faker()
         date = fake.date_between(start_date="-1y", end_date="today")
-        name = "epaipm-v6-rev-%s.xlsx" % date.isoformat()
+        name = f"epaipm-v6-rev-{date.isoformat()}.xlsx"
 
         fake_resource = self.fake_resource(name)
         package = epaipm_raw.datapackager([fake_resource])
         res = package["resources"][0]
 
         assert res["name"] == name
-        assert res["title"] == "epaipm-v6-rev-%s" % date.isoformat()
+        assert res["title"] == f"epaipm-v6-rev-{date.isoformat()}"
         assert res["parts"]["year"] == date.year
         assert res["parts"]["month"] == date.month
         assert res["parts"]["day"] == date.day
