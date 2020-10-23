@@ -140,20 +140,19 @@ class ZenodoStorage:
 
     def new_deposition_version(self, conceptdoi, version_info=None):
         """
-        Produce a new version for a given deposition archive
+        Produce a new version for a given deposition archive.
 
         Args:
-            conceptdoi: str, deposition conceptdoi, per
-                        https://help.zenodo.org/#versioning
-
-                        The deposition provided must already exist on Zenodo.
-
-            version_info: a semantic_version.Version.  By default the version metadata
-                will be incremented by on major semantic version number
+            conceptdoi (str): deposition conceptdoi, per
+                https://help.zenodo.org/#versioning
+                The deposition provided must already exist on Zenodo.
+            version_info (semantic_version.Version): By default the version metadata
+                will be incremented by on major semantic version number.
 
         Returns:
             deposition data as dict, per
             https://developers.zenodo.org/?python#depositions
+
         """
         query = f'conceptdoi:"{conceptdoi}"'
         deposition = self.get_deposition(query)
@@ -189,7 +188,7 @@ class ZenodoStorage:
         metadata = {}
 
         for key, val in source_metadata.items():
-            if key not in ["doi", "prereserve_doi"]:
+            if key not in ["doi", "prereserve_doi", "publication_date"]:
                 metadata[key] = val
 
         if version_info is None:
@@ -203,7 +202,7 @@ class ZenodoStorage:
 
     def file_api_upload(self, deposition, file_name, file_handle):
         """
-        Upload a file for the given deposition, using the older file api
+        Upload a file for the given deposition, using the older file API.
 
         Args:
             deposition: the dict of the deposition resource
@@ -212,8 +211,9 @@ class ZenodoStorage:
                 Must be < 100MB
 
         Returns:
-            dict of the deposition file resource, per
-                https://developers.zenodo.org/#deposition-files
+            dict: the deposition file resource, per
+            https://developers.zenodo.org/#deposition-files
+
         """
         url = deposition["links"]["files"]
         data = {"name": file_name, "access_token": self.key}
@@ -230,7 +230,7 @@ class ZenodoStorage:
 
     def bucket_api_upload(self, deposition, file_name, file_handle):
         """
-        Upload a file for the given deposition, using the newer bucket api
+        Upload a file for the given deposition, using the newer bucket API.
 
         Args:
             deposition: the dict of the deposition resource
@@ -239,8 +239,9 @@ class ZenodoStorage:
                 Must be < 100MB
 
         Returns:
-            dict of the deposition file resource, per
-                https://developers.zenodo.org/#deposition-files
+            dict: the deposition file resource, per
+            https://developers.zenodo.org/#deposition-files
+
         """
         url = deposition["links"]["bucket"] + "/" + file_name
         params = {"access_token": self.key}
