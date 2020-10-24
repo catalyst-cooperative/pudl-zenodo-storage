@@ -408,15 +408,16 @@ if __name__ == "__main__":
     args = parse_main()
 
     if args.sandbox:
-        zenodo = ZenodoStorage(
-            key=os.environ["ZENODO_SANDBOX_TOKEN_UPLOAD"],
-            testing=True,
-            verbose=args.verbose,
-            loglevel=args.loglevel
-        )
+        zenodo_upload_token = os.environ["ZENODO_SANDBOX_TOKEN_UPLOAD"]
     else:
-        # Because this is still just in development!
-        raise NotImplementedError("For now, use --sandbox.")
+        zenodo_upload_token = os.environ["ZENODO_TOKEN_UPLOAD"]
+
+    zenodo = ZenodoStorage(
+        key=zenodo_upload_token,
+        testing=args.sandbox,
+        verbose=args.verbose,
+        loglevel=args.loglevel
+    )
 
     sel = archive_selection(args.deposition)
 
