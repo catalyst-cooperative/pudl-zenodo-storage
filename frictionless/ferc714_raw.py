@@ -16,7 +16,7 @@ ferc714_raw = {
         "load, summer-winter generation peaks and system lambda.",
     "profile": "data-package",
     "keywords": [
-        "electricity", "electric", "utility", "planning area", "form 714", "ferc714"
+        "electricity", "electric", "utility", "planning area", "form 714", "ferc714",
         "balancing authority", "demand", "system lambda", "ferc",
         "federal energy regulatory commission", "hourly", "generation",
         "interchange", "forecast", "load", "adjacency", "plants",
