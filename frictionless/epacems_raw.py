@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Provide datapackage details specific to the EPA CEMS Hourly archives."""
 
 from datetime import datetime, timezone
@@ -19,7 +18,7 @@ epacems_raw = {
         "epa", "us", "emissions", "pollution", "ghg", "so2", "co2", "sox",
         "nox", "load", "utility", "electricity", "plant", "generator", "unit",
         "generation", "capacity", "output", "power", "heat content", "mmbtu",
-        "steam", "cems", "continuous emissions monitoring system", "hourly"
+        "steam", "cems", "continuous emissions monitoring system", "hourly",
         "environmental protection agency", "ampd", "air markets program data"
     ],
     "licenses": [licenses.us_govt, ],

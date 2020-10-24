@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Provide datapackage details specific to the Ferc Form 714 archives."""
 
 from . import core
@@ -17,9 +16,9 @@ ferc714_raw = {
         "load, summer-winter generation peaks and system lambda.",
     "profile": "data-package",
     "keywords": [
-        'electricity', 'electric', 'utility', 'planning area', 'form 714',
-        'balancing authority', 'demand', 'system lambda', 'ferc',
-        'federal energy regulatory commission', "hourly", "generation",
+        "electricity", "electric", "utility", "planning area", "form 714", "ferc714"
+        "balancing authority", "demand", "system lambda", "ferc",
+        "federal energy regulatory commission", "hourly", "generation",
         "interchange", "forecast", "load", "adjacency", "plants",
     ],
     "licenses": [licenses.us_govt, ],

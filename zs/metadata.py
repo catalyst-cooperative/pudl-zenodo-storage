@@ -172,12 +172,10 @@ ferc714_raw = {
     "access_right": "open",
     "license": "other-pd",
     "keywords": [
-        "electricity", "electric", "utility", "plant", "steam", "generation",
-        "cost", "expense", "price", "heat content", "ferc", "form 714", "ferc714",
-        "federal energy regulatory commission", "capital", "accounting",
-        "depreciation", "finance", "plant in service", "hydro", "coal",
-        "natural gas", "gas", "opex", "capex", "accounts", "investment",
-        "capacity", "usa", ferc714_raw_uuid
+        "electricity", "electric", "utility", "planning area", "form 714", "ferc714"
+        "balancing authority", "demand", "system lambda", "ferc",
+        "federal energy regulatory commission", "hourly", "generation",
+        "interchange", "forecast", "load", "adjacency", "plants", ferc714_raw_uuid
     ]
 }
 
