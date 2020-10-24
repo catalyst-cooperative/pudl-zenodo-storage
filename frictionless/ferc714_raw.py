@@ -9,16 +9,18 @@ ferc714_raw = {
     "name": "pudl-raw-ferc714",
     "title": "PUDL Raw FERC Form 714",
     "description":
-        "Form 714 Annual Electric Balancing Authority Area and Planning Area "
-        "Report from the Federal Energy Regulatory Commission (FERC).",
+        "Electric transmitting utilities operating balancing authority areas and "
+        "planning areas with annual peak demand over 200MW are required to "
+        "file Form 714 with the Federal Energy Regulatory Commission (FERC), "
+        "reporting balancing authority area generation, actual and scheduled "
+        "inter-balancing authority area power transfers, and net energy for "
+        "load, summer-winter generation peaks and system lambda.",
     "profile": "data-package",
     "keywords": [
-        'electricity', 'electric', 'utility', 'plant', 'steam', 'generation',
-        'cost', 'expense', 'price', 'heat content', 'ferc', 'form 714',
-        'federal energy regulatory commission', 'capital', 'accounting',
-        'depreciation', 'finance', 'plant in service', 'hydro', 'coal',
-        'natural gas', 'gas', 'opex', 'capex', 'accounts', 'investment',
-        'capacity'
+        'electricity', 'electric', 'utility', 'planning area', 'form 714',
+        'balancing authority', 'demand', 'system lambda', 'ferc',
+        'federal energy regulatory commission', "hourly", "generation",
+        "interchange", "forecast", "load", "adjacency", "plants",
     ],
     "licenses": [licenses.us_govt, ],
     "homepage": "https://catalyst.coop/pudl/",

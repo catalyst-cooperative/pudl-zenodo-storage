@@ -9,9 +9,10 @@ ferc1_raw = {
     "name": "pudl-raw-ferc1",
     "title": "PUDL Raw FERC Form 1",
     "description":
-        "Form No. 1 financial and operating report from the Federal Energy "
-        "Regulatory Commission (FERC).",
-
+        "The Federal Energy Regulatory Commission (FERC) Form 1 is a comprehensive "
+        "financial and operating report submitted annually for electric rate "
+        "regulation, market oversight analysis, and financial audits by Major "
+        "electric utilities, licensees and others.",
     "profile": "data-package",
     "keywords": [
         'electricity', 'electric', 'utility', 'plant', 'steam', 'generation',
