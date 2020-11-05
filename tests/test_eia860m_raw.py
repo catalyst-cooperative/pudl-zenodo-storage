@@ -12,7 +12,7 @@ class TestEia860M:
     def test_single_file(self):
         """Ensure a single file gets a good resource descriptor."""
         year = random.randint(2016, 2019)
-        month = random.randint(1, 12)
+        month = str(random.randint(1, 12)).zfill(2)
         name = f"eia860m-{year}-{month}.xlsx"
         size = random.randint(500000, 800000)
 
