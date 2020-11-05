@@ -52,6 +52,30 @@ eia860_raw = {
     ]
 }
 
+# Unaltered Eia860 archive.
+eia860m_raw_uuid = "863ba550-1faa-11eb-8dfb-a45e60b93f07"
+eia860m_raw = {
+    "title": "PUDL Raw EIA Form 860M",
+    "language": "eng",
+    "upload_type": "dataset",
+    "description": "<p>Raw US Energy Information Administration (EIA) Form "
+                   "860M data, archived from\n"
+                   "<a href=\"https://www.eia.gov/electricity/data/eia860m/\">"
+                   "https://www.eia.gov/electricity/data/eia860m/</a></p> "
+                   f"{pudl_description}",
+    "creators": creators,
+    "access_right": "open",
+    "license": "other-pd",
+    "keywords": [
+        "preliminary", "year to date", "electricity", "electric", "boiler",
+        "generator", "plant", "utility", "fuel", "coal", "natural gas",
+        "prime mover", "eia860m", "eia860", "retirement", "capacity",
+        "planned", "proposed", "energy", "hydro", "solar", "wind", "nuclear",
+        "form 860M", "eia", "annual", "gas", "ownership", "steam", "turbine",
+        "combustion", "combined cycle", "eia",
+        "energy information administration", "usa", eia860m_raw_uuid
+    ]
+}
 
 # Unaltered Eia861 archive.
 eia861_raw_uuid = "70999ef2-50e9-47ae-a4f6-5d69e6ff98d1"

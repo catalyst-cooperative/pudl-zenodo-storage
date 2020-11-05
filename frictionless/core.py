@@ -79,6 +79,70 @@ def annual_resource_datapackager(metadata, dfiles):
                    "created": datetime.now(timezone.utc).isoformat()})
 
 
+def archive_resource_year_month(name, url, size, md5_hash):
+    """
+    Produce the resource descriptor for a single file.
+
+    Args:
+        name (str): file name: must include a 4 digit year, and no other 4 digits.
+        url (str): url to download the file from Zenodo.
+        size (int): size in bytes.
+        md5_hash (str): the md5 checksum of the file.
+
+    Returns:
+        dict: a frictionless data package resource descriptor, per
+        https://frictionlessdata.io/specs/data-resource/
+
+    """
+    year_month = re.search(r"([\d]{4})-([\d]{2})", name)
+
+    if year_month is None:
+        raise ValueError(f"No year/month present in filename {name}")
+
+    title, file_format = os.path.splitext(name)
+    file_format = file_format[1:]
+    mt = MediaType[file_format].value
+
+    return {
+        "profile": "data-resource",
+        "name": name,
+        "path": url,
+        "remote_url": url,
+        "title": title,
+        "parts": {"year_month": year_month.group(0)},
+        "encoding": "utf-8",
+        "mediatype": mt,
+        "format": file_format,
+        "bytes": size,
+        "hash": md5_hash
+    }
+
+
+def resource_datapackager_year_month(metadata, dfiles):
+    """
+    Produce the datapackage json for a collection of annually named files.
+
+    Args:
+        metadata (dict): fixed metadata descriptors.
+        dfiles: iterable of file descriptors, as expected from Zenodo.
+            https://developers.zenodo.org/#deposition-files
+
+    Returns:
+        dict of fields suited to the frictionless datapackage spec
+            https://frictionlessdata.io/specs/data-package/
+    """
+    resources = [
+        archive_resource_year_month(
+            x["filename"],
+            x["links"]["download"],
+            x["filesize"], x["checksum"])
+        for x in dfiles]
+
+    return dict(**metadata,
+                **{"resources": resources,
+                   "created": datetime.now(timezone.utc).isoformat()})
+
+
 def minimal_datapackager(package_meta, dfiles):
     """
     Produce the datapackage json for the given archival collection.

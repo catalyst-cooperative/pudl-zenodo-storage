@@ -13,6 +13,7 @@ import datapackage
 
 import frictionless.censusdp1tract_raw
 import frictionless.eia860_raw
+import frictionless.eia860m_raw
 import frictionless.eia861_raw
 import frictionless.eia923_raw
 import frictionless.epacems_raw
@@ -195,7 +196,8 @@ def execute_actions(zenodo, deposition, datapackager, steps):
         return
 
     if deposition["submitted"]:
-        new_deposition = zenodo.new_deposition_version(deposition["conceptdoi"])
+        new_deposition = zenodo.new_deposition_version(
+            deposition["conceptdoi"])
     else:
         new_deposition = deposition
 
@@ -305,7 +307,7 @@ def parse_main():
     parser.add_argument("deposition", help="Name of the Zenodo deposition. "
                         "Supported: censusdp1tract_raw, eia860_raw, "
                         "eia861_raw, eia923_raw, epacems_raw, "
-                        "ferc1_raw, ferc714_raw, epaipm_raw")
+                        "ferc1_raw, ferc714_raw, epaipm_raw, eia860m_raw")
 
     return parser.parse_args()
 
@@ -351,6 +353,14 @@ def archive_selection(deposition_name):
             "metadata": zs.metadata.eia860_raw,
             "datapackager": frictionless.eia860_raw.datapackager,
             "latest_files": latest_files("eia860")
+        }
+
+    if deposition_name == "eia860m_raw":
+        return {
+            "key_id": zs.metadata.eia860m_raw_uuid,
+            "metadata": zs.metadata.eia860m_raw,
+            "datapackager": frictionless.eia860m_raw.datapackager,
+            "latest_files": latest_files("eia860m")
         }
 
     if deposition_name == "eia861_raw":
