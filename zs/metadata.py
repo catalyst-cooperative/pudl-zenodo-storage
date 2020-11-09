@@ -52,7 +52,7 @@ eia860_raw = {
     ]
 }
 
-# Unaltered Eia860 archive.
+# Unaltered EIA860M archive.
 eia860m_raw_uuid = "863ba550-1faa-11eb-8dfb-a45e60b93f07"
 eia860m_raw = {
     "title": "PUDL Raw EIA Form 860M",

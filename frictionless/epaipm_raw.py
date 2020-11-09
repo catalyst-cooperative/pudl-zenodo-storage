@@ -85,7 +85,7 @@ def datapackager(dfiles):
 
     Arguments:
         dfiles (list): file descriptor dictionaries as expected from Zenodo,
-        per https://developers.zenodo.org/#deposition-files
+            per https://developers.zenodo.org/#deposition-files
 
     Returns:
         dict: fields suited to the frictionless datapackage spec
