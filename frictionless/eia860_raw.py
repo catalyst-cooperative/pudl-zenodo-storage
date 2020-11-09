@@ -37,7 +37,8 @@ def datapackager(dfiles):
     Produce the datapackage json for the eia860 archival collection.
 
     Args:
-        metadata: dict of fixed metadata descriptors
+        dfiles: iterable of file descriptors, as expected from Zenodo.
+            https://developers.zenodo.org/#deposition-files
 
     Returns:
         dict: fields suited to the frictionless datapackage spec
