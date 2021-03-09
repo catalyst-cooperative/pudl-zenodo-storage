@@ -78,7 +78,7 @@ eia860m_raw = {
 }
 
 # Unaltered Eia861 archive.
-eia861_raw_uuid = "70999ef2-50e9-47ae-a4f6-5d69e6ff98d1"
+eia861_raw_uuid = "d6d05d7e-a0db-4346-a828-977d214f5aca"
 eia861_raw = {
     "title": "PUDL Raw EIA Form 861",
     "language": "eng",
