@@ -9,7 +9,7 @@ class TestEia861:
 
     def test_single_file(self):
         """Ensure a single file gets a good resource descriptor."""
-        year = random.randint(2001, 2019)
+        year = random.randint(1990, 2019)
         name = "eia861-%d.zip" % year
         size = random.randint(500000, 800000)
 
