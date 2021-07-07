@@ -29,7 +29,7 @@ class TestZenodoStorage:
     def test_lookup_and_create(self):
         """Ensure lookup and create processes work."""
         td = copy.deepcopy(self.test_deposition)
-        td["title"] += ": %d" % random.randint(1000, 9999)
+        td["title"] += ": %d" % random.randint(100000000, 999999999)
 
         lookup = self.zs.get_deposition(f"title:\"{td['title']}\"")
         assert(lookup is None)
@@ -49,7 +49,7 @@ class TestZenodoStorage:
         """Ensure updating a deposition's metadata works."""
         td = copy.deepcopy(self.test_deposition)
 
-        td["title"] += ": %d" % random.randint(1000, 9999)
+        td["title"] += ": %d" % random.randint(100000000, 999999999)
         deposition = self.zs.create_deposition(td)
 
         newtd = copy.deepcopy(self.test_deposition)
@@ -66,7 +66,7 @@ class TestZenodoStorage:
         # It would be better if we could test a single function at a time,
         # however the api does not support versioning without a file upload.
         td = copy.deepcopy(self.test_deposition)
-        td["title"] += ": %d" % random.randint(1000, 9999)
+        td["title"] += ": %d" % random.randint(100000000, 999999999)
 
         first = self.zs.create_deposition(td)
         fake_file = io.BytesIO(b"This is a test, via the file api.")
@@ -96,7 +96,7 @@ class TestZenodoStorage:
     def test_bucket_api_upload(self):
         """Verify the bucket api upload."""
         td = copy.deepcopy(self.test_deposition)
-        td["title"] += ": %d" % random.randint(1000, 9999)
+        td["title"] += ": %d" % random.randint(100000000, 999999999)
 
         deposition = self.zs.create_deposition(td)
         fake_file = io.BytesIO(b"This is a test, via the bucket api.")
