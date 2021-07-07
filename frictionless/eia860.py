@@ -5,7 +5,7 @@ from . import core
 from . import licenses
 from . import contributors
 
-eia860_raw = {
+eia860 = {
     "name": "pudl-raw-eia860",
     "title": "PUDL Raw EIA Form 860",
     "description":
@@ -44,4 +44,4 @@ def datapackager(dfiles):
         dict: fields suited to the frictionless datapackage spec
         https://frictionlessdata.io/specs/data-package/
     """
-    return core.annual_resource_datapackager(eia860_raw, dfiles)
+    return core.annual_resource_datapackager(eia860, dfiles)

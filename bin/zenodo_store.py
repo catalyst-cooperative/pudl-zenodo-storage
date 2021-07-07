@@ -11,15 +11,15 @@ import sys
 
 import datapackage
 
-import frictionless.censusdp1tract_raw
-import frictionless.eia860_raw
-import frictionless.eia860m_raw
-import frictionless.eia861_raw
-import frictionless.eia923_raw
-import frictionless.epacems_raw
-import frictionless.epaipm_raw
-import frictionless.ferc1_raw
-import frictionless.ferc714_raw
+import frictionless.censusdp1tract
+import frictionless.eia860
+import frictionless.eia860m
+import frictionless.eia861
+import frictionless.eia923
+import frictionless.epacems
+import frictionless.epaipm
+import frictionless.ferc1
+import frictionless.ferc714
 
 from zs import ZenodoStorage
 import zs.metadata
@@ -104,7 +104,7 @@ def new_datapackage(zenodo, datapackager, deposition):
         datapackager: a data package generation function that takes a list of
             Zenodo file descriptors and produces the complete frictionless
             datapackage json.
-            e.g. frictionless.eia860_raw.datapackager
+            e.g. frictionless.eia860.datapackager
         deposition: the deposition details, as retrieved from Zenodo. Must be
                     in an editable state.
 
@@ -180,7 +180,7 @@ def execute_actions(zenodo, deposition, datapackager, steps):
         datapackager: a data package generation function that takes a list of
             Zenodo file descriptors and produces the complete frictionless
             datapackage json.
-            e.g. frictionless.eia860_raw.datapackager
+            e.g. frictionless.eia860.datapackager
         steps: dict of file info to create, update, and delete, per
             action_steps(...)
 
@@ -237,13 +237,13 @@ def initial_run(zenodo, key_id, metadata, datapackager, file_paths):
 
     Args:
         zenodo: a zs.ZenodoStorage manager
-        key_id: keyword uuid, such as zs.metadata.eia860_raw_uuid
+        key_id: keyword uuid, such as zs.metadata.eia860_uuid
         metadata: the zenodo_store metadata (NOT frictionless datapackage data!)
-            for the deposition, such as zs.metadata.eia860_raw
+            for the deposition, such as zs.metadata.eia860
         datapackager: a data package generation function that takes a list of
             Zenodo file descriptors and produces the complete frictionless
             datapackage json.
-            e.g. frictionless.eia860_raw.datapackager
+            e.g. frictionless.eia860.datapackager
         file_paths: a list of files to upload
 
     Returns:
@@ -305,9 +305,9 @@ def parse_main():
                              "most recent files from %s will be uploaded." %
                              (ROOT_DIR))
     parser.add_argument("deposition", help="Name of the Zenodo deposition. "
-                        "Supported: censusdp1tract_raw, eia860_raw, "
-                        "eia861_raw, eia923_raw, epacems_raw, "
-                        "ferc1_raw, ferc714_raw, epaipm_raw, eia860m_raw")
+                        "Supported: censusdp1tract, eia860, "
+                        "eia861, eia923, epacems, "
+                        "ferc1, ferc714, epaipm, eia860m")
 
     return parser.parse_args()
 
@@ -339,75 +339,75 @@ def archive_selection(deposition_name):
 
         return glob.glob(os.path.join(previous[-1], "*"))
 
-    if deposition_name == "censusdp1tract_raw":
+    if deposition_name == "censusdp1tract":
         return {
-            "key_id": zs.metadata.censusdp1tract_raw_uuid,
-            "metadata": zs.metadata.censusdp1tract_raw,
-            "datapackager": frictionless.censusdp1tract_raw.datapackager,
+            "key_id": zs.metadata.censusdp1tract_uuid,
+            "metadata": zs.metadata.censusdp1tract,
+            "datapackager": frictionless.censusdp1tract.datapackager,
             "latest_files": latest_files("censusdp1tract")
         }
 
-    if deposition_name == "eia860_raw":
+    if deposition_name == "eia860":
         return {
-            "key_id": zs.metadata.eia860_raw_uuid,
-            "metadata": zs.metadata.eia860_raw,
-            "datapackager": frictionless.eia860_raw.datapackager,
+            "key_id": zs.metadata.eia860_uuid,
+            "metadata": zs.metadata.eia860,
+            "datapackager": frictionless.eia860.datapackager,
             "latest_files": latest_files("eia860")
         }
 
-    if deposition_name == "eia860m_raw":
+    if deposition_name == "eia860m":
         return {
-            "key_id": zs.metadata.eia860m_raw_uuid,
-            "metadata": zs.metadata.eia860m_raw,
-            "datapackager": frictionless.eia860m_raw.datapackager,
+            "key_id": zs.metadata.eia860m_uuid,
+            "metadata": zs.metadata.eia860m,
+            "datapackager": frictionless.eia860m.datapackager,
             "latest_files": latest_files("eia860m")
         }
 
-    if deposition_name == "eia861_raw":
+    if deposition_name == "eia861":
         return {
-            "key_id": zs.metadata.eia861_raw_uuid,
-            "metadata": zs.metadata.eia861_raw,
-            "datapackager": frictionless.eia861_raw.datapackager,
+            "key_id": zs.metadata.eia861_uuid,
+            "metadata": zs.metadata.eia861,
+            "datapackager": frictionless.eia861.datapackager,
             "latest_files": latest_files("eia861")
         }
 
-    if deposition_name == "eia923_raw":
+    if deposition_name == "eia923":
         return {
-            "key_id": zs.metadata.eia923_raw_uuid,
-            "metadata": zs.metadata.eia923_raw,
-            "datapackager": frictionless.eia923_raw.datapackager,
+            "key_id": zs.metadata.eia923_uuid,
+            "metadata": zs.metadata.eia923,
+            "datapackager": frictionless.eia923.datapackager,
             "latest_files": latest_files("eia923")
         }
 
-    if deposition_name == "epacems_raw":
+    if deposition_name == "epacems":
         return {
-            "key_id": zs.metadata.epacems_raw_uuid,
-            "metadata": zs.metadata.epacems_raw,
-            "datapackager": frictionless.epacems_raw.datapackager,
+            "key_id": zs.metadata.epacems_uuid,
+            "metadata": zs.metadata.epacems,
+            "datapackager": frictionless.epacems.datapackager,
             "latest_files": latest_files("epacems")
         }
 
-    if deposition_name == "ferc1_raw":
+    if deposition_name == "ferc1":
         return {
-            "key_id": zs.metadata.ferc1_raw_uuid,
-            "metadata": zs.metadata.ferc1_raw,
-            "datapackager": frictionless.ferc1_raw.datapackager,
+            "key_id": zs.metadata.ferc1_uuid,
+            "metadata": zs.metadata.ferc1,
+            "datapackager": frictionless.ferc1.datapackager,
             "latest_files": latest_files("ferc1")
         }
 
-    if deposition_name == "ferc714_raw":
+    if deposition_name == "ferc714":
         return {
-            "key_id": zs.metadata.ferc714_raw_uuid,
-            "metadata": zs.metadata.ferc714_raw,
-            "datapackager": frictionless.ferc714_raw.datapackager,
+            "key_id": zs.metadata.ferc714_uuid,
+            "metadata": zs.metadata.ferc714,
+            "datapackager": frictionless.ferc714.datapackager,
             "latest_files": latest_files("ferc714")
         }
 
-    if deposition_name == "epaipm_raw":
+    if deposition_name == "epaipm":
         return {
-            "key_id": zs.metadata.epaipm_raw_uuid,
-            "metadata": zs.metadata.epaipm_raw,
-            "datapackager": frictionless.epaipm_raw.datapackager,
+            "key_id": zs.metadata.epaipm_uuid,
+            "metadata": zs.metadata.epaipm,
+            "datapackager": frictionless.epaipm.datapackager,
             "latest_files": latest_files("epaipm")
         }
 

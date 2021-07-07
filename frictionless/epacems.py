@@ -7,7 +7,7 @@ from . import core
 from . import licenses
 from . import contributors
 
-epacems_raw = {
+epacems = {
     "name": "pudl-raw-epacems",
     "title": "PUDL Raw EPA CEMS Hourly",
     "description": "US EPA hourly Continuous Emissions Monitoring System "
@@ -92,6 +92,6 @@ def datapackager(dfiles):
 
         for x in dfiles]
 
-    return dict(**epacems_raw,
+    return dict(**epacems,
                 **{"resources": resources,
                    "created": datetime.now(timezone.utc).isoformat()})

@@ -29,8 +29,8 @@ following resources:
 """
 
 # Unaltered Eia860 archive.
-eia860_raw_uuid = "a93cdabd-706f-48c7-ae02-4463dacf1419"
-eia860_raw = {
+eia860_uuid = "a93cdabd-706f-48c7-ae02-4463dacf1419"
+eia860 = {
     "title": "PUDL Raw EIA Form 860",
     "language": "eng",
     "upload_type": "dataset",
@@ -48,13 +48,13 @@ eia860_raw = {
         "capacity", "planned", "proposed", "energy", "hydro", "solar", "wind",
         "nuclear", "form 860", "eia", "annual", "gas", "ownership", "steam",
         "turbine", "combustion", "combined cycle", "eia",
-        "energy information administration", "usa", eia860_raw_uuid
+        "energy information administration", "usa", eia860_uuid
     ]
 }
 
 # Unaltered EIA860M archive.
-eia860m_raw_uuid = "863ba550-1faa-11eb-8dfb-a45e60b93f07"
-eia860m_raw = {
+eia860m_uuid = "863ba550-1faa-11eb-8dfb-a45e60b93f07"
+eia860m = {
     "title": "PUDL Raw EIA Form 860M",
     "language": "eng",
     "upload_type": "dataset",
@@ -73,13 +73,13 @@ eia860m_raw = {
         "planned", "proposed", "energy", "hydro", "solar", "wind", "nuclear",
         "form 860M", "eia", "annual", "gas", "ownership", "steam", "turbine",
         "combustion", "combined cycle", "eia",
-        "energy information administration", "usa", eia860m_raw_uuid
+        "energy information administration", "usa", eia860m_uuid
     ]
 }
 
 # Unaltered Eia861 archive.
-eia861_raw_uuid = "70999ef2-50e9-47ae-a4f6-5d69e6ff98d1"
-eia861_raw = {
+eia861_uuid = "70999ef2-50e9-47ae-a4f6-5d69e6ff98d1"
+eia861 = {
     "title": "PUDL Raw EIA Form 861",
     "language": "eng",
     "upload_type": "dataset",
@@ -95,14 +95,14 @@ eia861_raw = {
         "electricity", "electric", "utility", "balancing area",
         "eia861", "sales", "energy efficiency", "dsm", "demand response",
         "demand side management", "service territory", "form 861", "eia",
-        "energy information administration", "usa", eia861_raw_uuid
+        "energy information administration", "usa", eia861_uuid
     ]
 }
 
 
 # Unaltered Eia923 archive.
-eia923_raw_uuid = "53831f63-fa82-475a-bef4-5b5f0b7c41a4"
-eia923_raw = {
+eia923_uuid = "53831f63-fa82-475a-bef4-5b5f0b7c41a4"
+eia923 = {
     "title": "PUDL Raw EIA Form 923",
     "language": "eng",
     "upload_type": "dataset",
@@ -120,14 +120,14 @@ eia923_raw = {
         "receipts", "generation", "net generation", "monthly", "annual", "gas",
         "fuel consumption", "MWh", "energy information administration", "eia",
         "mercury", "sulfur", "ash", "lignite", "bituminous", "subbituminous",
-        "heat content", eia923_raw_uuid
+        "heat content", eia923_uuid
     ]
 }
 
 
 # Unaltered EPA CEMS archive
-epacems_raw_uuid = "8bd99e7d-b11a-4bd1-8af0-bccf984dcc43"
-epacems_raw = {
+epacems_uuid = "8bd99e7d-b11a-4bd1-8af0-bccf984dcc43"
+epacems = {
     "title": "PUDL Raw EPA CEMS Hourly",
     "language": "eng",
     "upload_type": "dataset",
@@ -145,13 +145,13 @@ epacems_raw = {
         "generation", "capacity", "output", "power", "heat content", "mmbtu",
         "steam", "cems", "continuous emissions monitoring system", "hourly"
         "environmental protection agency", "ampd", "air markets program data",
-        epacems_raw_uuid
+        epacems_uuid
     ]
 }
 
 # For the unaltered Ferc1 archive.
-ferc1_raw_uuid = "d3d91c87-c595-49d5-a7f3-e5f5669c8306"
-ferc1_raw = {
+ferc1_uuid = "d3d91c87-c595-49d5-a7f3-e5f5669c8306"
+ferc1 = {
     "title": "PUDL Raw FERC Form 1",
     "language": "eng",
     "upload_type": "dataset",
@@ -173,13 +173,13 @@ ferc1_raw = {
         "federal energy regulatory commission", "capital", "accounting",
         "depreciation", "finance", "plant in service", "hydro", "coal",
         "natural gas", "gas", "opex", "capex", "accounts", "investment",
-        "capacity", "usa", ferc1_raw_uuid
+        "capacity", "usa", ferc1_uuid
     ]
 }
 
 # Unaltered Ferc714 archive.
-ferc714_raw_uuid = "f31f0894-639e-4bc2-9b7f-8a84713bcc87"
-ferc714_raw = {
+ferc714_uuid = "f31f0894-639e-4bc2-9b7f-8a84713bcc87"
+ferc714 = {
     "title": "PUDL Raw FERC Form 714",
     "language": "eng",
     "upload_type": "dataset",
@@ -199,13 +199,13 @@ ferc714_raw = {
         "electricity", "electric", "utility", "planning area", "form 714", "ferc714",
         "balancing authority", "demand", "system lambda", "ferc",
         "federal energy regulatory commission", "hourly", "generation",
-        "interchange", "forecast", "load", "adjacency", "plants", ferc714_raw_uuid
+        "interchange", "forecast", "load", "adjacency", "plants", ferc714_uuid
     ]
 }
 
 # For the unaltered IPM archive.
-epaipm_raw_uuid = "75b29994-bd39-4518-a5b2-ec180a18ac23"
-epaipm_raw = {
+epaipm_uuid = "75b29994-bd39-4518-a5b2-ec180a18ac23"
+epaipm = {
     "title": "PUDL Raw EPA IPM/NEEDS",
     "language": "eng",
     "upload_type": "dataset",
@@ -221,13 +221,13 @@ epaipm_raw = {
     "access_right": "open",
     "license": "other-pd",
     "keywords": [
-        "epa", "ipm", "needs", "usa", "integrated planning model", epaipm_raw_uuid
+        "epa", "ipm", "needs", "usa", "integrated planning model", epaipm_uuid
     ]
 }
 
 # For the census archive.
-censusdp1tract_raw_uuid = "beb36017-3fca-49be-a93a-7298f30ca3a3"
-censusdp1tract_raw = {
+censusdp1tract_uuid = "beb36017-3fca-49be-a93a-7298f30ca3a3"
+censusdp1tract = {
     "title": "PUDL Raw Census DP1 Tract GeoDatabase",
     "language": "eng",
     "upload_type": "dataset",
@@ -243,6 +243,6 @@ censusdp1tract_raw = {
     "license": "other-pd",
     "keywords": [
         "census", "usa", "geodata", "geodatabase", "gis", "spatial", "demographic",
-        "dp1", "population", "county", "fips", "tract", censusdp1tract_raw_uuid
+        "dp1", "population", "county", "fips", "tract", censusdp1tract_uuid
     ]
 }

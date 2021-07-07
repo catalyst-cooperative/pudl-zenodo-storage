@@ -4,7 +4,7 @@ from . import core
 from . import contributors
 from . import licenses
 
-ferc714_raw = {
+ferc714 = {
     "name": "pudl-raw-ferc714",
     "title": "PUDL Raw FERC Form 714",
     "description":
@@ -48,4 +48,4 @@ def datapackager(dfiles):
         https://frictionlessdata.io/specs/data-package/
 
     """
-    return core.minimal_datapackager(ferc714_raw, dfiles)
+    return core.minimal_datapackager(ferc714, dfiles)

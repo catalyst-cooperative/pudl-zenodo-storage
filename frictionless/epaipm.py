@@ -9,7 +9,7 @@ from . import core
 from . import licenses
 from . import contributors
 
-epaipm_raw = {
+epaipm = {
     "name": "pudl-raw-epaipm",
     "title": "PUDL Raw EPA IPM/NEEDS",
     "description": "EPA National Electric Energy Data System data, archived "
@@ -99,6 +99,6 @@ def datapackager(dfiles):
             x["filesize"], x["checksum"])
         for x in dfiles]
 
-    return dict(**epaipm_raw,
+    return dict(**epaipm,
                 **{"resources": resources,
                    "created": datetime.now(timezone.utc).isoformat()})

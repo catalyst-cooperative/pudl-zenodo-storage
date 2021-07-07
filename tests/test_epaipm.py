@@ -2,7 +2,7 @@ from faker import Faker
 import uuid
 import random
 
-from frictionless import epaipm_raw
+from frictionless import epaipm
 
 
 class TestIpmSource:
@@ -30,7 +30,7 @@ class TestIpmSource:
         name = f"epaipm-v6-rev-{date.isoformat()}.xlsx"
 
         fake_resource = self.fake_resource(name)
-        package = epaipm_raw.datapackager([fake_resource])
+        package = epaipm.datapackager([fake_resource])
         res = package["resources"][0]
 
         assert res["name"] == name
@@ -56,7 +56,7 @@ class TestIpmSource:
         print(name)
 
         fake_resource = self.fake_resource(name)
-        package = epaipm_raw.datapackager([fake_resource])
+        package = epaipm.datapackager([fake_resource])
         res = package["resources"][0]
 
         assert res["name"] == name
@@ -76,7 +76,7 @@ class TestIpmSource:
         """Files with no year are accepted."""
         name = "epaipm.zip"
         fake_resource = self.fake_resource(name)
-        package = epaipm_raw.datapackager([fake_resource])
+        package = epaipm.datapackager([fake_resource])
         res = package["resources"][0]
 
         assert res["name"] == name

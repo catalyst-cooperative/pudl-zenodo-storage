@@ -3,7 +3,7 @@
 import uuid
 import random
 
-from frictionless import eia860m_raw
+from frictionless import eia860m
 
 
 class TestEia860M:
@@ -31,7 +31,7 @@ class TestEia860M:
             "checksum": md5_hash
         }
 
-        package = eia860m_raw.datapackager([fake_resource])
+        package = eia860m.datapackager([fake_resource])
         res = package["resources"][0]
 
         assert(res["name"] == name)
