@@ -246,3 +246,23 @@ censusdp1tract = {
         "dp1", "population", "county", "fips", "tract", censusdp1tract_uuid
     ]
 }
+
+# EIP Infrastructure archive.
+eipinfrastructure_uuid = "865a4ee2-5140-11ec-81d1-acde48001122"
+eipinfrastructure = {
+    "title": "EIP Infrastructure Emissions",
+    "language": "eng",
+    "upload_type": "dataset",
+    "description": "<p>EIP Infrastructure Emissions "
+                   "archived from\n"
+                   "<a href=\"https://environmentalintegrity.org/download/eip-emissions-increase-database/\">"
+                   "https://environmentalintegrity.org/download/eip-emissions-increase-database/"
+                   "</a></p>"
+                   f"{pudl_description}",
+    "creators": creators,
+    "access_right": "open",
+    "license": "other-pd",
+    "keywords": [
+        "eip", "usa", "electricity", "infrastructure", "fossil fuel", "emissions", "oil", "gas", "chemicals", "pipelines", eipinfrastructure_uuid
+    ]
+}
