@@ -76,6 +76,9 @@ class TestZenodoStorage:
                                  data={"access_token": self.zs.key})
         published = response.json()
 
+        print(published)
+        print(response.status_code)
+
         if response.status_code > 299:
             raise AssertionError(
                 "Failed to save test deposition: code %d, %s" %
