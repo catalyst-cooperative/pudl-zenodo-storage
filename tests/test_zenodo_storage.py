@@ -114,4 +114,5 @@ class TestZenodoStorage:
                 (response.status_code, published))
 
         lookup = self.zs.get_deposition(f"title:\"{td['title']}\"")
+        print(lookup)
         assert lookup["files"][0]["filename"] == "testing.txt"
