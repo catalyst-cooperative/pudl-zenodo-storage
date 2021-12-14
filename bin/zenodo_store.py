@@ -21,6 +21,7 @@ import frictionless.epaipm
 import frictionless.ferc1
 import frictionless.ferc714
 import frictionless.eipinfrastructure
+import frictionless.lbnlisoqueues
 
 from zs import ZenodoStorage
 import zs.metadata
@@ -308,7 +309,7 @@ def parse_main():
     parser.add_argument("deposition", help="Name of the Zenodo deposition. "
                         "Supported: censusdp1tract, eia860, "
                         "eia861, eia923, epacems, "
-                        "ferc1, ferc714, epaipm, eia860m, eipinfrastructure")
+                        "ferc1, ferc714, epaipm, eia860m, eipinfrastructure, lbnlisoqueues")
 
     return parser.parse_args()
 
@@ -418,6 +419,14 @@ def archive_selection(deposition_name):
             "metadata": zs.metadata.eipinfrastructure,
             "datapackager": frictionless.eipinfrastructure.datapackager,
             "latest_files": latest_files("eipinfrastructure")
+        }
+    
+    if deposition_name == "lbnlisoqueues":
+        return {
+            "key_id": zs.metadata.lbnlisoqueues_uuid,
+            "metadata": zs.metadata.lbnlisoqueues,
+            "datapackager": frictionless.lbnlisoqueues.datapackager,
+            "latest_files": latest_files("lbnlisoqueues")
         }
 
     raise ValueError(f"Unsupported archive: {args.deposition}")

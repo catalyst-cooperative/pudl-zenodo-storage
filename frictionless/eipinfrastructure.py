@@ -6,7 +6,7 @@ from . import licenses
 
 eipinfrastructure = {
     "name": "raw-eipinfrastructure",
-    "title": "Raw EIP I",
+    "title": "Raw EIP Infrastructure",
     "description":
         "The Environmental Integrity Project created this public database to "
         "track the environmental and human health impacts of 429 of the largest "

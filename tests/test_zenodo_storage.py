@@ -76,8 +76,6 @@ class TestZenodoStorage:
                                  data={"access_token": self.zs.key})
         published = response.json()
 
-        print(published)
-        print(response.status_code)
 
         if response.status_code > 299:
             raise AssertionError(
@@ -114,5 +112,4 @@ class TestZenodoStorage:
                 (response.status_code, published))
 
         lookup = self.zs.get_deposition(f"title:\"{td['title']}\"")
-        print(lookup)
         assert lookup["files"][0]["filename"] == "testing.txt"
