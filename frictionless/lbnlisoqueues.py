@@ -6,7 +6,7 @@ from . import licenses
 
 lbnlisoqueues = {
     "name": "raw-lbnlisoqueues",
-    "title": "Raw LBLN ISO Interconnection Queues",
+    "title": "Raw LBNL ISO Interconnection Queues",
     "description":
         "Berkeley Lab compiled and analyzed data from all seven ISOs/RTOs " 
         "in concert with 35 non-ISO utilities, representing an estimated "
@@ -16,13 +16,13 @@ lbnlisoqueues = {
         "the ISOs (CAISO, ISO-NE, MISO, NYISO, PJM).",
     "profile": "data-package",
     "keywords": [
-        "lbln", "usa", "electricity", "iso", "renewables", "emissions", "utilities", "iso", "interconnection",
+        "lbnl", "usa", "electricity", "renewables", "emissions", "utilities", "iso", "interconnection",
     ],
     "licenses": [licenses.us_govt, ],
-    "homepage": "https://catalyst.coop/pudl/",
+    "homepage": "https://emp.lbl.gov/",
     "sources": [
         {
-            "title": "LBLN ISO Interconnection Queues",
+            "title": "LBNL ISO Interconnection Queues",
             "path": "https://emp.lbl.gov/publications/queued-characteristics-power-plants"
         }
     ],

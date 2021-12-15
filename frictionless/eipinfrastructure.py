@@ -19,8 +19,8 @@ eipinfrastructure = {
     "keywords": [
         "eip", "usa", "electricity", "infrastructure", "fossil fuel", "emissions", "oil", "gas", "chemicals", "pipelines",
     ],
-    "licenses": [licenses.us_govt, ],
-    "homepage": "https://catalyst.coop/pudl/",
+    "licenses": [],
+    "homepage": "https://emp.lbl.gov/",
     "sources": [
         {
             "title": "Enivonrmental Integrity Project",

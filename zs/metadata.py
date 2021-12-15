@@ -267,13 +267,13 @@ eipinfrastructure = {
     ]
 }
 
-# LBLN ISO Queues
+# LBNL ISO Queues
 lbnlisoqueues_uuid = "36f4c418-5d16-11ec-9a1d-acde48001122"
 lbnlisoqueues = {
-    "title": "LBLN ISO Queues",
+    "title": "LBNL ISO Queues",
     "language": "eng",
     "upload_type": "dataset",
-    "description": "<p>LBLN ISO Interconnection Queues "
+    "description": "<p>LBNL ISO Interconnection Queues "
                    "archived from\n"
                    "<a href=\"https://emp.lbl.gov/publications/queued-characteristics-power-plants\">"
                    "https://emp.lbl.gov/publications/queued-characteristics-power-plants"
@@ -283,6 +283,6 @@ lbnlisoqueues = {
     "access_right": "open",
     "license": "other-pd",
     "keywords": [
-        "lbln", "usa", "electricity", "iso", "renewables", "emissions", "utilities", "iso", "interconnection", lbnlisoqueues_uuid
+        "lbnl", "usa", "electricity", "renewables", "emissions", "utilities", "iso", "interconnection", lbnlisoqueues_uuid
     ]
 }
