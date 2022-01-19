@@ -19,6 +19,7 @@ import frictionless.eia923
 import frictionless.epacems
 import frictionless.epaipm
 import frictionless.ferc1
+import frictionless.ferc2
 import frictionless.ferc714
 import frictionless.eipinfrastructure
 
@@ -306,9 +307,9 @@ def parse_main():
                              "most recent files from %s will be uploaded." %
                              (ROOT_DIR))
     parser.add_argument("deposition", help="Name of the Zenodo deposition. "
-                        "Supported: censusdp1tract, eia860, "
-                        "eia861, eia923, epacems, "
-                        "ferc1, ferc714, epaipm, eia860m, eipinfrastructure")
+                        "Supported: censusdp1tract, eia860, eia861, eia923, "
+                        "epacems, ferc1, ferc2, ferc714, eia860m, "
+                        "eipinfrastructure")
 
     return parser.parse_args()
 
@@ -394,6 +395,14 @@ def archive_selection(deposition_name):
             "metadata": zs.metadata.ferc1,
             "datapackager": frictionless.ferc1.datapackager,
             "latest_files": latest_files("ferc1")
+        }
+
+    if deposition_name == "ferc2":
+        return {
+            "key_id": zs.metadata.ferc2_uuid,
+            "metadata": zs.metadata.ferc2,
+            "datapackager": frictionless.ferc2.datapackager,
+            "latest_files": latest_files("ferc2")
         }
 
     if deposition_name == "ferc714":

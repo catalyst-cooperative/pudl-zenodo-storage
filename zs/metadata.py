@@ -177,6 +177,31 @@ ferc1 = {
     ]
 }
 
+# For the unaltered Ferc2 archive.
+ferc2_uuid = "894a87fd-cc94-46d1-903a-44be6e77d450"
+ferc2 = {
+    "title": "PUDL Raw FERC Form 2",
+    "language": "eng",
+    "upload_type": "dataset",
+    "description": "<p>Raw Federal Energy Regulatory Commission (FERC) Form 2 data, "
+                   "archived from\n"
+                   "<a href=\"https://www.ferc.gov/industries-data/natural-gas/"
+                   "industry-forms/form-2-2a-3-q-gas-historical-vfp-data\">"
+                   "https://www.ferc.gov/industries-data/natural-gas/"
+                   "industry-forms/form-2-2a-3-q-gas-historical-vfp-data</a></p>"
+                   f"{pudl_description}",
+    "creators": creators,
+    "access_right": "open",
+    "license": "other-pd",
+    "keywords": [
+        "natural gas", "gas", "utility", "plant", "pipeline", "energy",
+        "cost", "expense", "price", "heat content", "ferc", "form 2",
+        "federal energy regulatory commission", "capital", "accounting",
+        "depreciation", "finance", "plant in service", "opex", "capex",
+        "accounts", "investment", "capacity", "usa", ferc2_uuid
+    ]
+}
+
 # Unaltered Ferc714 archive.
 ferc714_uuid = "f31f0894-639e-4bc2-9b7f-8a84713bcc87"
 ferc714 = {
@@ -266,3 +291,4 @@ eipinfrastructure = {
         "eip", "usa", "electricity", "infrastructure", "fossil fuel", "emissions", "oil", "gas", "chemicals", "pipelines", eipinfrastructure_uuid
     ]
 }
+
