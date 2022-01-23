@@ -7,3 +7,4 @@ dependencies:
  - pytest < 7.0
  - requests < 3.0
  - semantic_version < 3.0
+ - catalystcoop.pudl ~= 0.5.0

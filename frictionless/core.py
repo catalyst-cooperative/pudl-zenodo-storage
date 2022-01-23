@@ -4,6 +4,9 @@ import os.path
 import re
 
 from enum import Enum
+from typing import Dict
+
+from pudl.metadata.constants import KEYWORDS_BY_SOURCE, SOURCES, CONTRIBUTORS_BY_SOURCE, CONTRIBUTORS
 
 
 class MediaType(Enum):
@@ -189,3 +192,15 @@ def minimal_datapackager(package_meta, dfiles):
     return dict(**package_meta,
                 **{"resources": resources,
                    "created": datetime.now(timezone.utc).isoformat()})
+
+def build_datapackage_from_id(source: str) -> Dict:
+    """Build a datapackaage from a PUDL source."""
+    dp = {}
+    dp["profile"] = "data-package"
+    dp["homepage"] = "https://catalyst.coop/pudl/",
+    dp["keywords"] = KEYWORDS_BY_SOURCE[source]
+    dp["sources"] = SOURCES[source]
+    
+    cids = CONTRIBUTORS_BY_SOURCE[source]
+    dp["contributors"] = [{cid: CONTRIBUTORS[cid]} for cid in set(cids)]
+    return dp

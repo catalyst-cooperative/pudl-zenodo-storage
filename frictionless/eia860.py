@@ -11,26 +11,10 @@ eia860 = {
     "description":
         "US Energy Information Administration (EIA) Form 860 data for electric power "
         "plants with 1 megawatt or greater combined nameplate capacity.",
-    "profile": "data-package",
-    "keywords": [
-        "electricity", "electric", "boiler", "generator", "plant", "utility",
-        "fuel", "coal", "natural gas", " prime mover", "eia860", "retirement",
-        "capacity", "planned", "proposed", "energy", "hydro", "solar", "wind",
-        "nuclear", "form 860", "eia", "annual", "gas", "ownership", "steam",
-        "turbine", "combustion", "combined cycle", "eia",
-        "energy information administration"
-    ],
     "licenses": [licenses.us_govt, ],
-    "homepage": "https://catalyst.coop/pudl/",
-    "sources": [
-        {
-            "title": "US Energy Information Administration",
-            "path": "https://www.eia.gov/electricity/data/eia860/"
-        }
-    ],
-    "contributors": [contributors.catalyst_cooperative]
 }
 
+eia860.update(core.build_datapackage_from_id("eia860"))
 
 def datapackager(dfiles):
     """
