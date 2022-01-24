@@ -5,7 +5,7 @@ from . import core
 from . import licenses
 from . import contributors
 
-ferc1 = {
+ferc2 = {
     "name": "pudl-raw-ferc2",
     "title": "PUDL Raw FERC Form 2",
     "description":
