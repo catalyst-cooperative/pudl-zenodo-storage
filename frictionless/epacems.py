@@ -68,6 +68,6 @@ def datapackager(dfiles):
 
         for x in dfiles]
 
-    return dict(**DataSource.from_id("epacems").to_raw_datapackage_json(),
+    return dict(**DataSource.from_id("epacems").to_raw_datapackage_dict(),
                 **{"resources": resources,
                    "created": datetime.now(timezone.utc).isoformat()})

@@ -18,4 +18,4 @@ def datapackager(dfiles):
         https://frictionlessdata.io/specs/data-package/
     """
     return core.resource_datapackager_year_month(
-        DataSource.from_id("eia860m").to_raw_datapackage_json(), dfiles)
+        DataSource.from_id("eia860m").to_raw_datapackage_dict(), dfiles)

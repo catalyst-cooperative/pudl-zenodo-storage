@@ -18,4 +18,4 @@ def datapackager(dfiles):
 
     """
     return core.minimal_datapackager(
-        DataSource.from_id("ferc714").to_raw_datapackage_json(), dfiles)
+        DataSource.from_id("ferc714").to_raw_datapackage_dict(), dfiles)

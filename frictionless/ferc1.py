@@ -19,4 +19,4 @@ def datapackager(dfiles):
 
     """
     return core.annual_resource_datapackager(
-        DataSource.from_id("ferc1").to_raw_datapackage_json(), dfiles)
+        DataSource.from_id("ferc1").to_raw_datapackage_dict(), dfiles)
