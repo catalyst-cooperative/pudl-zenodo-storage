@@ -291,4 +291,3 @@ eipinfrastructure = {
         "eip", "usa", "electricity", "infrastructure", "fossil fuel", "emissions", "oil", "gas", "chemicals", "pipelines", eipinfrastructure_uuid
     ]
 }
-
