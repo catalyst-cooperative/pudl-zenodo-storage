@@ -6,31 +6,7 @@ import re
 from . import core
 from . import licenses
 from . import contributors
-
-epacems = {
-    "name": "pudl-raw-epacems",
-    "title": "PUDL Raw EPA CEMS Hourly",
-    "description": "US EPA hourly Continuous Emissions Monitoring System "
-                   "(CEMS) data, archived from "
-                   "ftp://newftp.epa.gov/dmdnload/emissions/hourly/monthly",
-    "profile": "data-package",
-    "keywords": [
-        "epa", "us", "emissions", "pollution", "ghg", "so2", "co2", "sox",
-        "nox", "load", "utility", "electricity", "plant", "generator", "unit",
-        "generation", "capacity", "output", "power", "heat content", "mmbtu",
-        "steam", "cems", "continuous emissions monitoring system", "hourly",
-        "environmental protection agency", "ampd", "air markets program data"
-    ],
-    "licenses": [licenses.us_govt, ],
-    "homepage": "https://catalyst.coop/pudl/",
-    "sources": [
-        {
-            "title": "US Environmental Protection Agency",
-            "path": "ftp://newftp.epa.gov/dmdnload/emissions/hourly/monthly"
-        }
-    ],
-    "contributors": [contributors.catalyst_cooperative]
-}
+from pudl.metadata.classes import DataSource
 
 
 def epacems_resource(name, url, size, md5_hash):
@@ -92,6 +68,6 @@ def datapackager(dfiles):
 
         for x in dfiles]
 
-    return dict(**epacems,
+    return dict(**DataSource.from_id("epacems").to_raw_datapackage_json(),
                 **{"resources": resources,
                    "created": datetime.now(timezone.utc).isoformat()})
