@@ -17,7 +17,6 @@ import frictionless.eia860m
 import frictionless.eia861
 import frictionless.eia923
 import frictionless.epacems
-import frictionless.epaipm
 import frictionless.ferc1
 import frictionless.ferc2
 import frictionless.ferc714
@@ -413,14 +412,6 @@ def archive_selection(deposition_name):
             "latest_files": latest_files("ferc714")
         }
 
-    if deposition_name == "epaipm":
-        return {
-            "key_id": zs.metadata.epaipm_uuid,
-            "metadata": zs.metadata.epaipm,
-            "datapackager": frictionless.epaipm.datapackager,
-            "latest_files": latest_files("epaipm")
-        }
-    
     if deposition_name == "eipinfrastructure":
         return {
             "key_id": zs.metadata.eipinfrastructure_uuid,

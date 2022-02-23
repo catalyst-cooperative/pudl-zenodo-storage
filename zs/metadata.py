@@ -81,28 +81,6 @@ ferc2 = _generate_metadata("ferc2", ferc2_uuid)
 ferc714_uuid = "f31f0894-639e-4bc2-9b7f-8a84713bcc87"
 ferc714 = _generate_metadata("ferc714", ferc714_uuid)
 
-# For the unaltered IPM archive.
-epaipm_uuid = "75b29994-bd39-4518-a5b2-ec180a18ac23"
-epaipm = {
-    "title": "PUDL Raw EPA IPM/NEEDS",
-    "language": "eng",
-    "upload_type": "dataset",
-    "description": "<p>Select data pertaining to the US EPA Integrated Planning Model / "
-                   "National Electric Energy Data System (IPM/NEEDS) "
-                   "Archived from\n"
-                   "<a href=\"https://www.epa.gov/airmarkets/"
-                   "national-electric-energy-data-system-needs-v6\">"
-                   "https://www.epa.gov/airmarkets/"
-                   "national-electric-energy-data-system-needs-v6</a></p>"
-                   f"{pudl_description}",
-    "creators": creators,
-    "access_right": "open",
-    "license": "other-pd",
-    "keywords": [
-        "epa", "ipm", "needs", "usa", "integrated planning model", epaipm_uuid
-    ]
-}
-
 # For the census archive.
 censusdp1tract_uuid = "beb36017-3fca-49be-a93a-7298f30ca3a3"
 censusdp1tract = _generate_metadata("censusdp1tract", censusdp1tract_uuid)
