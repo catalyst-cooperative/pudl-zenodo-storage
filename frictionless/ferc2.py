@@ -3,6 +3,36 @@
 
 from .core import DataPackage, annual_archive_resource
 from pudl.metadata.classes import DataSource
+from . import licenses
+from . import contributors
+
+ferc2 = {
+    "name": "pudl-raw-ferc2",
+    "title": "PUDL Raw FERC Form 2",
+    "description":
+        "The Federal Energy Regulatory Commission (FERC) Form 2 is a "
+        "comprehensive financial and operating report submitted for "
+        "natural gas pipelines rate regulation and financial audits.",
+    "profile": "data-package",
+    "keywords": [
+        'utility', 'plant', 'steam', 'generation', 'energy',
+        'cost', 'expense', 'price', 'heat content', 'ferc', 'form 2',
+        'federal energy regulatory commission', 'capital', 'accounting',
+        'depreciation', 'finance', 'plant in service',
+        'natural gas', 'gas', 'opex', 'capex', 'accounts', 'investment',
+        'capacity'
+    ],
+    "licenses": [licenses.us_govt, ],
+    "homepage": "https://catalyst.coop/pudl/",
+    "sources": [
+        {
+            "title": "Federal Energy Regulatory Commission (FERC)",
+            "path": "https://www.ferc.gov/industries-data/natural-gas/"
+                    "industry-forms/form-2-2a-3-q-gas-historical-vfp-data"
+        }
+    ],
+    "contributors": [contributors.catalyst_cooperative]
+}
 
 
 def datapackager(dfiles):
