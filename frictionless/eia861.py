@@ -1,6 +1,6 @@
 """Provide datapackage details specific to the EIA 861 archives."""
 
-from . import core
+from .core import DataPackage, annual_archive_resource
 from pudl.metadata.classes import DataSource
 
 
@@ -16,5 +16,8 @@ def datapackager(dfiles):
         dict: fields suited to the frictionless datapackage spec
         https://frictionlessdata.io/specs/data-package/
     """
-    return core.annual_resource_datapackager(
-        DataSource.from_id("eia861").to_raw_datapackage_dict(), dfiles)
+    return DataPackage.from_resource_archiver(
+        DataSource.from_id("eia861"),
+        dfiles,
+        annual_archive_resource
+    ).to_raw_datapackage_dict()

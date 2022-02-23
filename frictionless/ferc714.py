@@ -1,6 +1,6 @@
 """Provide datapackage details specific to the Ferc Form 714 archives."""
 
-from . import core
+from .core import DataPackage, minimal_archiver
 from pudl.metadata.classes import DataSource
 
 
@@ -17,5 +17,8 @@ def datapackager(dfiles):
         https://frictionlessdata.io/specs/data-package/
 
     """
-    return core.minimal_datapackager(
-        DataSource.from_id("ferc714").to_raw_datapackage_dict(), dfiles)
+    return DataPackage.from_resource_archiver(
+        DataSource.from_id("ferc714"),
+        dfiles,
+        minimal_archiver
+    ).to_raw_datapackage_dict()

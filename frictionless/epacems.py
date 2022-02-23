@@ -2,10 +2,7 @@
 
 from datetime import datetime, timezone
 import re
-
-from . import core
-from . import licenses
-from . import contributors
+from .core import DataPackage, MediaType
 from pudl.metadata.classes import DataSource
 
 
@@ -32,7 +29,7 @@ def epacems_resource(name, url, size, md5_hash):
     year = int(year)
 
     title, file_format = name.split(".")
-    mt = core.MediaType[file_format].value
+    mt = MediaType[file_format].value
 
     return {
         "profile": "data-resource",
@@ -61,13 +58,8 @@ def datapackager(dfiles):
         dict: fields suited to the frictionless datapackage spec
         https://frictionlessdata.io/specs/data-package/
     """
-    resources = [epacems_resource(
-        x["filename"],
-        x["links"]["download"],
-        x["filesize"], x["checksum"])
-
-        for x in dfiles]
-
-    return dict(**DataSource.from_id("epacems").to_raw_datapackage_dict(),
-                **{"resources": resources,
-                   "created": datetime.now(timezone.utc).isoformat()})
+    return DataPackage.from_resource_archiver(
+        DataSource.from_id("epacems"),
+        dfiles,
+        epacems_resource
+    ).to_raw_datapackage_dict()

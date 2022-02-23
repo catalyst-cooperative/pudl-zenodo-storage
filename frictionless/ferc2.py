@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Provide datapackage details specific to the FERC Form 2 archives."""
 
-from . import core
+from .core import DataPackage, annual_archive_resource
 from pudl.metadata.classes import DataSource
 
 
@@ -18,5 +18,8 @@ def datapackager(dfiles):
         https://frictionlessdata.io/specs/data-package/
 
     """
-    return core.annual_resource_datapackager(
-        DataSource.from_id("ferc2").to_raw_datapackage_dict(), dfiles)
+    return DataPackage.from_resource_archiver(
+        DataSource.from_id("ferc2"),
+        dfiles,
+        annual_archive_resource
+    ).to_raw_datapackage_dict()
