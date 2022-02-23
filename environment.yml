@@ -9,4 +9,4 @@ dependencies:
  - semantic_version < 3.0
  - pip>=21.0,<22
  - pip:
-   - --editable=git+https://github.com/catalyst-cooperative/pudl.git@dev#egg=catalystcoop.pudl
+   - git+https://github.com/catalyst-cooperative/pudl.git@dev#egg=catalystcoop.pudl
