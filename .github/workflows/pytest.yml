@@ -35,8 +35,8 @@ jobs:
       env:
         ZENODO_SANDBOX_TOKEN_PUBLISH: ${{ secrets.ZENODO_TEST_KEY }}
       run: |
-          conda run pytest
-          ./bin/zenodo_store.py --help
+          conda run -n pudl-zenodo-storage pytest
+          conda run -n pudl-zenodo-storage ./bin/zenodo_store.py --help
 
     - name: Inform the Codemonkeys
       uses: 8398a7/action-slack@v3
