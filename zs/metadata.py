@@ -2,18 +2,7 @@
 """Metadata for Zenodo depositions archiving PUDL raw input data."""
 
 from pudl.metadata.classes import DataSource
-
-creators = [
-    {
-        "name": "Gosnell, Christina",
-        "affiliation": "Catalyst Cooperative"
-    },
-    {
-        "name": "Selvans, Zane",
-        "affiliation": "Catalyst Cooperative",
-        "orcid": "0000-0002-9961-7208"
-    }
-]
+import frictionless.eipinfrastructure
 
 pudl_description = """
 <p>This archive contains raw input data for the Public Utility Data Liberation (PUDL)
@@ -31,10 +20,13 @@ following resources:
 
 
 def _generate_metadata(data_source_id, data_source_uuid):
-    data_source = DataSource.from_id(data_source_id)
+    if data_source_id == "eipinfrastructure":
+        data_source = DataSource(**frictionless.eipinfrastructure.eipinfrastructure)
+    else:
+        data_source = DataSource.from_id(data_source_id)
 
     return {
-        "title": data_source.raw_datapackage_title(),
+        "title": f"PUDL Raw {data_source.title}",
         "language": "eng",
         "upload_type": "dataset",
         "description": f"<p>{data_source.description} Archived from\n"
@@ -87,20 +79,4 @@ censusdp1tract = _generate_metadata("censusdp1tract", censusdp1tract_uuid)
 
 # EIP Infrastructure archive.
 eipinfrastructure_uuid = "865a4ee2-5140-11ec-81d1-acde48001122"
-eipinfrastructure = {
-    "title": "EIP Infrastructure Emissions",
-    "language": "eng",
-    "upload_type": "dataset",
-    "description": "<p>EIP Infrastructure Emissions "
-                   "archived from\n"
-                   "<a href=\"https://environmentalintegrity.org/download/eip-emissions-increase-database/\">"
-                   "https://environmentalintegrity.org/download/eip-emissions-increase-database/"
-                   "</a></p>"
-                   f"{pudl_description}",
-    "creators": creators,
-    "access_right": "open",
-    "license": "other-pd",
-    "keywords": [
-        "eip", "usa", "electricity", "infrastructure", "fossil fuel", "emissions", "oil", "gas", "chemicals", "pipelines", eipinfrastructure_uuid
-    ]
-}
+eipinfrastructure = _generate_metadata("eipinfrastructure", eipinfrastructure_uuid)

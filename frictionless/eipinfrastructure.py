@@ -6,8 +6,8 @@ from pudl.metadata.constants import LICENSES
 from pudl.metadata.classes import DataSource
 
 eipinfrastructure = {
-    "name": "raw_eipinfrastructure",
-    "title": "Raw EIP I",
+    "name": "eipinfrastructure",
+    "title": "EIP I",
     "path": "https://environmentalintegrity.org/oil-gas-infrastructure-emissions/",
     "description":
         "The Environmental Integrity Project created this public database to "
