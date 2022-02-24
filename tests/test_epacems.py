@@ -1,6 +1,7 @@
 from faker import Faker
 import uuid
 import random
+from datapackage import Package
 
 from frictionless import epacems
 
@@ -31,6 +32,7 @@ class TestCemsSource:
         package = epacems.datapackager([fake_resource])
         res = package["resources"][0]
 
+        assert(Package(descriptor=package).valid)
         assert(res["name"] == name)
         assert(res["title"] == name[:-4])
         assert(res["path"] == url)

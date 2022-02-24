@@ -1,5 +1,6 @@
 import uuid
 import random
+from datapackage import Package
 
 from frictionless import ferc1
 
@@ -31,6 +32,7 @@ class TestFerc1Source:
         package = ferc1.datapackager([fake_resource])
         res = package["resources"][0]
 
+        assert(Package(descriptor=package).valid)
         assert(res["name"] == name)
         assert(res["title"] == "ferc1-%d" % year)
         assert(res["path"] == url)

@@ -1,5 +1,6 @@
 import uuid
 import random
+from datapackage import Package
 from frictionless import ferc714
 
 
@@ -26,7 +27,9 @@ class TestFerc714Source:
 
         package = ferc714.datapackager([fake_resource])
         res = package["resources"][0]
+        print(Package(descriptor=package).errors)
 
+        assert(Package(descriptor=package).valid)
         assert(res["name"] == name)
         assert(res["title"] == name[:-4])
         assert(res["path"] == url)

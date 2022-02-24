@@ -1,5 +1,6 @@
 import uuid
 import random
+from datapackage import Package
 
 from frictionless import eia860
 
@@ -31,6 +32,7 @@ class TestEia860:
         package = eia860.datapackager([fake_resource])
         res = package["resources"][0]
 
+        assert(Package(descriptor=package).valid)
         assert(res["name"] == name)
         assert(res["title"] == "eia860-%d" % year)
         assert(res["path"] == url)

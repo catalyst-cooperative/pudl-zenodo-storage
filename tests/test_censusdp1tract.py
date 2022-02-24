@@ -1,6 +1,7 @@
 import uuid
 import random
 from frictionless import censusdp1tract
+from datapackage import Package
 
 
 class TestCensusDp1TractSource:
@@ -27,6 +28,9 @@ class TestCensusDp1TractSource:
         package = censusdp1tract.datapackager([fake_resource])
         res = package["resources"][0]
 
+        print("census")
+        print(Package(descriptor=package).errors)
+        assert(Package(descriptor=package).valid)
         assert(res["name"] == name)
         assert(res["title"] == name[:-4])
         assert(res["path"] == url)
