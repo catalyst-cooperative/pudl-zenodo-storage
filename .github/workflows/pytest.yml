@@ -5,25 +5,37 @@ on: [ push, pull_request ]
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10"]
+
     steps:
     - uses: actions/checkout@v2
-
-    - name: Set up Python
-      uses: actions/setup-python@v2
       with:
-        python-version: 3.8
+        fetch-depth: 2
 
-    - name: Install dependencies
+    - name: Set up conda environment for testing
+      uses: conda-incubator/setup-miniconda@v2.1.1
+      with:
+        mamba-version: "*"
+        channels: conda-forge,defaults
+        channel-priority: true
+        python-version: ${{ matrix.python-version }}
+        activate-environment: pudl-zenodo-storage
+        environment-file: environment.yml
+    - shell: bash -l {0}
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install ./
+        conda info
+        conda list
+        conda config --show-sources
+        conda config --show
+        printenv | sort
 
-    - name: Run PyTest
+    - name: Run pytest
       env:
         ZENODO_SANDBOX_TOKEN_PUBLISH: ${{ secrets.ZENODO_TEST_KEY }}
       run: |
-          pytest
+          conda run pytest
           ./bin/zenodo_store.py --help
 
     - name: Inform the Codemonkeys
@@ -44,4 +56,4 @@ jobs:
         GITHUB_TOKEN: ${{ github.token }} # required
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
         MATRIX_CONTEXT: ${{ toJson(matrix) }} # required
-      if: always() # Pick up events even if the job fails or is canceled.
+      if: ${{ always() && github.actor != 'dependabot[bot]' }}
