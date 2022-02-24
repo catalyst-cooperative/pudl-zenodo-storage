@@ -6,6 +6,7 @@ from pydantic import BaseModel, AnyHttpUrl
 from enum import Enum
 from typing import Dict, List
 from pudl.metadata.classes import Datetime, License, Contributor
+from pudl.metadata.constants import CONTRIBUTORS
 
 
 class MediaType(Enum):
@@ -77,7 +78,8 @@ class DataPackage(BaseModel):
             for x in dfiles]
 
         base_dict = data_source.dict(
-            exclude={"field_namespace", "working_partitions", "license_pudl",})
+            exclude={"field_namespace", "working_partitions", "license_pudl",
+                     "contributors"})
 
         base_dict.update(
             name=f"pudl-raw-{base_dict['name']}",
@@ -85,6 +87,7 @@ class DataPackage(BaseModel):
             sources=[{"title": base_dict["title"], "path": base_dict.pop("path")}],
             licenses=[base_dict.pop("license_raw")],
             resources=resources,
+            contributors=[CONTRIBUTORS["catalyst-cooperative"]],
             created=datetime.utcnow()
         )
 
