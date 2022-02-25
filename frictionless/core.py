@@ -1,25 +1,24 @@
-from pathlib import Path
-from datetime import datetime
+"""Core routines for frictionless data package construction."""
 import os.path
 import re
-from pydantic import BaseModel, AnyHttpUrl
-from enum import Enum
+from datetime import datetime
+from pathlib import Path
 from typing import Dict, List
-from pudl.metadata.classes import Datetime, License, Contributor
+
+from pudl.metadata.classes import Contributor, Datetime, License
 from pudl.metadata.constants import CONTRIBUTORS
+from pydantic import AnyHttpUrl, BaseModel
 
-
-class MediaType(Enum):
-    """Enumerate file extention -> mediatype descriptors."""
-
-    zip = "application/zip"
-    xlsx = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    csv = "text/csv"
+MEDIA_TYPES: Dict[str, str] = {
+    "zip": "application/zip",
+    "xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "csv": "text/csv",
+}
 
 
 class Resource(BaseModel):
     """
-    Data resource
+    A generic data resource, as per Frictionless Data specs.
 
     See https://specs.frictionlessdata.io/data-resource.
     """
@@ -32,14 +31,23 @@ class Resource(BaseModel):
     parts: Dict
     encoding: str = "utf-8"
     mediatype: str
-    format: str
-    bytes: int
-    hash: str
+    format_: str
+    bytes_: int
+    hash_: str
+
+    class Config:
+        """Alias attributes using reserved Python keywords."""
+
+        fields = {
+            'format_': 'format',
+            'bytes_': 'bytes',
+            'hash_': 'hash',
+        }
 
 
 class DataPackage(BaseModel):
     """
-    Data package
+    A generic Data Package, as per Frictionless Data specs.
 
     See https://specs.frictionlessdata.io/data-package.
     """
@@ -95,10 +103,11 @@ class DataPackage(BaseModel):
 
     def to_raw_datapackage_dict(self):
         """
-        Return raw data-package descriptor.
+        Return a data package descriptor.
+
         See https://specs.frictionlessdata.io/data-package
         """
-        descriptor = self.dict()
+        descriptor = self.dict(by_alias=True)
 
         descriptor.update(
             created=descriptor["created"].isoformat()
@@ -130,7 +139,7 @@ def annual_archive_resource(name, url, size, md5_hash):
     year = int(match.groups()[0])
     title, file_format = os.path.splitext(name)
     file_format = file_format[1:]
-    mt = MediaType[file_format].value
+    mt = MEDIA_TYPES[file_format]
 
     return {
         "profile": "data-resource",
@@ -141,9 +150,9 @@ def annual_archive_resource(name, url, size, md5_hash):
         "parts": {"year": year},
         "encoding": "utf-8",
         "mediatype": mt,
-        "format": file_format,
         "bytes": size,
-        "hash": md5_hash
+        "hash": md5_hash,
+        "format": file_format,
     }
 
 
@@ -169,7 +178,7 @@ def archive_resource_year_month(name, url, size, md5_hash):
 
     title, file_format = os.path.splitext(name)
     file_format = file_format[1:]
-    mt = MediaType[file_format].value
+    mt = MEDIA_TYPES[file_format]
 
     return {
         "profile": "data-resource",
@@ -180,9 +189,9 @@ def archive_resource_year_month(name, url, size, md5_hash):
         "parts": {"year_month": year_month.group(0)},
         "encoding": "utf-8",
         "mediatype": mt,
-        "format": file_format,
         "bytes": size,
-        "hash": md5_hash
+        "hash": md5_hash,
+        "format": file_format,
     }
 
 
@@ -204,7 +213,7 @@ def minimal_archiver(name, url, size, md5_hash):
     fp = Path(name)
     title = fp.stem
     file_format = fp.suffix[1:]
-    mt = MediaType[file_format].value
+    mt = MEDIA_TYPES[file_format]
 
     return {
         "profile": "data-resource",
@@ -215,7 +224,7 @@ def minimal_archiver(name, url, size, md5_hash):
         "parts": {},
         "encoding": "utf-8",
         "mediatype": mt,
-        "format": file_format,
         "bytes": size,
-        "hash": md5_hash
+        "hash": md5_hash,
+        "format": file_format,
     }

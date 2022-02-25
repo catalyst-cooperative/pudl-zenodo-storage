@@ -1,0 +1,6 @@
+skips:
+  - 'B101' # Assert statements
+  - 'B303' # We have to use md5 because Zenodo
+  - 'B311' # Random integers in testing, not crypto
+exclude:
+  - tests

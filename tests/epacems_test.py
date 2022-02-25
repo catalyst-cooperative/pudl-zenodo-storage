@@ -1,26 +1,26 @@
-import uuid
+"""EPA CEMS Tests."""
 import random
+
 from datapackage import Package
+from faker import Faker
 
-from frictionless import eia923
+from frictionless import epacems
 
 
-class TestEia923Source:
+class TestCemsSource:
     """Ensure we can create proper frictionless datapackage descriptions."""
 
-    def test_single_file_resource(self):
+    def test_single_file(self, zenodo_url):
         """Ensure a single file gets a good resource descriptor."""
-        year = random.randint(2001, 2020)
-        name = "eia923-%d.zip" % year
+        fake = Faker()
+        date = fake.date_between(start_date="-10y", end_date="today")
+        state = fake.state_abbr(include_territories=False).lower()
+
+        name = f"{date.year}-{state}.zip"
         size = random.randint(500000, 800000)
+        md5_hash = fake.md5(raw_output=False)
 
-        md5_hash = random.choice([
-            "4bd7e1025c91c00b50b6cef87cb9bfad",
-            "883895453cb3144b97d0095472f6136e",
-            "c271dfc0ca452b6582f0e592f57351ef"])
-
-        url = "https://zenodo.org/api/deposit/depositions/%d/files/%s" % (
-            random.randint(10000, 99999), uuid.uuid4())
+        url = zenodo_url
 
         fake_resource = {
             "filename": name,
@@ -29,14 +29,15 @@ class TestEia923Source:
             "checksum": md5_hash
         }
 
-        package = eia923.datapackager([fake_resource])
+        package = epacems.datapackager([fake_resource])
         res = package["resources"][0]
 
         assert(Package(descriptor=package).valid)
         assert(res["name"] == name)
-        assert(res["title"] == "eia923-%d" % year)
+        assert(res["title"] == name[:-4])
         assert(res["path"] == url)
-        assert(res["parts"]["year"] == year)
+        assert(res["parts"]["year"] == date.year)
+        assert(res["parts"]["state"] == state)
         assert(res["remote_url"] == url)
 
         assert(res["mediatype"] == "application/zip")

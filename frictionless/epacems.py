@@ -1,9 +1,10 @@
 """Provide datapackage details specific to the EPA CEMS Hourly archives."""
 
-from datetime import datetime, timezone
 import re
-from .core import DataPackage, MediaType
+
 from pudl.metadata.classes import DataSource
+
+from .core import MEDIA_TYPES, DataPackage
 
 
 def epacems_resource(name, url, size, md5_hash):
@@ -29,7 +30,7 @@ def epacems_resource(name, url, size, md5_hash):
     year = int(year)
 
     title, file_format = name.split(".")
-    mt = MediaType[file_format].value
+    mt = MEDIA_TYPES[file_format]
 
     return {
         "profile": "data-resource",

@@ -1,26 +1,25 @@
-import uuid
+"""Tests for archiving the Raw EIA 860 data."""
 import random
+
 from datapackage import Package
+from faker import Faker
 
-from frictionless import eia861
+from frictionless import eia860
 
 
-class TestEia861:
+class TestEia860:
     """Ensure we can create proper frictionless datapackage descriptions."""
 
-    def test_single_file(self):
+    def test_single_file(self, zenodo_url):
         """Ensure a single file gets a good resource descriptor."""
-        year = random.randint(1990, 2019)
-        name = "eia861-%d.zip" % year
+        fake = Faker()
+        year = random.randint(2001, 2020)
+        name = f"eia860-{year}.zip"
         size = random.randint(500000, 800000)
 
-        md5_hash = random.choice([
-            "48d28163ced6add3ed324a641bed077b",
-            "028a5fa8c5d302a9817960a155c93570",
-            "d2956f209926175c219571f47281b1e8"])
+        md5_hash = fake.md5(raw_output=False)
 
-        url = "https://zenodo.org/api/deposit/depositions/%d/files/%s" % (
-            random.randint(10000, 99999), uuid.uuid4())
+        url = zenodo_url
 
         fake_resource = {
             "filename": name,
@@ -29,12 +28,12 @@ class TestEia861:
             "checksum": md5_hash
         }
 
-        package = eia861.datapackager([fake_resource])
+        package = eia860.datapackager([fake_resource])
         res = package["resources"][0]
 
         assert(Package(descriptor=package).valid)
         assert(res["name"] == name)
-        assert(res["title"] == "eia861-%d" % year)
+        assert(res["title"] == f"eia860-{year}")
         assert(res["path"] == url)
         assert(res["parts"]["year"] == year)
         assert(res["remote_url"] == url)
