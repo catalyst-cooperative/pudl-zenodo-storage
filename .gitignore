@@ -2,3 +2,8 @@
 __pycache__
 *pyc
 *.egg-info
+.tox
+.env
+.coverage
+build/**
+coverage.xml

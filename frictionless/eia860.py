@@ -1,35 +1,9 @@
 # -*- coding: utf-8 -*-
 """Datapackage details specific to the EIA Form 860 archives."""
 
-from . import core
-from . import licenses
-from . import contributors
+from pudl.metadata.classes import DataSource
 
-eia860 = {
-    "name": "pudl-raw-eia860",
-    "title": "PUDL Raw EIA Form 860",
-    "description":
-        "US Energy Information Administration (EIA) Form 860 data for electric power "
-        "plants with 1 megawatt or greater combined nameplate capacity.",
-    "profile": "data-package",
-    "keywords": [
-        "electricity", "electric", "boiler", "generator", "plant", "utility",
-        "fuel", "coal", "natural gas", " prime mover", "eia860", "retirement",
-        "capacity", "planned", "proposed", "energy", "hydro", "solar", "wind",
-        "nuclear", "form 860", "eia", "annual", "gas", "ownership", "steam",
-        "turbine", "combustion", "combined cycle", "eia",
-        "energy information administration"
-    ],
-    "licenses": [licenses.us_govt, ],
-    "homepage": "https://catalyst.coop/pudl/",
-    "sources": [
-        {
-            "title": "US Energy Information Administration",
-            "path": "https://www.eia.gov/electricity/data/eia860/"
-        }
-    ],
-    "contributors": [contributors.catalyst_cooperative]
-}
+from .core import DataPackage, annual_archive_resource
 
 
 def datapackager(dfiles):
@@ -44,4 +18,8 @@ def datapackager(dfiles):
         dict: fields suited to the frictionless datapackage spec
         https://frictionlessdata.io/specs/data-package/
     """
-    return core.annual_resource_datapackager(eia860, dfiles)
+    return DataPackage.from_resource_archiver(
+        DataSource.from_id("eia860"),
+        dfiles,
+        annual_archive_resource
+    ).to_raw_datapackage_dict()

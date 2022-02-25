@@ -1,30 +1,29 @@
 #!/usr/bin/env python
+"""A script for archiving raw PUDL data on Zenodo."""
 
 import argparse
+import glob
 import io
 import json
-from hashlib import md5
-import glob
 import os
-import requests
 import sys
+from hashlib import md5
 
 import datapackage
+import requests
 
 import frictionless.censusdp1tract
 import frictionless.eia860
 import frictionless.eia860m
 import frictionless.eia861
 import frictionless.eia923
+import frictionless.eipinfrastructure
 import frictionless.epacems
-import frictionless.epaipm
 import frictionless.ferc1
 import frictionless.ferc2
 import frictionless.ferc714
-import frictionless.eipinfrastructure
-
-from zs import ZenodoStorage
 import zs.metadata
+from zs import ZenodoStorage
 
 ROOT_DIR = os.environ.get(
     "PUDL_IN",
@@ -59,9 +58,10 @@ def local_fileinfo(file_paths):
         checksum = file_md5s(fp)
 
         if name in metadata:
-            msg = "File names must be unique: %s name conflicts with %s/%s" % (
-                path, metadata[name]["path"], name)
-            raise ValueError(msg)
+            raise ValueError(
+                f"File names must be unique: {path} name conflicts "
+                f"with {metadata[name]['path']}/{name}"
+            )
 
         metadata[name] = {"path": path, "checksum": checksum}
 
@@ -89,7 +89,7 @@ def remote_fileinfo(zenodo, deposition):
 
     try:
         jsr = response.json()
-    except:
+    except:  # noqa: E722
         msg = f"Invalid remote file data at {url}: {response}"
         raise ValueError(msg)
 
@@ -267,8 +267,10 @@ def initial_run(zenodo, key_id, metadata, datapackager, file_paths):
         exists = False
 
     if exists:
-        raise RuntimeError("Cannot initialize %s, it already exists at %s" %
-                           (metadata["title"], deposition["links"]["html"]))
+        raise RuntimeError(
+            f"Cannot initialize {metadata['title']}, it already exists at "
+            f"{deposition['links']['html']}"
+        )
 
     # New deposition
     deposition = zenodo.create_deposition(metadata)
@@ -290,31 +292,51 @@ def initial_run(zenodo, key_id, metadata, datapackager, file_paths):
 def parse_main():
     """Process base commands from the CLI."""
     parser = argparse.ArgumentParser(
-        description="Upload PUDL data archives to Zenodo")
-    parser.add_argument("--noop", action="store_true", default=False,
-                        help="Review changes without uploading")
-    parser.add_argument("--sandbox", action="store_true",
-                        help="Use Zenodo sandbox server")
-    parser.add_argument("--verbose", action="store_true", default=False,
-                        help="Print logging messages to stdout")
-    parser.add_argument("--loglevel", help="Set log level", default="INFO")
+        description="Upload PUDL data archives to Zenodo"
+    )
     parser.add_argument(
-        "--initialize", action="store_true",
-        help="Produce the first version of a new Zenodo deposition.")
-
-    parser.add_argument("--files", nargs="*",
-                        help="Override default file list. By default, the "
-                             "most recent files from %s will be uploaded." %
-                             (ROOT_DIR))
-    parser.add_argument("deposition", help="Name of the Zenodo deposition. "
-                        "Supported: censusdp1tract, eia860, eia861, eia923, "
-                        "epacems, ferc1, ferc2, ferc714, eia860m, "
-                        "eipinfrastructure")
-
+        "--noop",
+        action="store_true",
+        default=False,
+        help="Review changes without uploading",
+    )
+    parser.add_argument(
+        "--sandbox",
+        action="store_true",
+        help="Use Zenodo sandbox server",
+    )
+    parser.add_argument(
+        "--verbose",
+        action="store_true",
+        default=False,
+        help="Print logging messages to stdout",
+    )
+    parser.add_argument(
+        "--loglevel",
+        help="Set log level",
+        default="INFO",
+    )
+    parser.add_argument(
+        "--initialize",
+        action="store_true",
+        help="Produce the first version of a new Zenodo deposition.",
+    )
+    parser.add_argument(
+        "--files",
+        nargs="*",
+        help="Override default file list. By default, the most recent files "
+             f"from {ROOT_DIR} will be uploaded."
+    )
+    parser.add_argument(
+        "deposition",
+        help="Name of the Zenodo deposition. Supported: censusdp1tract, "
+        "eia860, eia861, eia923, epacems, ferc1, ferc2, ferc714, eia860m, "
+        "eipinfrastructure"
+    )
     return parser.parse_args()
 
 
-def archive_selection(deposition_name):
+def archive_selection(deposition_name):  # noqa: C901
     """
     Produce the datasets needed to run the archiver.
 
@@ -413,14 +435,6 @@ def archive_selection(deposition_name):
             "latest_files": latest_files("ferc714")
         }
 
-    if deposition_name == "epaipm":
-        return {
-            "key_id": zs.metadata.epaipm_uuid,
-            "metadata": zs.metadata.epaipm,
-            "datapackager": frictionless.epaipm.datapackager,
-            "latest_files": latest_files("epaipm")
-        }
-    
     if deposition_name == "eipinfrastructure":
         return {
             "key_id": zs.metadata.eipinfrastructure_uuid,
@@ -465,8 +479,10 @@ if __name__ == "__main__":
         result = initial_run(
             zenodo, sel["key_id"], sel["metadata"], sel["datapackager"], files)
 
-        zenodo.logger.info("Your new deposition archive is ready for review "
-                           "at %s" % (result["links"]["html"]))
+        zenodo.logger.info(
+            "Your new deposition archive is ready for review at "
+            f"{result['links']['html']}"
+        )
         sys.exit()
 
     local = local_fileinfo(files)
@@ -486,5 +502,7 @@ if __name__ == "__main__":
     result = execute_actions(zenodo, deposition, sel["datapackager"], steps)
 
     if result is not None:
-        zenodo.logger.info("A new version of your deposition is ready for review "
-                           "at %s" % (result["links"]["html"]))
+        zenodo.logger.info(
+            "A new version of your deposition is ready for review "
+            f"at {result['links']['html']}"
+        )

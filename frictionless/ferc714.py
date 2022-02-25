@@ -1,38 +1,8 @@
 """Provide datapackage details specific to the Ferc Form 714 archives."""
 
-from . import core
-from . import contributors
-from . import licenses
+from pudl.metadata.classes import DataSource
 
-ferc714 = {
-    "name": "pudl-raw-ferc714",
-    "title": "PUDL Raw FERC Form 714",
-    "description":
-        "Electric transmitting utilities operating balancing authority areas and "
-        "planning areas with annual peak demand over 200MW are required to "
-        "file Form 714 with the Federal Energy Regulatory Commission (FERC), "
-        "reporting balancing authority area generation, actual and scheduled "
-        "inter-balancing authority area power transfers, and net energy for "
-        "load, summer-winter generation peaks and system lambda.",
-    "profile": "data-package",
-    "keywords": [
-        "electricity", "electric", "utility", "planning area", "form 714", "ferc714",
-        "balancing authority", "demand", "system lambda", "ferc",
-        "federal energy regulatory commission", "hourly", "generation",
-        "interchange", "forecast", "load", "adjacency", "plants",
-    ],
-    "licenses": [licenses.us_govt, ],
-    "homepage": "https://catalyst.coop/pudl/",
-    "sources": [
-        {
-            "title": "Federal Energy Regulatory Commission",
-            "path": "https://www.ferc.gov/industries-data/electric/"
-                    "general-information/electric-industry-forms/"
-                    "form-no-714-annual-electric/data"
-        }
-    ],
-    "contributors": [contributors.catalyst_cooperative]
-}
+from .core import DataPackage, minimal_archiver
 
 
 def datapackager(dfiles):
@@ -48,4 +18,8 @@ def datapackager(dfiles):
         https://frictionlessdata.io/specs/data-package/
 
     """
-    return core.minimal_datapackager(ferc714, dfiles)
+    return DataPackage.from_resource_archiver(
+        DataSource.from_id("ferc714"),
+        dfiles,
+        minimal_archiver
+    ).to_raw_datapackage_dict()

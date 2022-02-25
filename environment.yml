@@ -1,9 +1,10 @@
 name: pudl-zenodo-storage
 channels:
   - conda-forge
+  - defaults
 dependencies:
- - datapackage < 2.0
- - factory_boy < 3.0
- - pytest < 7.0
- - requests < 3.0
- - semantic_version < 3.0
+  - pip>=21.0,<22
+  - python>=3.8,<3.11
+  - tox>=3.24,<4
+  - pip:
+    - --editable ./[test]

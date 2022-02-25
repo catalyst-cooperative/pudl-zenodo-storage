@@ -1,31 +1,9 @@
 # -*- coding: utf-8 -*-
 """Provide datapackage details specific to the Census DP1 data."""
 
-from . import core
-from . import contributors
-from . import licenses
+from pudl.metadata.classes import DataSource
 
-censusdp1tract = {
-    "name": "pudl-raw-censusdp1tract",
-    "title": "PUDL Raw Census DP1 Tract Geodatabase",
-    "description": "US Census Demographic Profile 1 (DP1) County and Tract "
-                   "GeoDatabase.",
-    "profile": "data-package",
-    "keywords": [
-        "geodata", "usa", "census", "geodatabase", "gis", "spatial", "demographic",
-        "dp1", "population", "county", "fips", "tract"
-    ],
-    "licenses": [licenses.us_govt, ],
-    "homepage": "https://catalyst.coop/pudl/",
-    "sources": [
-        {
-            "title": "US Census Bureau",
-            "path": "http://www2.census.gov/geo/tiger/TIGER2010DP1/"
-                    "Profile-County_Tract.zip",
-        }
-    ],
-    "contributors": [contributors.catalyst_cooperative]
-}
+from .core import DataPackage, annual_archive_resource
 
 
 def datapackager(dfiles):
@@ -41,4 +19,8 @@ def datapackager(dfiles):
         https://frictionlessdata.io/specs/data-package/
 
     """
-    return core.annual_resource_datapackager(censusdp1tract, dfiles)
+    return DataPackage.from_resource_archiver(
+        DataSource.from_id("censusdp1tract"),
+        dfiles,
+        annual_archive_resource
+    ).to_raw_datapackage_dict()

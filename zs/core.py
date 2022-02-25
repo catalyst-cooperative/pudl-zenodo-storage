@@ -1,5 +1,7 @@
+"""Core routines for archiving raw data packages on Zenodo."""
 import json
 import logging
+
 import requests
 import semantic_version
 
@@ -66,8 +68,7 @@ class ZenodoStorage:
         print(jsr)
 
         if len(jsr) > 1:
-            msg = "Expected single deposition, query: %s, got: %d" % (
-                query, len(jsr))
+            msg = f"Expected single deposition, query: {query}, got: {len(jsr)}"
             self.logger.error(msg)
             raise ValueError(msg)
 
@@ -78,9 +79,10 @@ class ZenodoStorage:
 
     def create_deposition(self, metadata):
         """
-        Create a deposition resource.  This should only be called once for a
-        given data source.  The deposition will be prepared in draft form, so
-        that files can be added prior to publication.
+        Create a Zenodo deposition resource.
+
+        This should only be called once for a given data source.  The deposition will be
+        prepared in draft form, so that files can be added prior to publication.
 
         Args:
             metadata: deposition metadata as a dict, per
@@ -95,8 +97,9 @@ class ZenodoStorage:
         headers = {"Content-Type": "application/json"}
 
         if metadata.get("version", None) is None:
-            self.logger.debug("Deposition %s metadata assigned version 1.0.0"
-                              % metadata["title"])
+            self.logger.debug(
+                f"Deposition {metadata['title']} metadata assigned version 1.0.0"
+            )
             metadata["version"] = "1.0.0"
 
         data = json.dumps({"metadata": metadata})
@@ -166,12 +169,12 @@ class ZenodoStorage:
             f"Deposition '{query}' found at {deposition['links']['self']}")
 
         if deposition["state"] == "unsubmitted":
-            self.logger.debug("deposition '%s' is already a new version" %
-                              deposition["id"])
+            self.logger.debug(
+                f"deposition '{deposition['id']}' is already a new version")
             return deposition
 
-        url = self.api_root + "/deposit/depositions/%d/actions/newversion" \
-            % deposition["id"]
+        url = self.api_root + \
+            f"/deposit/depositions/{deposition['id']}/actions/newversion"
 
         # Create the new version
         params = {"access_token": self.key}
@@ -251,8 +254,10 @@ class ZenodoStorage:
         jsr = response.json()
 
         if response.status_code not in [200, 201]:
-            msg = "Failed to upload file: code %d / %s on %s" % \
-                (response.status_code, jsr, deposition)
+            msg = (
+                "Failed to upload file: "
+                f"code {response.status_code} / {jsr} on {deposition}"
+            )
             self.logger.error(msg)
             raise RuntimeError(msg)
 
@@ -260,8 +265,9 @@ class ZenodoStorage:
 
     def upload(self, deposition, file_name, file_handle):
         """
-        Upload a file for the given deposition.  Attempt using the bucket api
-        and fall back on the file api
+        Upload a file for the given deposition.
+
+        Attempt using the bucket api and fall back on the file api.
 
         Args:
             deposition: dict of the deposition resource
