@@ -23,6 +23,7 @@ setup(
     extras_require={
         "test": [
             "bandit~=1.6",
+            "black~=22",
             "coverage>=5.3,<7.0",
             "doc8~=0.9",
             "flake8~=4.0",
@@ -39,5 +40,5 @@ setup(
             "pytest-cov>=2.10,<4.0",
             "tox~=3.20",
         ]
-    }
+    },
 )

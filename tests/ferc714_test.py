@@ -22,7 +22,7 @@ class TestFerc714Source:
             "filename": name,
             "links": {"download": url},
             "filesize": size,
-            "checksum": md5_hash
+            "checksum": md5_hash,
         }
 
         package = ferc714.datapackager([fake_resource])

@@ -6,5 +6,5 @@ catalyst_cooperative = {
     "path": "https://catalyst.coop/",
     "role": "publisher",
     "email": "pudl@catalyst.coop",
-    "organization": "Catalyst Cooperative"
+    "organization": "Catalyst Cooperative",
 }

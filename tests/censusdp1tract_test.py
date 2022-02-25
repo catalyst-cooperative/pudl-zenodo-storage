@@ -22,7 +22,7 @@ class TestCensusDp1TractSource:
             "filename": name,
             "links": {"download": url},
             "filesize": size,
-            "checksum": md5_hash
+            "checksum": md5_hash,
         }
 
         package = censusdp1tract.datapackager([fake_resource])
@@ -30,14 +30,14 @@ class TestCensusDp1TractSource:
 
         print("census")
         print(Package(descriptor=package).errors)
-        assert(Package(descriptor=package).valid)
-        assert(res["name"] == name)
-        assert(res["title"] == name[:-4])
-        assert(res["path"] == url)
-        assert(res["remote_url"] == url)
+        assert Package(descriptor=package).valid
+        assert res["name"] == name
+        assert res["title"] == name[:-4]
+        assert res["path"] == url
+        assert res["remote_url"] == url
 
-        assert(res["mediatype"] == "application/zip")
-        assert(res["format"] == "zip")
+        assert res["mediatype"] == "application/zip"
+        assert res["format"] == "zip"
 
-        assert(res["bytes"] == size)
-        assert(res["hash"] == md5_hash)
+        assert res["bytes"] == size
+        assert res["hash"] == md5_hash

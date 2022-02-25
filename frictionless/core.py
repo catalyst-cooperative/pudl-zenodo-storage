@@ -39,9 +39,9 @@ class Resource(BaseModel):
         """Alias attributes using reserved Python keywords."""
 
         fields = {
-            'format_': 'format',
-            'bytes_': 'bytes',
-            'hash_': 'hash',
+            "format_": "format",
+            "bytes_": "bytes",
+            "hash_": "hash",
         }
 
 
@@ -80,14 +80,19 @@ class DataPackage(BaseModel):
         """
         resources = [
             archiver(
-                x["filename"],
-                x["links"]["download"],
-                x["filesize"], x["checksum"])
-            for x in dfiles]
+                x["filename"], x["links"]["download"], x["filesize"], x["checksum"]
+            )
+            for x in dfiles
+        ]
 
         base_dict = data_source.dict(
-            exclude={"field_namespace", "working_partitions", "license_pudl",
-                     "contributors"})
+            exclude={
+                "field_namespace",
+                "working_partitions",
+                "license_pudl",
+                "contributors",
+            }
+        )
 
         base_dict.update(
             name=f"pudl-raw-{base_dict['name']}",
@@ -96,7 +101,7 @@ class DataPackage(BaseModel):
             licenses=[base_dict.pop("license_raw")],
             resources=resources,
             contributors=[CONTRIBUTORS["catalyst-cooperative"]],
-            created=datetime.utcnow()
+            created=datetime.utcnow(),
         )
 
         return cls(**base_dict)
@@ -109,9 +114,7 @@ class DataPackage(BaseModel):
         """
         descriptor = self.dict(by_alias=True)
 
-        descriptor.update(
-            created=descriptor["created"].isoformat()
-        )
+        descriptor.update(created=descriptor["created"].isoformat())
 
         return descriptor
 

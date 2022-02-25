@@ -43,7 +43,7 @@ def epacems_resource(name, url, size, md5_hash):
         "mediatype": mt,
         "format": file_format,
         "bytes": size,
-        "hash": md5_hash
+        "hash": md5_hash,
     }
 
 
@@ -60,7 +60,5 @@ def datapackager(dfiles):
         https://frictionlessdata.io/specs/data-package/
     """
     return DataPackage.from_resource_archiver(
-        DataSource.from_id("epacems"),
-        dfiles,
-        epacems_resource
+        DataSource.from_id("epacems"), dfiles, epacems_resource
     ).to_raw_datapackage_dict()

@@ -26,8 +26,8 @@ import zs.metadata
 from zs import ZenodoStorage
 
 ROOT_DIR = os.environ.get(
-    "PUDL_IN",
-    os.path.join(os.path.expanduser("~"), "Downloads", "pudl_scrapers"))
+    "PUDL_IN", os.path.join(os.path.expanduser("~"), "Downloads", "pudl_scrapers")
+)
 ROOT_DIR = os.path.join(ROOT_DIR, "scraped")
 
 
@@ -42,6 +42,7 @@ def local_fileinfo(file_paths):
         dict: of form {filename: {path: str, checksum: str (md5)}}
 
     """
+
     def file_md5s(file_path):
         hash_md5 = md5()
 
@@ -119,7 +120,8 @@ def new_datapackage(zenodo, datapackager, deposition):
     if "datapackage.json" in files:
         requests.delete(
             files["datapackage.json"]["links"]["self"],
-            params={"access_token": zenodo.key})
+            params={"access_token": zenodo.key},
+        )
         files.pop("datapackage.json")
 
     datapkg_descriptor = datapackager(files.values())
@@ -127,7 +129,8 @@ def new_datapackage(zenodo, datapackager, deposition):
     datapkg = datapackage.Package(datapkg_descriptor)
     if not datapkg.valid:
         zenodo.logger.error(
-            f"Found the following {len(datapkg.errors)} datapackage validation errors:")
+            f"Found the following {len(datapkg.errors)} datapackage validation errors:"
+        )
         for e in datapkg.errors:
             print(f"  * {e}")
         raise datapkg.errors[0]
@@ -191,15 +194,13 @@ def execute_actions(zenodo, deposition, datapackager, steps):
         or error on failure
 
     """
-    if steps["create"] == {} and steps["update"] == {} and \
-            steps["delete"] == {}:
+    if steps["create"] == {} and steps["update"] == {} and steps["delete"] == {}:
 
         zenodo.logger.info(f"No changes for deposition {deposition['title']}")
         return
 
     if deposition["submitted"]:
-        new_deposition = zenodo.new_deposition_version(
-            deposition["conceptdoi"])
+        new_deposition = zenodo.new_deposition_version(deposition["conceptdoi"])
     else:
         new_deposition = deposition
 
@@ -213,8 +214,9 @@ def execute_actions(zenodo, deposition, datapackager, steps):
             zenodo.logger.info(f"Uploaded {path}")
 
     for filename, data in steps["update"].items():
-        requests.delete(nd_files[filename]["links"]["self"],
-                        params={"access_token": zenodo.key})
+        requests.delete(
+            nd_files[filename]["links"]["self"], params={"access_token": zenodo.key}
+        )
 
         path = os.path.join(data["path"], filename)
 
@@ -223,8 +225,9 @@ def execute_actions(zenodo, deposition, datapackager, steps):
             zenodo.logger.info(f"Replaced {path}")
 
     for filename, data in steps["delete"].items():
-        requests.delete(nd_files[filename]["links"]["self"],
-                        params={"access_token": zenodo.key})
+        requests.delete(
+            nd_files[filename]["links"]["self"], params={"access_token": zenodo.key}
+        )
         zenodo.logger.info(f"Deleted {filename}")
 
     # Replace the datapackage json
@@ -291,9 +294,7 @@ def initial_run(zenodo, key_id, metadata, datapackager, file_paths):
 
 def parse_main():
     """Process base commands from the CLI."""
-    parser = argparse.ArgumentParser(
-        description="Upload PUDL data archives to Zenodo"
-    )
+    parser = argparse.ArgumentParser(description="Upload PUDL data archives to Zenodo")
     parser.add_argument(
         "--noop",
         action="store_true",
@@ -325,13 +326,13 @@ def parse_main():
         "--files",
         nargs="*",
         help="Override default file list. By default, the most recent files "
-             f"from {ROOT_DIR} will be uploaded."
+        f"from {ROOT_DIR} will be uploaded.",
     )
     parser.add_argument(
         "deposition",
         help="Name of the Zenodo deposition. Supported: censusdp1tract, "
         "eia860, eia861, eia923, epacems, ferc1, ferc2, ferc714, eia860m, "
-        "eipinfrastructure"
+        "eipinfrastructure",
     )
     return parser.parse_args()
 
@@ -354,6 +355,7 @@ def archive_selection(deposition_name):  # noqa: C901
         }
 
     """
+
     def latest_files(name):
         sources = os.path.join(ROOT_DIR, name, "*")
         previous = sorted(glob.glob(sources))
@@ -368,7 +370,7 @@ def archive_selection(deposition_name):  # noqa: C901
             "key_id": zs.metadata.censusdp1tract_uuid,
             "metadata": zs.metadata.censusdp1tract,
             "datapackager": frictionless.censusdp1tract.datapackager,
-            "latest_files": latest_files("censusdp1tract")
+            "latest_files": latest_files("censusdp1tract"),
         }
 
     if deposition_name == "eia860":
@@ -376,7 +378,7 @@ def archive_selection(deposition_name):  # noqa: C901
             "key_id": zs.metadata.eia860_uuid,
             "metadata": zs.metadata.eia860,
             "datapackager": frictionless.eia860.datapackager,
-            "latest_files": latest_files("eia860")
+            "latest_files": latest_files("eia860"),
         }
 
     if deposition_name == "eia860m":
@@ -384,7 +386,7 @@ def archive_selection(deposition_name):  # noqa: C901
             "key_id": zs.metadata.eia860m_uuid,
             "metadata": zs.metadata.eia860m,
             "datapackager": frictionless.eia860m.datapackager,
-            "latest_files": latest_files("eia860m")
+            "latest_files": latest_files("eia860m"),
         }
 
     if deposition_name == "eia861":
@@ -392,7 +394,7 @@ def archive_selection(deposition_name):  # noqa: C901
             "key_id": zs.metadata.eia861_uuid,
             "metadata": zs.metadata.eia861,
             "datapackager": frictionless.eia861.datapackager,
-            "latest_files": latest_files("eia861")
+            "latest_files": latest_files("eia861"),
         }
 
     if deposition_name == "eia923":
@@ -400,7 +402,7 @@ def archive_selection(deposition_name):  # noqa: C901
             "key_id": zs.metadata.eia923_uuid,
             "metadata": zs.metadata.eia923,
             "datapackager": frictionless.eia923.datapackager,
-            "latest_files": latest_files("eia923")
+            "latest_files": latest_files("eia923"),
         }
 
     if deposition_name == "epacems":
@@ -408,7 +410,7 @@ def archive_selection(deposition_name):  # noqa: C901
             "key_id": zs.metadata.epacems_uuid,
             "metadata": zs.metadata.epacems,
             "datapackager": frictionless.epacems.datapackager,
-            "latest_files": latest_files("epacems")
+            "latest_files": latest_files("epacems"),
         }
 
     if deposition_name == "ferc1":
@@ -416,7 +418,7 @@ def archive_selection(deposition_name):  # noqa: C901
             "key_id": zs.metadata.ferc1_uuid,
             "metadata": zs.metadata.ferc1,
             "datapackager": frictionless.ferc1.datapackager,
-            "latest_files": latest_files("ferc1")
+            "latest_files": latest_files("ferc1"),
         }
 
     if deposition_name == "ferc2":
@@ -424,7 +426,7 @@ def archive_selection(deposition_name):  # noqa: C901
             "key_id": zs.metadata.ferc2_uuid,
             "metadata": zs.metadata.ferc2,
             "datapackager": frictionless.ferc2.datapackager,
-            "latest_files": latest_files("ferc2")
+            "latest_files": latest_files("ferc2"),
         }
 
     if deposition_name == "ferc714":
@@ -432,7 +434,7 @@ def archive_selection(deposition_name):  # noqa: C901
             "key_id": zs.metadata.ferc714_uuid,
             "metadata": zs.metadata.ferc714,
             "datapackager": frictionless.ferc714.datapackager,
-            "latest_files": latest_files("ferc714")
+            "latest_files": latest_files("ferc714"),
         }
 
     if deposition_name == "eipinfrastructure":
@@ -440,7 +442,7 @@ def archive_selection(deposition_name):  # noqa: C901
             "key_id": zs.metadata.eipinfrastructure_uuid,
             "metadata": zs.metadata.eipinfrastructure,
             "datapackager": frictionless.eipinfrastructure.datapackager,
-            "latest_files": latest_files("eipinfrastructure")
+            "latest_files": latest_files("eipinfrastructure"),
         }
 
     raise ValueError(f"Unsupported archive: {args.deposition}")
@@ -458,7 +460,7 @@ if __name__ == "__main__":
         key=zenodo_upload_token,
         testing=args.sandbox,
         verbose=args.verbose,
-        loglevel=args.loglevel
+        loglevel=args.loglevel,
     )
 
     sel = archive_selection(args.deposition)
@@ -477,7 +479,8 @@ if __name__ == "__main__":
             sys.exit()
 
         result = initial_run(
-            zenodo, sel["key_id"], sel["metadata"], sel["datapackager"], files)
+            zenodo, sel["key_id"], sel["metadata"], sel["datapackager"], files
+        )
 
         zenodo.logger.info(
             "Your new deposition archive is ready for review at "

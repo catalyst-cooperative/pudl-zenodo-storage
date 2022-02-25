@@ -20,7 +20,5 @@ def datapackager(dfiles):
 
     """
     return DataPackage.from_resource_archiver(
-        DataSource.from_id("ferc1"),
-        dfiles,
-        annual_archive_resource
+        DataSource.from_id("ferc1"), dfiles, annual_archive_resource
     ).to_raw_datapackage_dict()
