@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """Datapackage details specific to the EIA Form 860 archives."""
 
-from .core import DataPackage, annual_archive_resource
 from pudl.metadata.classes import DataSource
+
+from .core import DataPackage, annual_archive_resource
 
 
 def datapackager(dfiles):

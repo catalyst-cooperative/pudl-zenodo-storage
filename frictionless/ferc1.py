@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """Provide datapackage details specific to the FERC Form 1 archives."""
 
-from .core import DataPackage, annual_archive_resource
 from pudl.metadata.classes import DataSource
+
+from .core import DataPackage, annual_archive_resource
 
 
 def datapackager(dfiles):

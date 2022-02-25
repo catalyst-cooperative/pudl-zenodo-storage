@@ -1,7 +1,8 @@
 """Provide datapackage details specific to the Ferc Form 714 archives."""
 
-from .core import DataPackage, minimal_archiver
 from pudl.metadata.classes import DataSource
+
+from .core import DataPackage, minimal_archiver
 
 
 def datapackager(dfiles):

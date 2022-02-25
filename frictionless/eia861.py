@@ -1,7 +1,8 @@
 """Provide datapackage details specific to the EIA 861 archives."""
 
-from .core import DataPackage, annual_archive_resource
 from pudl.metadata.classes import DataSource
+
+from .core import DataPackage, annual_archive_resource
 
 
 def datapackager(dfiles):

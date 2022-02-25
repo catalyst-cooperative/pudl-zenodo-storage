@@ -2,6 +2,7 @@
 """Metadata for Zenodo depositions archiving PUDL raw input data."""
 
 from pudl.metadata.classes import DataSource
+
 import frictionless.eipinfrastructure
 
 pudl_description = """
