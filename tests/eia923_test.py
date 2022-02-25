@@ -23,7 +23,7 @@ class TestEia923Source:
             "filename": name,
             "links": {"download": url},
             "filesize": size,
-            "checksum": md5_hash
+            "checksum": md5_hash,
         }
 
         package = eia923.datapackager([fake_resource])

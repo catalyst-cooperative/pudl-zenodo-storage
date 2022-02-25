@@ -25,7 +25,7 @@ class TestZenodoStorage:
         "description": "Test dataset for the sandbox.  Thanks!",
         "creators": [{"name": "Catalyst Cooperative"}],
         "access_right": "open",
-        "keywords": ["catalyst", "test", "cooperative"]
+        "keywords": ["catalyst", "test", "cooperative"],
     }
 
     def test_lookup_and_create(self):
@@ -34,18 +34,17 @@ class TestZenodoStorage:
         td["title"] += f": {random.randint(100000000, 999999999)}"
 
         lookup = self.zs.get_deposition(f"title:\"{td['title']}\"")
-        assert(lookup is None)
+        assert lookup is None
 
         create = self.zs.create_deposition(td)
 
         for key, _ in td.items():
-            assert(create["metadata"][key] == td[key])
+            assert create["metadata"][key] == td[key]
 
-        requests.post(
-            create["links"]["publish"], data={"access_token": self.zs.key})
+        requests.post(create["links"]["publish"], data={"access_token": self.zs.key})
 
         lookup = self.zs.get_deposition(f"title:\"{td['title']}\"")
-        assert(lookup["metadata"]["title"] == td["title"])
+        assert lookup["metadata"]["title"] == td["title"]
 
     def test_update(self):
         """Ensure updating a deposition's metadata works."""
@@ -65,6 +64,7 @@ class TestZenodoStorage:
 
     def test_new_version_and_file_api_upload(self):
         """Ensure we can create new versions of a deposition."""
+        # There seems to be some Zenodo latency issue in CI on GitHub
         # It would be better if we could test a single function at a time,
         # however the api does not support versioning without a file upload.
         td = copy.deepcopy(self.test_deposition)
@@ -74,8 +74,9 @@ class TestZenodoStorage:
         fake_file = io.BytesIO(b"This is a test, via the file api.")
         self.zs.file_api_upload(first, "testing.txt", fake_file)
 
-        response = requests.post(first["links"]["publish"],
-                                 data={"access_token": self.zs.key})
+        response = requests.post(
+            first["links"]["publish"], data={"access_token": self.zs.key}
+        )
         published = response.json()
 
         print(published)
@@ -96,19 +97,22 @@ class TestZenodoStorage:
         assert new_version["state"] == "unsubmitted"
         assert not new_version["submitted"]
 
-        assert semantic_version.Version(published["metadata"]["version"]) < \
-            semantic_version.Version(new_version["metadata"]["version"])
+        assert semantic_version.Version(
+            published["metadata"]["version"]
+        ) < semantic_version.Version(new_version["metadata"]["version"])
 
     def test_bucket_api_upload(self):
         """Verify the bucket api upload."""
+        # There seems to be some Zenodo latency issue in CI on GitHub
         td = copy.deepcopy(self.test_deposition)
         td["title"] += f": {random.randint(100000000, 999999999)}"
 
         deposition = self.zs.create_deposition(td)
         fake_file = io.BytesIO(b"This is a test, via the bucket api.")
         self.zs.bucket_api_upload(deposition, "testing.txt", fake_file)
-        response = requests.post(deposition["links"]["publish"],
-                                 data={"access_token": self.zs.key})
+        response = requests.post(
+            deposition["links"]["publish"], data={"access_token": self.zs.key}
+        )
         published = response.json()
 
         if response.status_code > 299:

@@ -104,8 +104,7 @@ class ZenodoStorage:
 
         data = json.dumps({"metadata": metadata})
 
-        response = requests.post(
-            url, params=params, data=data, headers=headers)
+        response = requests.post(url, params=params, data=data, headers=headers)
         jsr = response.json()
 
         if response.status_code != 201:
@@ -133,7 +132,8 @@ class ZenodoStorage:
         headers = {"Content-Type": "application/json"}
 
         response = requests.put(
-            deposition_url, params=params, data=data, headers=headers)
+            deposition_url, params=params, data=data, headers=headers
+        )
         jsr = response.json()
 
         if response.status_code != 200:
@@ -166,15 +166,19 @@ class ZenodoStorage:
             raise ValueError(f"Deposition '{query}' does not exist")
 
         self.logger.debug(
-            f"Deposition '{query}' found at {deposition['links']['self']}")
+            f"Deposition '{query}' found at {deposition['links']['self']}"
+        )
 
         if deposition["state"] == "unsubmitted":
             self.logger.debug(
-                f"deposition '{deposition['id']}' is already a new version")
+                f"deposition '{deposition['id']}' is already a new version"
+            )
             return deposition
 
-        url = self.api_root + \
-            f"/deposit/depositions/{deposition['id']}/actions/newversion"
+        url = (
+            self.api_root
+            + f"/deposit/depositions/{deposition['id']}/actions/newversion"
+        )
 
         # Create the new version
         params = {"access_token": self.key}
@@ -302,7 +306,8 @@ class ZenodoStorage:
             return deposition
 
         response = requests.post(
-            deposition["links"]["publish"], params={"access_token": self.key})
+            deposition["links"]["publish"], params={"access_token": self.key}
+        )
         jsr = response.json()
 
         if response.status_code != 202:

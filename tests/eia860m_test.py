@@ -26,22 +26,24 @@ class TestEia860M:
             "filename": name,
             "links": {"download": url},
             "filesize": size,
-            "checksum": md5_hash
+            "checksum": md5_hash,
         }
 
         package = eia860m.datapackager([fake_resource])
         res = package["resources"][0]
 
-        assert(Package(descriptor=package).valid)
-        assert(res["name"] == name)
-        assert(res["title"] == f"eia860m-{year}-{month}")
-        assert(res["path"] == url)
-        assert(res["parts"]["year_month"] == f"{year}-{month}")
-        assert(res["remote_url"] == url)
+        assert Package(descriptor=package).valid
+        assert res["name"] == name
+        assert res["title"] == f"eia860m-{year}-{month}"
+        assert res["path"] == url
+        assert res["parts"]["year_month"] == f"{year}-{month}"
+        assert res["remote_url"] == url
 
-        assert(res["mediatype"] ==
-               "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-        assert(res["format"] == "xlsx")
+        assert (
+            res["mediatype"]
+            == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
+        assert res["format"] == "xlsx"
 
-        assert(res["bytes"] == size)
-        assert(res["hash"] == md5_hash)
+        assert res["bytes"] == size
+        assert res["hash"] == md5_hash

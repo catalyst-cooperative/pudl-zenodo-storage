@@ -26,22 +26,22 @@ class TestCemsSource:
             "filename": name,
             "links": {"download": url},
             "filesize": size,
-            "checksum": md5_hash
+            "checksum": md5_hash,
         }
 
         package = epacems.datapackager([fake_resource])
         res = package["resources"][0]
 
-        assert(Package(descriptor=package).valid)
-        assert(res["name"] == name)
-        assert(res["title"] == name[:-4])
-        assert(res["path"] == url)
-        assert(res["parts"]["year"] == date.year)
-        assert(res["parts"]["state"] == state)
-        assert(res["remote_url"] == url)
+        assert Package(descriptor=package).valid
+        assert res["name"] == name
+        assert res["title"] == name[:-4]
+        assert res["path"] == url
+        assert res["parts"]["year"] == date.year
+        assert res["parts"]["state"] == state
+        assert res["remote_url"] == url
 
-        assert(res["mediatype"] == "application/zip")
-        assert(res["format"] == "zip")
+        assert res["mediatype"] == "application/zip"
+        assert res["format"] == "zip"
 
-        assert(res["bytes"] == size)
-        assert(res["hash"] == md5_hash)
+        assert res["bytes"] == size
+        assert res["hash"] == md5_hash

@@ -31,12 +31,12 @@ def _generate_metadata(data_source_id, data_source_uuid):
         "language": "eng",
         "upload_type": "dataset",
         "description": f"<p>{data_source.description} Archived from\n"
-                       f"<a href=\"{data_source.path}\">{data_source.path}</a></p>"
-                       f"{pudl_description}",
+        f'<a href="{data_source.path}">{data_source.path}</a></p>'
+        f"{pudl_description}",
         "creators": [contributor.dict() for contributor in data_source.contributors],
         "access_right": "open",
         "license": data_source.license_raw.name,
-        "keywords": [*data_source.keywords, data_source_uuid]
+        "keywords": [*data_source.keywords, data_source_uuid],
     }
 
 

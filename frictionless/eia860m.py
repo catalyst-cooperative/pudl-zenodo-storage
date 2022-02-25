@@ -19,7 +19,5 @@ def datapackager(dfiles):
         https://frictionlessdata.io/specs/data-package/
     """
     return DataPackage.from_resource_archiver(
-        DataSource.from_id("eia860m"),
-        dfiles,
-        archive_resource_year_month
+        DataSource.from_id("eia860m"), dfiles, archive_resource_year_month
     ).to_raw_datapackage_dict()
