@@ -3,6 +3,7 @@ import copy
 import io
 import os
 import random
+from time import sleep
 
 import requests
 import semantic_version
@@ -64,6 +65,8 @@ class TestZenodoStorage:
 
     def test_new_version_and_file_api_upload(self):
         """Ensure we can create new versions of a deposition."""
+        # There seems to be some Zenodo latency issue in CI on GitHub
+        sleep(5)
         # It would be better if we could test a single function at a time,
         # however the api does not support versioning without a file upload.
         td = copy.deepcopy(self.test_deposition)
@@ -102,6 +105,8 @@ class TestZenodoStorage:
 
     def test_bucket_api_upload(self):
         """Verify the bucket api upload."""
+        # There seems to be some Zenodo latency issue in CI on GitHub
+        sleep(5)
         td = copy.deepcopy(self.test_deposition)
         td["title"] += f": {random.randint(100000000, 999999999)}"
 
