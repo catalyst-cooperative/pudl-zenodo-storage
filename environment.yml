@@ -7,5 +7,4 @@ dependencies:
   - python>=3.8,<3.11
   - tox>=3.24,<4
   - pip:
-    - git+https://github.com/catalyst-cooperative/pudl.git@dev#egg=catalystcoop.pudl
     - --editable ./[test]

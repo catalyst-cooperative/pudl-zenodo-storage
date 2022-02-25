@@ -15,6 +15,7 @@ setup(
     install_requires=[
         "datapackage<2",
         "factory_boy<3",
+        "catalystcoop.pudl @ git+https://github.com/catalyst-cooperative/pudl.git@dev",
         "pydantic[email]~=1.7",
         "requests<3",
         "semantic_version<3",
