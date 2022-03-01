@@ -4,7 +4,7 @@ import random
 from datapackage import Package
 from faker import Faker
 
-from frictionless import eia861
+from pudl_zenodo_storage.frictionless import eia861
 
 
 class TestEia861:

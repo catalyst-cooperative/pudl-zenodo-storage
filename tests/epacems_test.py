@@ -4,7 +4,7 @@ import random
 from datapackage import Package
 from faker import Faker
 
-from frictionless import epacems
+from pudl_zenodo_storage.frictionless import epacems
 
 
 class TestCemsSource:

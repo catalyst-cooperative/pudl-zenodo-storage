@@ -7,7 +7,7 @@ import random
 import requests
 import semantic_version
 
-from zs import ZenodoStorage
+from pudl_zenodo_storage.zs.core import ZenodoStorage
 
 
 class TestZenodoStorage:
