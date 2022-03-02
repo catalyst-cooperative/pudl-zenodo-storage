@@ -4,7 +4,7 @@ import random
 from datapackage import Package
 from faker import Faker
 
-from frictionless import eia860m
+from pudl_zenodo_storage.frictionless import eia860m
 
 
 class TestEia860M:

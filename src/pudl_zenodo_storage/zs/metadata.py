@@ -3,7 +3,7 @@
 
 from pudl.metadata.classes import DataSource
 
-import frictionless.eipinfrastructure
+import pudl_zenodo_storage as pzs
 
 pudl_description = """
 <p>This archive contains raw input data for the Public Utility Data Liberation (PUDL)
@@ -22,7 +22,7 @@ following resources:
 
 def _generate_metadata(data_source_id, data_source_uuid):
     if data_source_id == "eipinfrastructure":
-        data_source = DataSource(**frictionless.eipinfrastructure.eipinfrastructure)
+        data_source = DataSource(**pzs.frictionless.eipinfrastructure.eipinfrastructure)
     else:
         data_source = DataSource.from_id(data_source_id)
 
@@ -52,11 +52,9 @@ eia860m = _generate_metadata("eia860m", eia860m_uuid)
 eia861_uuid = "70999ef2-50e9-47ae-a4f6-5d69e6ff98d1"
 eia861 = _generate_metadata("eia861", eia861_uuid)
 
-
 # Unaltered Eia923 archive.
 eia923_uuid = "53831f63-fa82-475a-bef4-5b5f0b7c41a4"
 eia923 = _generate_metadata("eia923", eia923_uuid)
-
 
 # Unaltered EPA CEMS archive
 epacems_uuid = "8bd99e7d-b11a-4bd1-8af0-bccf984dcc43"

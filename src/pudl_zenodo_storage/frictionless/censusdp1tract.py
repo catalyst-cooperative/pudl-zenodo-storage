@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Provide datapackage details specific to the Census DP1 data."""
 
 from pudl.metadata.classes import DataSource

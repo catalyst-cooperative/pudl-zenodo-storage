@@ -4,7 +4,7 @@ import random
 from datapackage import Package
 from faker import Faker
 
-from frictionless import censusdp1tract
+from pudl_zenodo_storage.frictionless import censusdp1tract
 
 
 class TestCensusDp1TractSource:

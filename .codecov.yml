@@ -1,0 +1,17 @@
+coverage:
+  range: 70..100
+  round: down
+  precision: 1
+
+codecov:
+  token: e7ed35b1-9cc7-4669-8a6e-3a10d29a8487
+  require_ci_to_pass: true
+  notify:
+    after_n_builds: 3
+    wait_for_ci: true
+
+comment:
+  after_n_builds: 3
+
+github_checks:
+  annotations: false

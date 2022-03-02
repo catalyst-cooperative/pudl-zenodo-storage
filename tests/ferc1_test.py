@@ -4,7 +4,7 @@ import random
 from datapackage import Package
 from faker import Faker
 
-from frictionless import ferc1
+from pudl_zenodo_storage.frictionless import ferc1
 
 
 class TestFerc1Source:

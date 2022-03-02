@@ -6,11 +6,16 @@ from setuptools import find_packages, setup
 setup(
     name="pudl_zenodo_storage",
     version="0.2.0",
-    packages=find_packages(),
+    packages=find_packages("src"),
+    package_dir={"": "src"},
     author="Catalyst Cooperative",
     description="Zenodo storage interface and scripts",
-    scripts=["./bin/zenodo_store.py"],
     python_requires=">=3.8,<3.11",
+    entry_points={
+        "console_scripts": [
+            "zenodo_store = pudl_zenodo_storage.cli:main",
+        ]
+    },
     license="MIT",
     install_requires=[
         "catalystcoop.pudl @ git+https://github.com/catalyst-cooperative/pudl.git@dev",
