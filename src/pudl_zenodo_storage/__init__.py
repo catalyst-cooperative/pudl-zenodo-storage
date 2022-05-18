@@ -8,6 +8,7 @@ import pudl_zenodo_storage.frictionless.eia861
 import pudl_zenodo_storage.frictionless.eia923
 import pudl_zenodo_storage.frictionless.eipinfrastructure
 import pudl_zenodo_storage.frictionless.epacems
+import pudl_zenodo_storage.frictionless.epa_eia_crosswalk
 import pudl_zenodo_storage.frictionless.ferc1
 import pudl_zenodo_storage.frictionless.ferc2
 import pudl_zenodo_storage.frictionless.ferc714
