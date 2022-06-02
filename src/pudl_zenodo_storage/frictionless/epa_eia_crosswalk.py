@@ -3,7 +3,7 @@
 
 from pudl.metadata.classes import DataSource
 
-from .core import DataPackage, annual_archive_resource
+from .core import DataPackage, minimal_archiver
 
 
 def datapackager(dfiles):
@@ -19,5 +19,5 @@ def datapackager(dfiles):
         https://frictionlessdata.io/specs/data-package/
     """
     return DataPackage.from_resource_archiver(
-        DataSource.from_id("epa-eia-crosswalk"), dfiles, annual_archive_resource
+        DataSource.from_id("epa_eia_crosswalk"), dfiles, minimal_archiver
     ).to_raw_datapackage_dict()
