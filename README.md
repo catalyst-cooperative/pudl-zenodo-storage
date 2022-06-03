@@ -28,7 +28,13 @@ $ mamba activate pudl-zenodo-storage
 ## Adding a New Data Source
 When you're adding an entirely new dataset to the PUDL, your first course of action is building a scrapy script in the (`pudl-scrapers`)[https://github.com/catalyst-cooperative/pudl-scrapers] repo. Once you've done that, you're ready to archive.
 
-First, you'll need to fill in some metadata in the `pudl` repo. Start by adding a new key value pair in the `SOURCE` dict in the `pudl/metadata/source.py` module. It's best to keep the key (the source name) you choose simple and consistent across all repos that reference the data.
+First, you'll need to fill in some metadata in the `pudl` repo. Start by adding a new key value pair in the `SOURCE` dict in the `pudl/metadata/source.py` module. It's best to keep the key (the source name) you choose simple and consistent across all repos that reference the data. Once you've done this, you'll need to install your local version
+of pudl (rather than the default version from github). Doing this will allow the zenodo archiver script to process changes you made to the `pudl` repo.
+
+While in the `pudl-zenodo-storage` environment, navigate to the `pudl` repo and run:
+```
+$ pip install -e ./
+```
 
 You don't need to worry about the `fields.py` module until you're ready to transform the
 data in pudl.
