@@ -2,6 +2,7 @@
 """Metadata for Zenodo depositions archiving PUDL raw input data."""
 
 from typing import List
+
 from pudl.metadata.classes import DataSource
 
 import pudl_zenodo_storage as pzs
