@@ -1,10 +1,10 @@
-"""Tests for EPA-EIA Crosswalk file."""
+"""Tests for EPA CEMS unitid to EIA plant Crosswalk file."""
 import random
 
 from datapackage import Package
 from faker import Faker
 
-from pudl_zenodo_storage.frictionless import epa_eia_crosswalk
+from pudl_zenodo_storage.frictionless import epacems_unitid_eia_plant_crosswalk
 
 
 class TestEpaEiaCrosswalkSource:
@@ -13,7 +13,7 @@ class TestEpaEiaCrosswalkSource:
     def test_file_resource(self, zenodo_url):
         """Test that file resources are made correctly."""
         fake = Faker()
-        name = random.choice(["epa_eia_crosswalk.zip"])
+        name = random.choice(["epacems_unitid_eia_plant_crosswalk.zip"])
         url = zenodo_url
         size = random.randint(500000, 800000)
         md5_hash = fake.md5(raw_output=False)
@@ -25,7 +25,7 @@ class TestEpaEiaCrosswalkSource:
             "checksum": md5_hash,
         }
 
-        package = epa_eia_crosswalk.datapackager([fake_resource])
+        package = epacems_unitid_eia_plant_crosswalk.datapackager([fake_resource])
         res = package["resources"][0]
         print(Package(descriptor=package).errors)
 
