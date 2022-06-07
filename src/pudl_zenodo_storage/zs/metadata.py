@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Metadata for Zenodo depositions archiving PUDL raw input data."""
 
+from typing import List
 from pudl.metadata.classes import DataSource
 
 import pudl_zenodo_storage as pzs
@@ -20,6 +21,21 @@ following resources:
 """
 
 
+def _parse_contributor_metadata(pudl_contributors) -> List[dict]:
+    """Reformat PUDL contributor metadata to fit Zenodo requirements."""
+    zenodo_cont_list = []
+
+    for contributor in pudl_contributors:
+        pudl_cont_dict = contributor.dict()
+        zenodo_cont_dict = {
+            "name": pudl_cont_dict["title"],
+            "affiliation": pudl_cont_dict["organization"],
+        }
+        zenodo_cont_list.append(zenodo_cont_dict)
+
+    return zenodo_cont_list
+
+
 def _generate_metadata(data_source_id, data_source_uuid):
     # if data_source_id == "eipinfrastructure":
     #    data_source = DataSource(**pzs.frictionless.eipinfrastructure.eipinfrastructure)
@@ -33,7 +49,7 @@ def _generate_metadata(data_source_id, data_source_uuid):
         "description": f"<p>{data_source.description} Archived from\n"
         f'<a href="{data_source.path}">{data_source.path}</a></p>'
         f"{pudl_description}",
-        "creators": [contributor.dict() for contributor in data_source.contributors],
+        "creators": _parse_contributor_metadata(data_source.contributors),
         "access_right": "open",
         "license": data_source.license_raw.name,
         "keywords": [*data_source.keywords, data_source_uuid],
