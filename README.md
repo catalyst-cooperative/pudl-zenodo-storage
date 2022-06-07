@@ -12,7 +12,7 @@ wade through tons of test uploads when looking for the most recent version of da
 the regular environment, the sandbox can be wiped clean at any time. When testing
 uploads, you'll want to upload to the sandbox first.
 
-One last thing-- this repo refers to Zenodo archives for particular datasets as "depositions". Each dataset is it's own deposition that gets created when the
+One last thing-- Zenodo archives for particular datasets are referred to as "depositions". Each dataset is it's own deposition that gets created when the
 dataset is first uploaded to Zenodo and versioned as the source releases new data that gets uploaded to Zenodo.
 
 ## Installation
@@ -29,7 +29,7 @@ $ mamba activate pudl-zenodo-storage
 When you're adding an entirely new dataset to the PUDL, your first course of action is building a scrapy script in the (`pudl-scrapers`)[https://github.com/catalyst-cooperative/pudl-scrapers] repo. Once you've done that, you're ready to archive.
 
 First, you'll need to fill in some metadata in the `pudl` repo. Start by adding a new key value pair in the `SOURCE` dict in the `pudl/metadata/source.py` module. It's best to keep the key (the source name) you choose simple and consistent across all repos that reference the data. Once you've done this, you'll need to install your local version
-of pudl (rather than the default version from github). Doing this will allow the zenodo archiver script to process changes you made to the `pudl` repo.
+of pudl (rather than the default version from github). Doing this will allow the Zenodo archiver script to process changes you made to the `pudl` repo.
 
 While in the `pudl-zenodo-storage` environment, navigate to the `pudl` repo and run:
 ```
@@ -42,7 +42,7 @@ data in pudl.
 Now, come back to this repo and create a module for the dataset in the `frictionless`
 directory. Give it the same name as the key you made for the data in the SOURCE dict.
 Use the existing modules as a model for your new one. The main function is called
-`datapackager()` and it serves to produce a json for the zenodo archival collection.
+`datapackager()` and it serves to produce a json for the Zenodo archival collection.
 
 Lastly, you need to:
 - Create archive metadata for the new dataset in the `zs/metadata.py` module.
@@ -64,7 +64,7 @@ The `zenodo_store` script requires you to include the name of the Zenodo deposit
 
 When you're testing an archive, you'll want to make sure you use the Zenodo
 sandbox rather than the official Zenodo archive (see above for more info about the sandbox). Adding the `--verbose` flag will print out logging messages that are helpful for debugging. Adding the `--noop` flag will show you whether your the data you scraped
-is any different from the data you already have uploaded to Zenodo without uploading anything.
+is any different from the data you already have uploaded to Zenodo without uploading anything (so long as there is an existing upload to compare it to).
 
 If the dataset is brand new, you'll also need to add the `--initialize` flag so that it knows to create a new deposition for the data.
 
