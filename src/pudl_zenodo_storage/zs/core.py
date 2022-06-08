@@ -65,7 +65,7 @@ class ZenodoStorage:
             self.logger.error(msg)
             raise RuntimeError(msg)
 
-        print(jsr)
+        self.logger.info(jsr)
 
         if len(jsr) > 1:
             msg = f"Expected single deposition, query: {query}, got: {len(jsr)}"
