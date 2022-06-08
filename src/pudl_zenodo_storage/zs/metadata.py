@@ -1,7 +1,8 @@
 """Metadata for Zenodo depositions archiving PUDL raw input data."""
 
 from typing import Dict, List
-from pudl.metadata.classes import DataSource, Contributor
+
+from pudl.metadata.classes import Contributor, DataSource
 
 pudl_description = """
 <p>This archive contains raw input data for the Public Utility Data Liberation (PUDL)

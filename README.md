@@ -65,7 +65,7 @@ data--you don't need to add any new metadata to the `pudl` repo. Simply run the 
 for the data and then run the Zenodo script as described below. The code was built to
 detect any changes in the data and automatically create a new version of the same deposition when uploaded.
 
-## Running the Zenodo Archiver Script  
+## Running the Zenodo Archiver Script
 Before you can archive data, you'll need to run the scrapy script you just created in
 the `pudl-scrapers` repo. Once you've scraped the data, then you can come back and run the archiver. This script, `zenodo_store` gets defined as an entry point in `setup.py`.
 
