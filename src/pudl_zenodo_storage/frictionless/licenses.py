@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Provide data package details for licences used on multiple archives."""
 
 cc_by = {
