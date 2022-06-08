@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Metadata for Zenodo depositions archiving PUDL raw input data."""
 
 from typing import Dict, List
@@ -12,7 +11,7 @@ Data Packages</a>. For additional information about this data and PUDL, see the
 following resources:
 <ul>
   <li><a href="https://github.com/catalyst-cooperative/pudl">The PUDL Repository on GitHub</a></li>
-  <li><a href="https://readthedocs.org/projects/catalystcoop-pudl/">PUDL Documentation</a></li>
+  <li><a href="https://catalystcoop-pudl.readthedocs.io">PUDL Documentation</a></li>
   <li><a href="https://zenodo.org/communities/catalyst-cooperative/">Other Catalyst Cooperative data archives</a></li>
 </ul>
 </p>
