@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 """Metadata for Zenodo depositions archiving PUDL raw input data."""
 
-from typing import List
-
-from pudl.metadata.classes import DataSource
+from typing import Dict, List
+from pudl.metadata.classes import DataSource, Contributor
 
 pudl_description = """
 <p>This archive contains raw input data for the Public Utility Data Liberation (PUDL)
@@ -20,7 +19,9 @@ following resources:
 """
 
 
-def _parse_contributor_metadata(pudl_contributors) -> List[dict]:
+def _parse_contributor_metadata(
+    pudl_contributors: List[Contributor],
+) -> List[Dict[str, str]]:
     """Reformat PUDL contributor metadata to fit Zenodo requirements."""
     zenodo_cont_list = []
 
