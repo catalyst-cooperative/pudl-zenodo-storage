@@ -13,7 +13,7 @@ class TestEpaEiaCrosswalkSource:
     def test_file_resource(self, zenodo_url):
         """Test that file resources are made correctly."""
         fake = Faker()
-        name = random.choice(["epacems_unitid_eia_plant_crosswalk.zip"])
+        name = "epacems_unitid_eia_plant_crosswalk.zip"
         url = zenodo_url
         size = random.randint(500000, 800000)
         md5_hash = fake.md5(raw_output=False)
