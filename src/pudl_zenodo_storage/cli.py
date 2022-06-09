@@ -322,7 +322,7 @@ def parse_main():
         "deposition",
         help="Name of the Zenodo deposition. Supported: censusdp1tract, "
         "eia860, eia861, eia923, epacems, epacems_unitid_eia_plant_crosswalk, "
-        "ferc1, ferc2, ferc714, eia860m, eipinfrastructure",
+        "ferc1, ferc2, ferc714, eia860m",
     )
     return parser.parse_args()
 
@@ -433,14 +433,6 @@ def archive_selection(deposition_name):  # noqa: C901
             "metadata": pzs.zs.metadata.ferc714,
             "datapackager": pzs.frictionless.ferc714.datapackager,
             "latest_files": latest_files("ferc714"),
-        }
-
-    if deposition_name == "eipinfrastructure":
-        return {
-            "key_id": pzs.zs.metadata.eipinfrastructure_uuid,
-            "metadata": pzs.zs.metadata.eipinfrastructure,
-            "datapackager": pzs.frictionless.eipinfrastructure.datapackager,
-            "latest_files": latest_files("eipinfrastructure"),
         }
 
     raise ValueError(f"Unsupported archive: {deposition_name}")

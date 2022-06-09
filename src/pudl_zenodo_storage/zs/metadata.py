@@ -37,9 +37,7 @@ def _parse_contributor_metadata(
 
 
 def _generate_metadata(data_source_id, data_source_uuid):
-    # if data_source_id == "eipinfrastructure":
-    #    data_source = DataSource(**pzs.frictionless.eipinfrastructure.eipinfrastructure)
-    # else:
+
     data_source = DataSource.from_id(data_source_id)
 
     return {
@@ -97,7 +95,3 @@ ferc714 = _generate_metadata("ferc714", ferc714_uuid)
 # For the census archive.
 censusdp1tract_uuid = "beb36017-3fca-49be-a93a-7298f30ca3a3"
 censusdp1tract = _generate_metadata("censusdp1tract", censusdp1tract_uuid)
-
-# EIP Infrastructure archive.
-# eipinfrastructure_uuid = "865a4ee2-5140-11ec-81d1-acde48001122"
-# eipinfrastructure = _generate_metadata("eipinfrastructure", eipinfrastructure_uuid)
