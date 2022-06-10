@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Provide datapackage details specific to the FERC Form 1 archives."""
 
 from pudl.metadata.classes import DataSource

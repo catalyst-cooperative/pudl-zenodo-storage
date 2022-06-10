@@ -1,13 +1,13 @@
-"""Datapackage details specific to the EIA Form 860 archives."""
+"""Datapackage details specific to the EPACEMS unitid - EIA plant Crosswalk archives."""
 
 from pudl.metadata.classes import DataSource
 
-from .core import DataPackage, archive_resource_year_month
+from .core import DataPackage, minimal_archiver
 
 
 def datapackager(dfiles):
     """
-    Produce the datapackage json for the eia860m archival collection.
+    Produce the datapackage json for the epacems_unitid_eia_plant_crosswalk archive.
 
     Args:
         dfiles: iterable of file descriptors, as expected from Zenodo.
@@ -18,5 +18,7 @@ def datapackager(dfiles):
         https://frictionlessdata.io/specs/data-package/
     """
     return DataPackage.from_resource_archiver(
-        DataSource.from_id("eia860m"), dfiles, archive_resource_year_month
+        DataSource.from_id("epacems_unitid_eia_plant_crosswalk"),
+        dfiles,
+        minimal_archiver,
     ).to_raw_datapackage_dict()
