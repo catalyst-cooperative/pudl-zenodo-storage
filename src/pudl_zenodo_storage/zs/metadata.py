@@ -88,6 +88,14 @@ ferc1 = _generate_metadata("ferc1", ferc1_uuid)
 ferc2_uuid = "894a87fd-cc94-46d1-903a-44be6e77d450"
 ferc2 = _generate_metadata("ferc2", ferc2_uuid)
 
+# For the unaltered Ferc2 archive.
+ferc6_uuid = "21d71f60-6073-421a-9208-e4d1adfc4ee2"
+ferc6 = _generate_metadata("ferc6", ferc6_uuid)
+
+# For the unaltered Ferc2 archive.
+ferc60_uuid = "a64f9e22-fe9a-4f46-801d-c1a9b5f492b0"
+ferc60 = _generate_metadata("ferc60", ferc60_uuid)
+
 # Unaltered Ferc714 archive.
 ferc714_uuid = "f31f0894-639e-4bc2-9b7f-8a84713bcc87"
 ferc714 = _generate_metadata("ferc714", ferc714_uuid)
