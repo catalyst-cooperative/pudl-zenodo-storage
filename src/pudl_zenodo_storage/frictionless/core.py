@@ -5,9 +5,10 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List
 
+from pydantic import AnyHttpUrl, BaseModel
+
 from pudl.metadata.classes import Contributor, Datetime, License
 from pudl.metadata.constants import CONTRIBUTORS
-from pydantic import AnyHttpUrl, BaseModel
 
 MEDIA_TYPES: Dict[str, str] = {
     "zip": "application/zip",

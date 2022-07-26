@@ -1,7 +1,6 @@
 """Provide datapackage details specific to the EIA Form 923 archives."""
 
 from pudl.metadata.classes import DataSource
-
 from pudl_zenodo_storage.frictionless.core import DataPackage, annual_archive_resource
 
 

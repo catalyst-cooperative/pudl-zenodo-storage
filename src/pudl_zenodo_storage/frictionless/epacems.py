@@ -3,7 +3,6 @@
 import re
 
 from pudl.metadata.classes import DataSource
-
 from pudl_zenodo_storage.frictionless.core import MEDIA_TYPES, DataPackage
 
 

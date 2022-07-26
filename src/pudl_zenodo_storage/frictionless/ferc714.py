@@ -1,7 +1,6 @@
 """Provide datapackage details specific to the Ferc Form 714 archives."""
 
 from pudl.metadata.classes import DataSource
-
 from pudl_zenodo_storage.frictionless.core import DataPackage, minimal_archiver
 
 
