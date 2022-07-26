@@ -34,7 +34,7 @@ def local_fileinfo(file_paths):
     """
 
     def file_md5s(file_path):
-        hash_md5 = md5()
+        hash_md5 = md5()  # nosec: B324
 
         with open(file_path, "rb") as f:
             for chunk in iter(lambda: f.read(4096), b""):
