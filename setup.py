@@ -19,11 +19,11 @@ setup(
     license="MIT",
     install_requires=[
         "catalystcoop.pudl @ git+https://github.com/catalyst-cooperative/pudl.git@dev",
-        "datapackage<2",
-        "factory_boy<3",
+        "datapackage>=1.0,<2.0",
+        "factory_boy>=2.12,<3",
         "pydantic[email]>=1.7,<2",
-        "requests<3",
-        "semantic_version<3",
+        "requests>=2.22,<3",
+        "semantic_version>=2.8,<3",
     ],
     extras_require={
         "test": [
