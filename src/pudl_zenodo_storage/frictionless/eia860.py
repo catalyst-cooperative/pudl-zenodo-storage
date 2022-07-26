@@ -2,7 +2,7 @@
 
 from pudl.metadata.classes import DataSource
 
-from .core import DataPackage, annual_archive_resource
+from pudl_zenodo_storage.frictionless.core import DataPackage, annual_archive_resource
 
 
 def datapackager(dfiles):
