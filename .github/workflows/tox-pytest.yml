@@ -1,7 +1,7 @@
 ---
 name: tox-pytest
 
-on: [ push, pull_request ]
+on: [push, pull_request]
 
 jobs:
   ci-test:
@@ -38,7 +38,7 @@ jobs:
         env:
           ZENODO_SANDBOX_TOKEN_PUBLISH: ${{ secrets.ZENODO_TEST_KEY }}
         run: |
-            conda run -n pudl-zenodo-storage tox
+          conda run -n pudl-zenodo-storage tox
 
       - name: Upload test coverage report to CodeCov
         uses: codecov/codecov-action@v3.1.0
