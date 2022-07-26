@@ -1,6 +1,5 @@
 """Metadata for Zenodo depositions archiving PUDL raw input data."""
 
-from typing import Dict, List
 
 from pudl.metadata.classes import Contributor, DataSource
 
@@ -20,8 +19,8 @@ following resources:
 
 
 def _parse_contributor_metadata(
-    pudl_contributors: List[Contributor],
-) -> List[Dict[str, str]]:
+    pudl_contributors: list[Contributor],
+) -> list[dict[str, str]]:
     """Reformat PUDL contributor metadata to fit Zenodo requirements."""
     zenodo_cont_list = []
 
