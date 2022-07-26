@@ -4,7 +4,7 @@ channels:
   - defaults
 dependencies:
   - pip>=21.0,<22
-  - python>=3.8,<3.11
+  - python>=3.10,<3.11
   - tox>=3.24,<4
   - pip:
     - --editable ./[test]
