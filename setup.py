@@ -10,7 +10,7 @@ setup(
     package_dir={"": "src"},
     author="Catalyst Cooperative",
     description="Zenodo storage interface and scripts",
-    python_requires=">=3.8,<3.11",
+    python_requires=">=3.10,<3.11",
     entry_points={
         "console_scripts": [
             "zenodo_store = pudl_zenodo_storage.cli:main",
@@ -19,11 +19,11 @@ setup(
     license="MIT",
     install_requires=[
         "catalystcoop.pudl @ git+https://github.com/catalyst-cooperative/pudl.git@dev",
-        "datapackage<2",
-        "factory_boy<3",
+        "datapackage>=1.0,<2.0",
+        "factory_boy>=2.12,<4",
         "pydantic[email]>=1.7,<2",
-        "requests<3",
-        "semantic_version<3",
+        "requests>=2.22,<3",
+        "semantic_version>=2.8,<3",
     ],
     extras_require={
         "test": [

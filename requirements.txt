@@ -1,6 +1,0 @@
-datapackage >= 1.0, < 2.0
-factory_boy >= 2.12, < 3.0
-pytest >= 6.0, < 7.0
-requests >= 2.22.0, < 3.0
-semantic_version >= 2.8, < 3.0
-git+https://github.com/catalyst-cooperative/pudl.git@dev#egg=catalystcoop.pudl

@@ -1,8 +1,10 @@
 """Datapackage details specific to the EIA Form 860 archives."""
 
 from pudl.metadata.classes import DataSource
-
-from .core import DataPackage, archive_resource_year_month
+from pudl_zenodo_storage.frictionless.core import (
+    DataPackage,
+    archive_resource_year_month,
+)
 
 
 def datapackager(dfiles):

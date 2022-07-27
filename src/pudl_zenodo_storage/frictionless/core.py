@@ -3,13 +3,13 @@ import os.path
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List
+
+from pydantic import AnyHttpUrl, BaseModel
 
 from pudl.metadata.classes import Contributor, Datetime, License
 from pudl.metadata.constants import CONTRIBUTORS
-from pydantic import AnyHttpUrl, BaseModel
 
-MEDIA_TYPES: Dict[str, str] = {
+MEDIA_TYPES: dict[str, str] = {
     "zip": "application/zip",
     "xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "csv": "text/csv",
@@ -28,7 +28,7 @@ class Resource(BaseModel):
     path: AnyHttpUrl
     remote_url: AnyHttpUrl
     title: str
-    parts: Dict
+    parts: dict
     encoding: str = "utf-8"
     mediatype: str
     format_: str
@@ -55,13 +55,13 @@ class DataPackage(BaseModel):
     name: str
     title: str
     description: str
-    keywords: List[str]
-    contributors: List[Contributor]
-    sources: List[Dict[str, str]]
+    keywords: list[str]
+    contributors: list[Contributor]
+    sources: list[dict[str, str]]
     profile: str = "data-package"
     homepage: str = "https://catalyst.coop/pudl/"
-    licenses: List[License]
-    resources: List[Resource]
+    licenses: list[License]
+    resources: list[Resource]
     created: Datetime
 
     @classmethod

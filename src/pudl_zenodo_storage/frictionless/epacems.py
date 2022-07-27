@@ -3,8 +3,7 @@
 import re
 
 from pudl.metadata.classes import DataSource
-
-from .core import MEDIA_TYPES, DataPackage
+from pudl_zenodo_storage.frictionless.core import MEDIA_TYPES, DataPackage
 
 
 def epacems_resource(name, url, size, md5_hash):

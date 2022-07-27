@@ -1,8 +1,7 @@
 """Provide datapackage details specific to the FERC Form 1 archives."""
 
 from pudl.metadata.classes import DataSource
-
-from .core import DataPackage, annual_archive_resource
+from pudl_zenodo_storage.frictionless.core import DataPackage, annual_archive_resource
 
 
 def datapackager(dfiles):

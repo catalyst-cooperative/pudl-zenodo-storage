@@ -1,8 +1,7 @@
 """Datapackage details specific to the EPACEMS unitid - EIA plant Crosswalk archives."""
 
 from pudl.metadata.classes import DataSource
-
-from .core import DataPackage, minimal_archiver
+from pudl_zenodo_storage.frictionless.core import DataPackage, minimal_archiver
 
 
 def datapackager(dfiles):
