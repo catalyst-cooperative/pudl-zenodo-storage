@@ -31,7 +31,7 @@ setup(
             "black>=22,<23",
             "coverage>=5.3,<7",
             "doc8>=0.9,<1",
-            "flake8>=4.0,<5",
+            "flake8>=4.0,<6",
             "flake8-builtins>=1.5,<2",
             "flake8-colors~=0.1",
             "flake8-docstrings>=1.5,<2",
