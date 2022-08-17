@@ -29,9 +29,9 @@ setup(
         "test": [
             "bandit>=1.6,<2",
             "black>=22,<23",
-            "coverage>=5.3,<7",
-            "doc8>=0.9,<2",
-            "flake8>=4.0,<5",
+            "coverage>=5.3,<6.5",
+            "doc8>=0.9,<1.1",
+            "flake8>=4.0,<5.1",
             "flake8-builtins>=1.5,<2",
             "flake8-colors~=0.1",
             "flake8-docstrings>=1.5,<2",
