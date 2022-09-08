@@ -321,7 +321,7 @@ def parse_main():
     parser.add_argument(
         "deposition",
         help="Name of the Zenodo deposition. Supported: censusdp1tract, "
-        "eia860, eia861, eia923, epacems, epacems_unitid_eia_plant_crosswalk, "
+        "eia860, eia861, eia923, epacems, epacamd_eia, "
         "ferc1, ferc2, ferc714, eia860m",
     )
     return parser.parse_args()
@@ -403,12 +403,12 @@ def archive_selection(deposition_name):  # noqa: C901
             "latest_files": latest_files("epacems"),
         }
 
-    if deposition_name == "epacems_unitid_eia_plant_crosswalk":
+    if deposition_name == "epacamd_eia":
         return {
-            "key_id": pzs.zs.metadata.epacems_unitid_eia_plant_crosswalk_uuid,
-            "metadata": pzs.zs.metadata.epacems_unitid_eia_plant_crosswalk,
-            "datapackager": pzs.frictionless.epacems_unitid_eia_plant_crosswalk.datapackager,
-            "latest_files": latest_files("epacems_unitid_eia_plant_crosswalk"),
+            "key_id": pzs.zs.metadata.epacamd_eia_uuid,
+            "metadata": pzs.zs.metadata.epacamd_eia,
+            "datapackager": pzs.frictionless.epacamd_eia.datapackager,
+            "latest_files": latest_files("epacamd_eia"),
         }
 
     if deposition_name == "ferc1":
