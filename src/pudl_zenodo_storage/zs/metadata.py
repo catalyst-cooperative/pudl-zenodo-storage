@@ -74,7 +74,7 @@ epacems_uuid = "8bd99e7d-b11a-4bd1-8af0-bccf984dcc43"
 epacems = _generate_metadata("epacems", epacems_uuid)
 
 # Unaltered EPACEMS-EIA Crosswalk archive.
-epacamd_eia_uuid = "3bad6051-a0c3-43a2-97a6-02f61460ab35"
+epacamd_eia_uuid = "40696588-d6ee-11ec-abb9-34363bce6e4c"
 epacamd_eia = _generate_metadata("epacamd_eia", epacamd_eia_uuid)
 
 # For the unaltered Ferc1 archive.
