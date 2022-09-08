@@ -74,10 +74,8 @@ epacems_uuid = "8bd99e7d-b11a-4bd1-8af0-bccf984dcc43"
 epacems = _generate_metadata("epacems", epacems_uuid)
 
 # Unaltered EPACEMS-EIA Crosswalk archive.
-epacems_unitid_eia_plant_crosswalk_uuid = "40696588-d6ee-11ec-abb9-34363bce6e4c"
-epacems_unitid_eia_plant_crosswalk = _generate_metadata(
-    "epacems_unitid_eia_plant_crosswalk", epacems_unitid_eia_plant_crosswalk_uuid
-)
+epacamd_eia_uuid = "40696588-d6ee-11ec-abb9-34363bce6e4c"
+epacamd_eia = _generate_metadata("epacamd_eia", epacamd_eia_uuid)
 
 # For the unaltered Ferc1 archive.
 ferc1_uuid = "d3d91c87-c595-49d5-a7f3-e5f5669c8306"

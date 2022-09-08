@@ -44,10 +44,9 @@ $ mamba activate pudl-zenodo-storage
 ## Adding a New Data Source
 
 When you're adding an entirely new dataset to the PUDL, your first course of action is
-building a scrapy script in the
-
-[`pudl-scrapers`](https://github.com/catalyst-cooperative/pudl-scrapers) repo. Once
-you've done that, you're ready to archive.
+building a scrapy script in the [`pudl-scrapers`]
+(https://github.com/catalyst-cooperative/pudl-scrapers) repo. Once you've done that,
+you're ready to archive.
 
 First, you'll need to fill in some metadata in the `pudl` repo. Start by adding a new
 key value pair in the `SOURCE` dict in the `pudl/metadata/source.py` module. It's best
@@ -72,7 +71,10 @@ Use the existing modules as a model for your new one. The main function is calle
 
 Lastly, you need to:
 
-* Create archive metadata for the new dataset in the `zs/metadata.py` module.
+* Add archive metadata for the new dataset in the `zs/metadata.py` module. This
+  includes creating a UUID (universally unique identifier) for the data. UUIDs are
+  used to uniquely distinguish the archive prior to the creation of a DOI. You can
+  create one with free online UUID generators.
 * Add the chosen deposition name to this list of acceptable names output with the
   `zenodo_store --help` flag. See `parse_main()` in `zs.cli.py`.
 * Add specifications for your new deposition in the `archive_selection()` function also

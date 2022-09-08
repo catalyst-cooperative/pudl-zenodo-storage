@@ -6,7 +6,7 @@ from pudl_zenodo_storage.frictionless.core import DataPackage, minimal_archiver
 
 def datapackager(dfiles):
     """
-    Produce the datapackage json for the epacems_unitid_eia_plant_crosswalk archive.
+    Produce the datapackage json for the epacamd_eia archive.
 
     Args:
         dfiles: iterable of file descriptors, as expected from Zenodo.
@@ -17,7 +17,7 @@ def datapackager(dfiles):
         https://frictionlessdata.io/specs/data-package/
     """
     return DataPackage.from_resource_archiver(
-        DataSource.from_id("epacems_unitid_eia_plant_crosswalk"),
+        DataSource.from_id("epacamd_eia"),
         dfiles,
         minimal_archiver,
     ).to_raw_datapackage_dict()
