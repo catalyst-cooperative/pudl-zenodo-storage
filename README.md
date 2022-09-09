@@ -26,7 +26,7 @@ see integrated, and you're not part of the team, send us an email at
 hello@catalyst.coop.
 
 One last thing-- Zenodo archives for particular datasets are referred to as
-"depositions". Each dataset is it's own deposition that gets created when the dataset is
+"depositions". Each dataset is its own deposition that gets created when the dataset is
 first uploaded to Zenodo and versioned as the source releases new data that gets
 uploaded to Zenodo.
 
@@ -65,7 +65,7 @@ You don't need to worry about the `fields.py` module until you're ready to trans
 data in pudl.
 
 Now, come back to this repo and create a module for the dataset in the `frictionless`
-directory. Give it the same name as the key you made for the data in the SOURCE dict.
+directory. Give it the same name as the key you made for the data in the `SOURCE` dict.
 Use the existing modules as a model for your new one. The main function is called
 `datapackager()` and it serves to produce a json for the Zenodo archival collection.
 
