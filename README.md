@@ -73,8 +73,8 @@ Lastly, you need to:
 
 * Add archive metadata for the new dataset in the `zs/metadata.py` module. This
   includes creating a UUID (universally unique identifier) for the data. UUIDs are
-  used to uniquely distinguish the archive prior to the creation of a DOI. You can
-  create one with free online UUID generators.
+  used to uniquely distinguish the archive prior to the creation of a DOI. You can do
+  this using the `uuid.uuid4()` function that is part of the Python standard library.
 * Add the chosen deposition name to this list of acceptable names output with the
   `zenodo_store --help` flag. See `parse_main()` in `zs.cli.py`.
 * Add specifications for your new deposition in the `archive_selection()` function also

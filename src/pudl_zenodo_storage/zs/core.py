@@ -9,7 +9,7 @@ import semantic_version
 class ZenodoStorage:
     """Thin interface to store data with zenodo.org via their API."""
 
-    def __init__(self, key, testing=False, verbose=False, loglevel="WARNING"):
+    def __init__(self, key, testing=False, verbose=True, loglevel="WARNING"):
         """
         Prepare the ZenodoStorage interface.
 
