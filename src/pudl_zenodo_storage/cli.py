@@ -5,15 +5,20 @@ import argparse
 import glob
 import io
 import json
+import logging
 import os
 import sys
 from hashlib import md5
+from typing import Any
 
 import datapackage
 import requests
 
 import pudl_zenodo_storage as pzs
 from pudl_zenodo_storage.zs.core import ZenodoStorage
+
+logger = logging.getLogger(__name__)
+logging.basicConfig()
 
 ROOT_DIR = os.environ.get(
     "PUDL_IN", os.path.join(os.path.expanduser("~"), "Downloads", "pudl_scrapers")
@@ -297,12 +302,6 @@ def parse_main():
         help="Use Zenodo sandbox server",
     )
     parser.add_argument(
-        "--verbose",
-        action="store_true",
-        default=False,
-        help="Print logging messages to stdout",
-    )
-    parser.add_argument(
         "--loglevel",
         help="Set log level",
         default="INFO",
@@ -321,32 +320,30 @@ def parse_main():
     parser.add_argument(
         "deposition",
         help="Name of the Zenodo deposition. Supported: censusdp1tract, "
-        "eia860, eia861, eia923, epacems, epacamd_eia, "
+        "eia860, eia861, eia923, eia_bulk_elec, epacems, epacamd_eia, "
         "ferc1, ferc2, ferc714, eia860m",
     )
     return parser.parse_args()
 
 
-def archive_selection(deposition_name):  # noqa: C901
+def archive_selection(deposition_name: str) -> dict[str, Any]:
     """
     Produce the datasets needed to run the archiver.
 
     Args:
-        argument: str name for a deposition, as input from the cli.
+        deposition_name: str name for a deposition, as input from the cli.
 
     Returns:
         {
             key_id: a uuid string from pzs.zs.metadata,
             metadata: a metadata descriptor from pzs.zs.metadata
-            datapackager: a datapackager from the appropriate frictionless
-                          library
-            latest_files: str path of the most recently scraped copy of the
-                          archive
+            datapackager: a datapackager from the appropriate frictionless library
+            latest_files: str path of the most recently scraped copy of the archive
         }
 
     """
 
-    def latest_files(name):
+    def _latest_files(name):
         sources = os.path.join(ROOT_DIR, name, "*")
         previous = sorted(glob.glob(sources))
 
@@ -355,87 +352,21 @@ def archive_selection(deposition_name):  # noqa: C901
 
         return glob.glob(os.path.join(previous[-1], "*"))
 
-    if deposition_name == "censusdp1tract":
-        return {
-            "key_id": pzs.zs.metadata.censusdp1tract_uuid,
-            "metadata": pzs.zs.metadata.censusdp1tract,
-            "datapackager": pzs.frictionless.censusdp1tract.datapackager,
-            "latest_files": latest_files("censusdp1tract"),
-        }
+    if deposition_name not in pzs.zs.metadata.UUIDS:
+        raise ValueError(f"No UUID found for: {deposition_name}")
 
-    if deposition_name == "eia860":
-        return {
-            "key_id": pzs.zs.metadata.eia860_uuid,
-            "metadata": pzs.zs.metadata.eia860,
-            "datapackager": pzs.frictionless.eia860.datapackager,
-            "latest_files": latest_files("eia860"),
-        }
+    if deposition_name not in pzs.frictionless.__dict__:
+        raise ValueError(f"No datapackager method defined for {deposition_name}")
 
-    if deposition_name == "eia860m":
-        return {
-            "key_id": pzs.zs.metadata.eia860m_uuid,
-            "metadata": pzs.zs.metadata.eia860m,
-            "datapackager": pzs.frictionless.eia860m.datapackager,
-            "latest_files": latest_files("eia860m"),
-        }
+    if not _latest_files(deposition_name):
+        logger.warning(f"No recent files found in {ROOT_DIR}/{deposition_name}")
 
-    if deposition_name == "eia861":
-        return {
-            "key_id": pzs.zs.metadata.eia861_uuid,
-            "metadata": pzs.zs.metadata.eia861,
-            "datapackager": pzs.frictionless.eia861.datapackager,
-            "latest_files": latest_files("eia861"),
-        }
-
-    if deposition_name == "eia923":
-        return {
-            "key_id": pzs.zs.metadata.eia923_uuid,
-            "metadata": pzs.zs.metadata.eia923,
-            "datapackager": pzs.frictionless.eia923.datapackager,
-            "latest_files": latest_files("eia923"),
-        }
-
-    if deposition_name == "epacems":
-        return {
-            "key_id": pzs.zs.metadata.epacems_uuid,
-            "metadata": pzs.zs.metadata.epacems,
-            "datapackager": pzs.frictionless.epacems.datapackager,
-            "latest_files": latest_files("epacems"),
-        }
-
-    if deposition_name == "epacamd_eia":
-        return {
-            "key_id": pzs.zs.metadata.epacamd_eia_uuid,
-            "metadata": pzs.zs.metadata.epacamd_eia,
-            "datapackager": pzs.frictionless.epacamd_eia.datapackager,
-            "latest_files": latest_files("epacamd_eia"),
-        }
-
-    if deposition_name == "ferc1":
-        return {
-            "key_id": pzs.zs.metadata.ferc1_uuid,
-            "metadata": pzs.zs.metadata.ferc1,
-            "datapackager": pzs.frictionless.ferc1.datapackager,
-            "latest_files": latest_files("ferc1"),
-        }
-
-    if deposition_name == "ferc2":
-        return {
-            "key_id": pzs.zs.metadata.ferc2_uuid,
-            "metadata": pzs.zs.metadata.ferc2,
-            "datapackager": pzs.frictionless.ferc2.datapackager,
-            "latest_files": latest_files("ferc2"),
-        }
-
-    if deposition_name == "ferc714":
-        return {
-            "key_id": pzs.zs.metadata.ferc714_uuid,
-            "metadata": pzs.zs.metadata.ferc714,
-            "datapackager": pzs.frictionless.ferc714.datapackager,
-            "latest_files": latest_files("ferc714"),
-        }
-
-    raise ValueError(f"Unsupported archive: {deposition_name}")
+    return {
+        "key_id": pzs.zs.metadata.UUIDS[deposition_name],
+        "metadata": pzs.zs.metadata.generate_metadata(deposition_name),
+        "datapackager": pzs.frictionless.__dict__[deposition_name].datapackager,
+        "latest_files": _latest_files(deposition_name),
+    }
 
 
 def main():
@@ -450,7 +381,6 @@ def main():
     zenodo = ZenodoStorage(
         key=zenodo_upload_token,
         testing=args.sandbox,
-        verbose=args.verbose,
         loglevel=args.loglevel,
     )
 
