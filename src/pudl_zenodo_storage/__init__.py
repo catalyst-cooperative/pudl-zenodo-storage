@@ -11,6 +11,8 @@ import pudl_zenodo_storage.frictionless.epacamd_eia
 import pudl_zenodo_storage.frictionless.epacems
 import pudl_zenodo_storage.frictionless.ferc1
 import pudl_zenodo_storage.frictionless.ferc2
+import pudl_zenodo_storage.frictionless.ferc6
+import pudl_zenodo_storage.frictionless.ferc60
 import pudl_zenodo_storage.frictionless.ferc714
 import pudl_zenodo_storage.frictionless.licenses
 import pudl_zenodo_storage.zs.core

@@ -119,7 +119,7 @@ class DataPackage(BaseModel):
         return descriptor
 
 
-def annual_archive_resource(name, url, size, md5_hash):
+def annual_archive_resource(name, url, size, md5_hash, **extra_parts):
     """
     Produce the resource descriptor for a single file.
 
@@ -128,6 +128,7 @@ def annual_archive_resource(name, url, size, md5_hash):
         url (str): url to download the file from Zenodo.
         size (int): size in bytes.
         md5_hash (str): the md5 checksum of the file.
+        extra_parts (str): extra partitions to add to resource descriptor.
 
     Returns:
         dict: a frictionless data package resource descriptor, per
@@ -150,13 +151,39 @@ def annual_archive_resource(name, url, size, md5_hash):
         "path": url,
         "remote_url": url,
         "title": title,
-        "parts": {"year": year},
+        "parts": {"year": year, **extra_parts},
         "encoding": "utf-8",
         "mediatype": mt,
         "bytes": size,
         "hash": md5_hash,
         "format": file_format,
     }
+
+
+def ferc_annual_archive_resource(name, url, size, md5_hash):
+    """
+    Produce the resource descriptor for a single file.
+
+    FERC filers can resubmit past years in XBRL format. This means that
+    there are years with both DBF and XBRL data. These will be saved in
+    different archives, and an extra partition is added to the resource
+    descriptor to indicate which data is contianed in each archive.
+
+    Args:
+        name (str): file name: must include a 4 digit year, and no other 4 digits.
+        url (str): url to download the file from Zenodo.
+        size (int): size in bytes.
+        md5_hash (str): the md5 checksum of the file.
+
+    Returns:
+        dict: a frictionless data package resource descriptor, per
+        https://frictionlessdata.io/specs/data-resource/
+
+    """
+    # Check file name to see if it contains XBRL data
+    data_format = "XBRL" if "xbrl" in name else "DBF"
+
+    return annual_archive_resource(name, url, size, md5_hash, data_format=data_format)
 
 
 def archive_resource_year_month(name, url, size, md5_hash):
