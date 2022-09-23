@@ -128,7 +128,7 @@ def annual_archive_resource(name, url, size, md5_hash, **extra_parts):
         url (str): url to download the file from Zenodo.
         size (int): size in bytes.
         md5_hash (str): the md5 checksum of the file.
-        extra_parts (str): extra partitions to add to resource descriptor.
+        extra_parts (dict): extra partitions to add to resource descriptor.
 
     Returns:
         dict: a frictionless data package resource descriptor, per
