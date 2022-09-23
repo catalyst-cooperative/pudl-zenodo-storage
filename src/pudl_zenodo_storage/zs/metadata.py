@@ -12,6 +12,8 @@ UUIDS: dict[str, str] = {
     "epacems": "8bd99e7d-b11a-4bd1-8af0-bccf984dcc43",
     "ferc1": "d3d91c87-c595-49d5-a7f3-e5f5669c8306",
     "ferc2": "894a87fd-cc94-46d1-903a-44be6e77d450",
+    "ferc6": "21d71f60-6073-421a-9208-e4d1adfc4ee2",
+    "ferc60": "a64f9e22-fe9a-4f46-801d-c1a9b5f492b0",
     "ferc714": "f31f0894-639e-4bc2-9b7f-8a84713bcc87",
 }
 
