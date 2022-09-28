@@ -42,7 +42,7 @@ setup(
             "pre-commit>=2.9,<3",
             "pydocstyle>=5.1,<7",
             "pytest>=6.2,<8",
-            "pytest-cov>=2.10,<4",
+            "pytest-cov>=2.10,<5",
             "tox>=3.20,<4",
         ]
     },
