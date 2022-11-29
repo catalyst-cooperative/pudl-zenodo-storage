@@ -1,5 +1,8 @@
 # PUDL Utils for Zenodo storage and packaging
 
+# Deprecated
+This repo has been replaced by the new [pudl-archiver](https://github.com/catalyst-cooperative/pudl-archiver) repo, which combines both the scraping andd archiving process.
+
 ## Background on Zenodo
 
 [Zenodo](https://zenodo.org/) is an open repository maintained by CERN that allows users
